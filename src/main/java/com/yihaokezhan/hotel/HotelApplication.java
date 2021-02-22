@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.yihaokezhan.hotel.module.*.mapper")
+@MapperScan("com.yihaokezhan.hotel.mapper")
 public class HotelApplication {
 
     public static void main(String[] args) {

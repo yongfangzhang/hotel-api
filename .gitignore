@@ -33,3 +33,4 @@ build/
 .vscode/
 *.sql
 application-*.yaml
+GeneratorApplication.java
