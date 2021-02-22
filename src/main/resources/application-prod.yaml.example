@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    druid:
+      username: xxxxxx
+      password: xxxxxx
+      url: jdbc:mysql://localhost/yhkz_hotel?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
