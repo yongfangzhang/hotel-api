@@ -1,6 +1,7 @@
 package com.yihaokezhan.hotel.module.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -66,5 +67,7 @@ public class Role extends RemarkEntity {
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
     private LocalDateTime updatedAt;
 
+    @TableField(exist = false)
+    private List<Route> routes;
 
 }

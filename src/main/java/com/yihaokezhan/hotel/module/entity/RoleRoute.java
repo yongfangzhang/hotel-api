@@ -60,5 +60,7 @@ public class RoleRoute extends RemarkEntity {
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
     private LocalDateTime updatedAt;
 
+    @TableField(exist = false)
+    private Route route;
 
 }

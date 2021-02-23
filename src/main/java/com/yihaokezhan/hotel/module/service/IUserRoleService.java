@@ -16,7 +16,10 @@ import com.yihaokezhan.hotel.module.entity.UserRole;
  */
 public interface IUserRoleService extends IService<UserRole> {
 
+    List<UserRole> mList(M params);
+
     UserRole getByMap(M params);
 
     List<RemarkRecord> getRemark(String uuid);
+
 }

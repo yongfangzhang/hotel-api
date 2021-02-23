@@ -54,4 +54,12 @@ public class M extends LinkedHashMap<String, Object> {
         }
         return this.put(key, value);
     }
+
+    public String getString(String k) {
+        Object v = this.get(k);
+        if (v == null) {
+            return null;
+        }
+        return v.toString();
+    }
 }

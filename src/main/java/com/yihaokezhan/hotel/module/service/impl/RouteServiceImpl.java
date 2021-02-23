@@ -24,6 +24,11 @@ import org.springframework.stereotype.Service;
 public class RouteServiceImpl extends ServiceImpl<RouteMapper, Route> implements IRouteService {
 
     @Override
+    public List<Route> mList(M params) {
+        return this.list(getWrapper(params));
+    }
+
+    @Override
     public Route getByMap(M params) {
         return this.getOne(getWrapper(params));
     }
@@ -45,6 +50,7 @@ public class RouteServiceImpl extends ServiceImpl<RouteMapper, Route> implements
         WrapperUtils.fillEqs(wrapper, params, eqFields);
         // WrapperUtils.fillLikes(wrapper, params, likeFields);
         WrapperUtils.fillSelects(wrapper, params);
+        WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
 
         return wrapper;
     }
