@@ -1,7 +1,11 @@
-package com.yihaokezhan.hotel.utils;
+package com.yihaokezhan.hotel.common.utils;
 
 import com.fasterxml.uuid.Generators;
 
+/**
+ * @author zhangyongfang
+ * @since 2021-02-22
+ */
 public class UUIDUtils {
 
     public static String generate() {

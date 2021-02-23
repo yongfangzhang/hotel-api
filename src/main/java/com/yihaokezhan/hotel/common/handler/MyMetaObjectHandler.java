@@ -1,14 +1,17 @@
-package com.yihaokezhan.hotel.handler;
+package com.yihaokezhan.hotel.common.handler;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.yihaokezhan.hotel.utils.StringUtils;
-import com.yihaokezhan.hotel.utils.UUIDUtils;
+import com.yihaokezhan.hotel.common.utils.UUIDUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
 /**
  * 自定义填充字段
+ * 
+ * @author zhangyongfang
+ * @since 2021-02-22
  */
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
@@ -26,10 +29,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     private void insertDate(MetaObject metaObject) {
         String[] insertFields = new String[] {"createdAt", "updatedAt"};
-        Date now = new Date();
+        LocalDateTime now = LocalDateTime.now();
         for (String field : insertFields) {
             if (metaObject.hasSetter(field)) {
-                strictInsertFill(metaObject, field, Date.class, now);
+                setFieldValByName(field, now, metaObject);
             }
         }
     }
@@ -41,15 +44,15 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
             return;
         }
         Object uuid = getFieldValByName(field, metaObject);
-        if (StringUtils.isBlank(uuid)) {
-            strictInsertFill(metaObject, field, String.class, UUIDUtils.generateTimeBased());
+        if (uuid == null || StringUtils.isBlank(uuid.toString())) {
+            setFieldValByName(field, UUIDUtils.generateTimeBased(), metaObject);
         }
     }
 
     private void updateDate(MetaObject metaObject) {
         String field = "updatedAt";
         if (metaObject.hasSetter(field)) {
-            strictUpdateFill(metaObject, field, Date.class, new Date());
+            setFieldValByName(field, LocalDateTime.now(), metaObject);
         }
     }
 }

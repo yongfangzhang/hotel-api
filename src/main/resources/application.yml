@@ -36,6 +36,18 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 
 mybatis-plus:
-  global-config:
-    meta-object-handler: com.yihaokezhan.hotel.handler.MyMetaObjectHandler
   mapper-locations: classpath:/mapper/*Mapper.xml
+
+shiro:
+  enabled: true
+
+yhkz:
+  hotel:
+    redis:
+      timeout: 6
+      jedis:
+        pool:
+          max-active: 1000
+          max-wait: -1ms
+          max-idle: 10
+          min-idle: 5

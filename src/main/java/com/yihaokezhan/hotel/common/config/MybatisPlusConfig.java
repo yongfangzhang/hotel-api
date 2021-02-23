@@ -1,4 +1,4 @@
-package com.yihaokezhan.hotel.config;
+package com.yihaokezhan.hotel.common.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
@@ -7,6 +7,10 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author zhangyongfang
+ * @since 2021-02-22
+ */
 @Configuration
 public class MybatisPlusConfig {
 
