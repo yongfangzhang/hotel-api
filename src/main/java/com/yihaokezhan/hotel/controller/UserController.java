@@ -1,6 +1,7 @@
 package com.yihaokezhan.hotel.controller;
 
 
+import com.yihaokezhan.hotel.common.annotation.LoginUser;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
@@ -36,6 +37,11 @@ public class UserController {
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
         return R.ok(userService.getById(uuid));
+    }
+
+    @GetMapping("/info")
+    public R getInfo(@LoginUser User user) {
+        return R.ok(user);
     }
 
     @PostMapping("")

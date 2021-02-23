@@ -15,8 +15,6 @@ import com.yihaokezhan.hotel.common.xss.XssHttpServletRequestWrapper;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.ObjectError;
@@ -27,14 +25,15 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author zhangyongfang
  * @since 2021-02-22
  */
 @RestControllerAdvice("com.yihaokezhan")
+@Slf4j
 public class RRExceptionHandler {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @ExceptionHandler(RRException.class)
     public R<String> handleRRException(RRException e) {
@@ -122,24 +121,24 @@ public class RRExceptionHandler {
     }
 
     private void printRequestInfo(Throwable e) {
-        logger.error(e.getMessage(), e);
+        log.error(e.getMessage(), e);
 
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         if (request == null) {
             return;
         }
-        logger.error("Access-Token : {}", request.getHeader(Constant.ACCESS_TOKEN_HEADER));
-        logger.error("IP : {}", IPUtils.getIpAddr(request));
-        logger.error("method : {}", request.getMethod());
-        logger.error("url : {}", request.getRequestURL().toString());
-        logger.error("params map : {}", JSONUtils.toJSONString(request.getParameterMap()));
-        logger.error("query params : {}", request.getQueryString());
+        log.error("Access-Token : {}", request.getHeader(Constant.ACCESS_TOKEN_HEADER));
+        log.error("IP : {}", IPUtils.getIpAddr(request));
+        log.error("method : {}", request.getMethod());
+        log.error("url : {}", request.getRequestURL().toString());
+        log.error("params map : {}", JSONUtils.toJSONString(request.getParameterMap()));
+        log.error("query params : {}", request.getQueryString());
         if (request instanceof ShiroHttpServletRequest) {
             ShiroHttpServletRequest shiroRequest = (ShiroHttpServletRequest) request;
             if (shiroRequest.getRequest() instanceof XssHttpServletRequestWrapper) {
                 String data =
                         ((XssHttpServletRequestWrapper) shiroRequest.getRequest()).getBodyStr();
-                logger.error("body : {}", data);
+                log.error("body : {}", data);
             }
         }
     }

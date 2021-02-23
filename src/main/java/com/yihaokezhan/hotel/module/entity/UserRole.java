@@ -2,10 +2,14 @@ package com.yihaokezhan.hotel.module.entity;
 
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.remark.RemarkEntity;
+import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.V;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,6 +33,7 @@ public class UserRole extends RemarkEntity {
     /**
      * UUID
      */
+    @TableId(type = IdType.INPUT)
     private String uuid;
 
     /**
@@ -45,12 +50,14 @@ public class UserRole extends RemarkEntity {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
     @TableField(fill = FieldFill.UPDATE)
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
     private LocalDateTime updatedAt;
 
 
