@@ -34,8 +34,30 @@ public class RoleRouteServiceImpl extends ServiceImpl<RoleRouteMapper, RoleRoute
     private IRouteService routeService;
 
     @Override
+    public RoleRoute mGet(String uuid) {
+        return join(this.getById(uuid));
+    }
+
+    @Override
     public List<RoleRoute> mList(M params) {
-        List<RoleRoute> roleRouteList = this.list(getWrapper(params));
+        return join(this.list(getWrapper(params)));
+    }
+
+    @Override
+    public RoleRoute mOne(M params) {
+        return join(this.getOne(getWrapper(params)));
+    }
+
+    @Override
+    public List<RemarkRecord> getRemark(String uuid) {
+        RoleRoute entity = this.getById(uuid);
+        if (entity == null) {
+            return new ArrayList<>();
+        }
+        return entity.getRemark();
+    }
+
+    private List<RoleRoute> join(List<RoleRoute> roleRouteList) {
         if (CollectionUtils.isEmpty(roleRouteList)) {
             return roleRouteList;
         }
@@ -53,30 +75,28 @@ public class RoleRouteServiceImpl extends ServiceImpl<RoleRouteMapper, RoleRoute
         return roleRouteList;
     }
 
-    @Override
-    public RoleRoute getByMap(M params) {
-        return this.getOne(getWrapper(params));
-    }
-
-    @Override
-    public List<RemarkRecord> getRemark(String uuid) {
-        RoleRoute entity = getByMap(M.m().put("uuid", uuid).put(WrapperUtils.SQL_SELECT, "remark"));
-        if (entity == null) {
-            return new ArrayList<>();
+    private RoleRoute join(RoleRoute roleRoute) {
+        if (roleRoute == null) {
+            return roleRoute;
         }
-        return entity.getRemark();
+
+        roleRoute.setRoute(routeService.mGet(roleRoute.getRouteUuid()));
+
+        return roleRoute;
     }
 
     private QueryWrapper<RoleRoute> getWrapper(M params) {
         QueryWrapper<RoleRoute> wrapper = new QueryWrapper<RoleRoute>();
 
-        String[] eqFields = new String[] {"uuid"};
+        WrapperUtils.fillEq(wrapper, params, "uuid");
+        WrapperUtils.fillEq(wrapper, params, "roleUuid");
+        WrapperUtils.fillEq(wrapper, params, "routeUuid");
 
-        WrapperUtils.fillEqs(wrapper, params, eqFields);
-        // WrapperUtils.fillLikes(wrapper, params, likeFields);
-        WrapperUtils.fillSelects(wrapper, params);
+        WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
         WrapperUtils.fillInList(wrapper, params, "roleUuids", "role_uuid");
+        WrapperUtils.fillInList(wrapper, params, "routeUuids", "route_uuid");
 
+        WrapperUtils.fillSelect(wrapper, params);
         return wrapper;
     }
 }

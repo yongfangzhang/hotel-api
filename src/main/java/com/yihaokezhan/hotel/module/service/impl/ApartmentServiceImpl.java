@@ -25,13 +25,18 @@ public class ApartmentServiceImpl extends ServiceImpl<ApartmentMapper, Apartment
         implements IApartmentService {
 
     @Override
-    public Apartment getByMap(M params) {
+    public Apartment mGet(String uuid) {
+        return this.getById(uuid);
+    }
+
+    @Override
+    public Apartment mOne(M params) {
         return this.getOne(getWrapper(params));
     }
 
     @Override
     public List<RemarkRecord> getRemark(String uuid) {
-        Apartment entity = getByMap(M.m().put("uuid", uuid).put(WrapperUtils.SQL_SELECT, "remark"));
+        Apartment entity = this.getById(uuid);
         if (entity == null) {
             return new ArrayList<>();
         }
@@ -41,12 +46,24 @@ public class ApartmentServiceImpl extends ServiceImpl<ApartmentMapper, Apartment
     private QueryWrapper<Apartment> getWrapper(M params) {
         QueryWrapper<Apartment> wrapper = new QueryWrapper<Apartment>();
 
-        String[] eqFields = new String[] {"uuid"};
+        WrapperUtils.fillEq(wrapper, params, "uuid");
+        WrapperUtils.fillEq(wrapper, params, "tenantUuid");
+        WrapperUtils.fillEq(wrapper, params, "areaCode");
+        WrapperUtils.fillEq(wrapper, params, "longitude");
+        WrapperUtils.fillEq(wrapper, params, "latitude");
+        WrapperUtils.fillEq(wrapper, params, "geohash4");
+        WrapperUtils.fillEq(wrapper, params, "contactorMobile");
+        WrapperUtils.fillEq(wrapper, params, "state");
 
-        WrapperUtils.fillEqs(wrapper, params, eqFields);
-        // WrapperUtils.fillLikes(wrapper, params, likeFields);
-        WrapperUtils.fillSelects(wrapper, params);
+        WrapperUtils.fillLike(wrapper, params, "name");
+        WrapperUtils.fillLike(wrapper, params, "shortName");
+        WrapperUtils.fillLike(wrapper, params, "address");
+        WrapperUtils.fillLike(wrapper, params, "contactor");
 
+        WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
+        WrapperUtils.fillInList(wrapper, params, "tenantUuids", "tenant_uuid");
+
+        WrapperUtils.fillSelect(wrapper, params);
         return wrapper;
     }
 }

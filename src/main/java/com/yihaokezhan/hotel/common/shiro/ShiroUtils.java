@@ -2,7 +2,7 @@ package com.yihaokezhan.hotel.common.shiro;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.redis.RedisService;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.module.entity.User;
@@ -22,15 +22,18 @@ public class ShiroUtils {
     @Autowired
     private RedisService redisUtils;
 
-    public Set<String> getPermsByUuid(User user) {
-
-        Set<String> sets = new HashSet<String>();
+    public ShiroSet getUserShiroSet(User user) {
+        ShiroSet shiroSet = new ShiroSet();
         String uuid = user.getUuid();
         List<String> perms = redisUtils.getList(getPermKey(uuid), String.class);
-        if (perms == null) {
-            return sets;
+        List<String> roles = redisUtils.getList(getRoleKey(uuid), String.class);
+        if (CollectionUtils.isNotEmpty(perms)) {
+            shiroSet.setPermissions(new HashSet<>(perms));
         }
-        return new HashSet<>(perms);
+        if (CollectionUtils.isNotEmpty(roles)) {
+            shiroSet.setRoles(new HashSet<>(perms));
+        }
+        return shiroSet;
     }
 
     public static User getUser() {
@@ -48,12 +51,21 @@ public class ShiroUtils {
         return Constant.USER_PERMS_PREFIX + uuid;
     }
 
+    private String getRoleKey(String uuid) {
+        return Constant.USER_ROLES_PREFIX + uuid;
+    }
+
     public void updatePermCache(String uuid, List<String> perms) {
         redisUtils.permanentSet(getPermKey(uuid), perms);
     }
 
-    public void clearPermCache(String uuid) {
+    public void updateRoleCache(String uuid, List<String> roles) {
+        redisUtils.permanentSet(getRoleKey(uuid), roles);
+    }
+
+    public void clear(String uuid) {
         redisUtils.delete(getPermKey(uuid));
+        redisUtils.delete(getRoleKey(uuid));
     }
 
     public boolean login(String openId) {

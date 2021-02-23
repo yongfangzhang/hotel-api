@@ -1,6 +1,5 @@
 package com.yihaokezhan.hotel.common.shiro;
 
-import java.util.Set;
 import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.service.IUserService;
 import org.apache.shiro.authc.AuthenticationException;
@@ -36,9 +35,10 @@ public class StatelessRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         User user = (User) principals.getPrimaryPrincipal();
-        Set<String> perms = shiroUtils.getPermsByUuid(user);
+        ShiroSet shiroSet = shiroUtils.getUserShiroSet(user);
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.setStringPermissions(perms);
+        info.setStringPermissions(shiroSet.getPermissions());
+        info.setRoles(shiroSet.getRoles());
         return info;
     }
 

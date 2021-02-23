@@ -25,13 +25,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
 
     @Override
-    public Order getByMap(M params) {
+    public Order mGet(String uuid) {
+        return this.getById(uuid);
+    }
+
+    @Override
+    public Order mOne(M params) {
         return this.getOne(getWrapper(params));
     }
 
     @Override
     public List<RemarkRecord> getRemark(String uuid) {
-        Order entity = getByMap(M.m().put("uuid", uuid).put(WrapperUtils.SQL_SELECT, "remark"));
+        Order entity = this.getById(uuid);
         if (entity == null) {
             return new ArrayList<>();
         }
@@ -41,11 +46,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private QueryWrapper<Order> getWrapper(M params) {
         QueryWrapper<Order> wrapper = new QueryWrapper<Order>();
 
-        String[] eqFields = new String[] {"uuid"};
+        WrapperUtils.fillEq(wrapper, params, "uuid");
+        WrapperUtils.fillEq(wrapper, params, "tenantUuid");
+        WrapperUtils.fillEq(wrapper, params, "apartmentUuid");
+        WrapperUtils.fillEq(wrapper, params, "userUuid");
+        WrapperUtils.fillEq(wrapper, params, "from");
+        WrapperUtils.fillEq(wrapper, params, "number");
+        WrapperUtils.fillEq(wrapper, params, "state");
+        WrapperUtils.fillEq(wrapper, params, "type");
 
-        WrapperUtils.fillEqs(wrapper, params, eqFields);
-        // WrapperUtils.fillLikes(wrapper, params, likeFields);
-        WrapperUtils.fillSelects(wrapper, params);
+        WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
+        WrapperUtils.fillInList(wrapper, params, "tenantUuids", "tenant_uuid");
+        WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
+        WrapperUtils.fillInList(wrapper, params, "userUuids", "user_uuid");
+
+        WrapperUtils.fillSelect(wrapper, params);
 
         return wrapper;
     }

@@ -24,13 +24,18 @@ import org.springframework.stereotype.Service;
 public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> implements ITenantService {
 
     @Override
-    public Tenant getByMap(M params) {
+    public Tenant mGet(String uuid) {
+        return this.getById(uuid);
+    }
+
+    @Override
+    public Tenant mOne(M params) {
         return this.getOne(getWrapper(params));
     }
 
     @Override
     public List<RemarkRecord> getRemark(String uuid) {
-        Tenant entity = getByMap(M.m().put("uuid", uuid).put(WrapperUtils.SQL_SELECT, "remark"));
+        Tenant entity = this.getById(uuid);
         if (entity == null) {
             return new ArrayList<>();
         }
@@ -40,12 +45,16 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
     private QueryWrapper<Tenant> getWrapper(M params) {
         QueryWrapper<Tenant> wrapper = new QueryWrapper<Tenant>();
 
-        String[] eqFields = new String[] {"uuid"};
+        WrapperUtils.fillEq(wrapper, params, "uuid");
+        WrapperUtils.fillEq(wrapper, params, "contactorMobile");
 
-        WrapperUtils.fillEqs(wrapper, params, eqFields);
-        // WrapperUtils.fillLikes(wrapper, params, likeFields);
-        WrapperUtils.fillSelects(wrapper, params);
+        WrapperUtils.fillLike(wrapper, params, "name");
+        WrapperUtils.fillLike(wrapper, params, "contactor");
+        WrapperUtils.fillLike(wrapper, params, "legalPerson");
 
+        WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
+
+        WrapperUtils.fillSelect(wrapper, params);
         return wrapper;
     }
 }

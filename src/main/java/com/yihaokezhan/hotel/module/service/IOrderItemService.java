@@ -16,7 +16,9 @@ import com.yihaokezhan.hotel.module.entity.OrderItem;
  */
 public interface IOrderItemService extends IService<OrderItem> {
 
-    OrderItem getByMap(M params);
+    OrderItem mGet(String uuid);
+
+    OrderItem mOne(M params);
 
     List<RemarkRecord> getRemark(String uuid);
 }

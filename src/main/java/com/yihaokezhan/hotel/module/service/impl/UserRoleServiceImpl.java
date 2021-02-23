@@ -34,8 +34,22 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
     private IRoleService roleService;
 
     @Override
+    public UserRole mGet(String uuid) {
+        return join(this.getById(uuid));
+    }
+
+    @Override
     public List<UserRole> mList(M params) {
-        List<UserRole> userRoleList = this.list(getWrapper(params));
+        return join(this.list(getWrapper(params)));
+    }
+
+    @Override
+    public UserRole mOne(M params) {
+        return join(this.getOne(getWrapper(params)));
+    }
+
+    private List<UserRole> join(List<UserRole> userRoleList) {
+
         if (CollectionUtils.isEmpty(userRoleList)) {
             return userRoleList;
         }
@@ -53,15 +67,20 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         return userRoleList;
     }
 
-    @Override
-    public UserRole getByMap(M params) {
-        return this.getOne(getWrapper(params));
-    }
+    private UserRole join(UserRole userRole) {
 
+        if (userRole == null) {
+            return userRole;
+        }
+
+        userRole.setRole(roleService.mOne(M.m().put("uuid", userRole.getRoleUuid())));
+
+        return userRole;
+    }
 
     @Override
     public List<RemarkRecord> getRemark(String uuid) {
-        UserRole entity = getByMap(M.m().put("uuid", uuid).put(WrapperUtils.SQL_SELECT, "remark"));
+        UserRole entity = this.getById(uuid);
         if (entity == null) {
             return new ArrayList<>();
         }
@@ -71,13 +90,16 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
     private QueryWrapper<UserRole> getWrapper(M params) {
         QueryWrapper<UserRole> wrapper = new QueryWrapper<UserRole>();
 
-        String[] eqFields = new String[] {"uuid"};
+        WrapperUtils.fillEq(wrapper, params, "uuid");
+        WrapperUtils.fillEq(wrapper, params, "userUuid");
+        WrapperUtils.fillEq(wrapper, params, "roleUuid");
 
-        WrapperUtils.fillEqs(wrapper, params, eqFields);
-        // WrapperUtils.fillLikes(wrapper, params, likeFields);
-        WrapperUtils.fillSelects(wrapper, params);
+
+        WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
         WrapperUtils.fillInList(wrapper, params, "userUuids", "user_uuid");
+        WrapperUtils.fillInList(wrapper, params, "roleUuids", "role_uuid");
 
+        WrapperUtils.fillSelect(wrapper, params);
         return wrapper;
     }
 }

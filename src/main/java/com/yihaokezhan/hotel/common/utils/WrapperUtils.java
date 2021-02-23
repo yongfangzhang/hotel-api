@@ -9,26 +9,27 @@ public class WrapperUtils {
 
     public static final String SQL_SELECT = "sqlSelect";
 
-    public static <T> QueryWrapper<T> fillEqs(QueryWrapper<T> wrapper, M params, String[] fields) {
-
-        for (String field : fields) {
-            wrapper.eq(params.containsKey(field), StringUtils.camelToUnderline(field),
-                    params.get(field));
-        }
+    public static <T> QueryWrapper<T> fillEq(QueryWrapper<T> wrapper, M params, String field,
+            String column) {
+        wrapper.eq(params.containsKey(field), column, params.get(field));
         return wrapper;
     }
 
-    public static <T> QueryWrapper<T> fillLikes(QueryWrapper<T> wrapper, M params,
-            String[] fields) {
+    public static <T> QueryWrapper<T> fillEq(QueryWrapper<T> wrapper, M params, String field) {
+        return fillEq(wrapper, params, field, StringUtils.camelToUnderline(field));
+    }
 
-        for (String field : fields) {
-            wrapper.like(params.containsKey(field), StringUtils.camelToUnderline(field),
-                    params.get(field));
-        }
+    public static <T> QueryWrapper<T> fillLike(QueryWrapper<T> wrapper, M params, String field,
+            String column) {
+        wrapper.like(params.containsKey(field), column, params.get(field));
         return wrapper;
     }
 
-    public static <T> QueryWrapper<T> fillSelects(QueryWrapper<T> wrapper, M params) {
+    public static <T> QueryWrapper<T> fillLike(QueryWrapper<T> wrapper, M params, String field) {
+        return fillLike(wrapper, params, field, StringUtils.camelToUnderline(field));
+    }
+
+    public static <T> QueryWrapper<T> fillSelect(QueryWrapper<T> wrapper, M params) {
         if (!params.containsKey(SQL_SELECT)) {
             return wrapper;
         }

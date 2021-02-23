@@ -16,9 +16,11 @@ import com.yihaokezhan.hotel.module.entity.RoleRoute;
  */
 public interface IRoleRouteService extends IService<RoleRoute> {
 
+    RoleRoute mGet(String uuid);
+
     List<RoleRoute> mList(M params);
 
-    RoleRoute getByMap(M params);
+    RoleRoute mOne(M params);
 
     List<RemarkRecord> getRemark(String uuid);
 }

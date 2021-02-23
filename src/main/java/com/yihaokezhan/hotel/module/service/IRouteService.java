@@ -16,9 +16,11 @@ import com.yihaokezhan.hotel.module.entity.Route;
  */
 public interface IRouteService extends IService<Route> {
 
+    Route mGet(String uuid);
+
     List<Route> mList(M params);
 
-    Route getByMap(M params);
+    Route mOne(M params);
 
     List<RemarkRecord> getRemark(String uuid);
 }

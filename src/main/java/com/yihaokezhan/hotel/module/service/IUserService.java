@@ -14,7 +14,9 @@ import com.yihaokezhan.hotel.module.entity.User;
  */
 public interface IUserService extends IService<User> {
 
-    User getByMap(M params);
+    User mGet(String uuid);
+
+    User mOne(M params);
 
     User getByOpenId(String openId);
 }

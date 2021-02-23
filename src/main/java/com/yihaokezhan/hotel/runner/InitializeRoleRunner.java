@@ -38,6 +38,8 @@ public class InitializeRoleRunner implements ApplicationRunner {
                             .distinct().collect(Collectors.toList());
 
             shiroUtils.updatePermCache(userUuid, perms);
+            shiroUtils.updateRoleCache(userUuid, userRoles.stream()
+                    .map(ur -> ur.getRole().getCode()).collect(Collectors.toList()));
         });
 
     }

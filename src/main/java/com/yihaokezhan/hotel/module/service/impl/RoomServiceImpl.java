@@ -25,13 +25,18 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IR
 
 
     @Override
-    public Room getByMap(M params) {
+    public Room mGet(String uuid) {
+        return this.getById(uuid);
+    }
+
+    @Override
+    public Room mOne(M params) {
         return this.getOne(getWrapper(params));
     }
 
     @Override
     public List<RemarkRecord> getRemark(String uuid) {
-        Room entity = getByMap(M.m().put("uuid", uuid).put(WrapperUtils.SQL_SELECT, "remark"));
+        Room entity = this.getById(uuid);
         if (entity == null) {
             return new ArrayList<>();
         }
@@ -41,11 +46,20 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IR
     private QueryWrapper<Room> getWrapper(M params) {
         QueryWrapper<Room> wrapper = new QueryWrapper<Room>();
 
-        String[] eqFields = new String[] {"uuid"};
+        WrapperUtils.fillEq(wrapper, params, "uuid");
+        WrapperUtils.fillEq(wrapper, params, "apartmentUuid");
+        WrapperUtils.fillEq(wrapper, params, "type");
+        WrapperUtils.fillEq(wrapper, params, "state");
+        WrapperUtils.fillEq(wrapper, params, "saleTimes");
 
-        WrapperUtils.fillEqs(wrapper, params, eqFields);
-        // WrapperUtils.fillLikes(wrapper, params, likeFields);
-        WrapperUtils.fillSelects(wrapper, params);
+        WrapperUtils.fillLike(wrapper, params, "floorNumber");
+        WrapperUtils.fillLike(wrapper, params, "unitNumber");
+        WrapperUtils.fillLike(wrapper, params, "number");
+
+        WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
+        WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
+
+        WrapperUtils.fillSelect(wrapper, params);
 
         return wrapper;
     }

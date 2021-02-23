@@ -6,6 +6,7 @@ import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.module.entity.Apartment;
 import com.yihaokezhan.hotel.module.service.IApartmentService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +34,7 @@ public class ApartmentController {
     private IApartmentService apartmentService;
 
     @GetMapping("/{uuid}")
+    @RequiresPermissions("")
     public R get(@PathVariable String uuid) {
         return R.ok().data(apartmentService.getById(uuid));
     }

@@ -16,7 +16,9 @@ import com.yihaokezhan.hotel.module.entity.Room;
  */
 public interface IRoomService extends IService<Room> {
 
-    Room getByMap(M params);
+    Room mGet(String uuid);
+
+    Room mOne(M params);
 
     List<RemarkRecord> getRemark(String uuid);
 }

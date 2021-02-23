@@ -16,9 +16,11 @@ import com.yihaokezhan.hotel.module.entity.Role;
  */
 public interface IRoleService extends IService<Role> {
 
+    Role mGet(String uuid);
+
     List<Role> mList(M params);
 
-    Role getByMap(M params);
+    Role mOne(M params);
 
     List<RemarkRecord> getRemark(String uuid);
 }

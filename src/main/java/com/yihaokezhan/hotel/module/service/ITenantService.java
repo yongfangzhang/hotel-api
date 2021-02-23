@@ -16,7 +16,9 @@ import com.yihaokezhan.hotel.module.entity.Tenant;
  */
 public interface ITenantService extends IService<Tenant> {
 
-    Tenant getByMap(M params);
+    Tenant mGet(String uuid);
+
+    Tenant mOne(M params);
 
     List<RemarkRecord> getRemark(String uuid);
 }

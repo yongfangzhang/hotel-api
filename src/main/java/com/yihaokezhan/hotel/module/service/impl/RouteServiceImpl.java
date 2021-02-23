@@ -24,18 +24,23 @@ import org.springframework.stereotype.Service;
 public class RouteServiceImpl extends ServiceImpl<RouteMapper, Route> implements IRouteService {
 
     @Override
+    public Route mGet(String uuid) {
+        return this.getById(uuid);
+    }
+
+    @Override
     public List<Route> mList(M params) {
         return this.list(getWrapper(params));
     }
 
     @Override
-    public Route getByMap(M params) {
+    public Route mOne(M params) {
         return this.getOne(getWrapper(params));
     }
 
     @Override
     public List<RemarkRecord> getRemark(String uuid) {
-        Route entity = getByMap(M.m().put("uuid", uuid).put(WrapperUtils.SQL_SELECT, "remark"));
+        Route entity = this.getById(uuid);
         if (entity == null) {
             return new ArrayList<>();
         }
@@ -45,13 +50,17 @@ public class RouteServiceImpl extends ServiceImpl<RouteMapper, Route> implements
     private QueryWrapper<Route> getWrapper(M params) {
         QueryWrapper<Route> wrapper = new QueryWrapper<Route>();
 
-        String[] eqFields = new String[] {"uuid"};
+        WrapperUtils.fillEq(wrapper, params, "uuid");
+        WrapperUtils.fillEq(wrapper, params, "type");
 
-        WrapperUtils.fillEqs(wrapper, params, eqFields);
-        // WrapperUtils.fillLikes(wrapper, params, likeFields);
-        WrapperUtils.fillSelects(wrapper, params);
+        WrapperUtils.fillLike(wrapper, params, "path");
+        WrapperUtils.fillLike(wrapper, params, "caption");
+        WrapperUtils.fillLike(wrapper, params, "permissions");
+        WrapperUtils.fillLike(wrapper, params, "description");
+
         WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
 
+        WrapperUtils.fillSelect(wrapper, params);
         return wrapper;
     }
 }

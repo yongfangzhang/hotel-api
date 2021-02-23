@@ -24,15 +24,19 @@ import org.springframework.stereotype.Service;
 public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem>
         implements IOrderItemService {
 
+    @Override
+    public OrderItem mGet(String uuid) {
+        return this.getById(uuid);
+    }
 
     @Override
-    public OrderItem getByMap(M params) {
+    public OrderItem mOne(M params) {
         return this.getOne(getWrapper(params));
     }
 
     @Override
     public List<RemarkRecord> getRemark(String uuid) {
-        OrderItem entity = getByMap(M.m().put("uuid", uuid).put(WrapperUtils.SQL_SELECT, "remark"));
+        OrderItem entity = this.getById(uuid);
         if (entity == null) {
             return new ArrayList<>();
         }
@@ -42,12 +46,23 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
     private QueryWrapper<OrderItem> getWrapper(M params) {
         QueryWrapper<OrderItem> wrapper = new QueryWrapper<OrderItem>();
 
-        String[] eqFields = new String[] {"uuid"};
+        WrapperUtils.fillEq(wrapper, params, "uuid");
+        WrapperUtils.fillEq(wrapper, params, "orderUuid");
+        WrapperUtils.fillEq(wrapper, params, "tenantUuid");
+        WrapperUtils.fillEq(wrapper, params, "apartmentUuid");
+        WrapperUtils.fillEq(wrapper, params, "roomUuid");
+        WrapperUtils.fillEq(wrapper, params, "mobile");
+        WrapperUtils.fillEq(wrapper, params, "state");
 
-        WrapperUtils.fillEqs(wrapper, params, eqFields);
-        // WrapperUtils.fillLikes(wrapper, params, likeFields);
-        WrapperUtils.fillSelects(wrapper, params);
+        WrapperUtils.fillLike(wrapper, params, "name");
 
+        WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
+        WrapperUtils.fillInList(wrapper, params, "tenantUuids", "tenant_uuid");
+        WrapperUtils.fillInList(wrapper, params, "orderUuids", "order_uuid");
+        WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
+        WrapperUtils.fillInList(wrapper, params, "roomUuids", "room_uuid");
+
+        WrapperUtils.fillSelect(wrapper, params);
         return wrapper;
     }
 }
