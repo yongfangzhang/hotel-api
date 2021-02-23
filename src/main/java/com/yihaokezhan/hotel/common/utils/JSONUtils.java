@@ -7,11 +7,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author zhangyongfang
  * @since 2021-02-22
  */
+@Component
 public class JSONUtils {
 
     public static ObjectMapper objectMapper;

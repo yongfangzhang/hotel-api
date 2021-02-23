@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/hotel/order")
-@SuppressWarnings("rawtypes")
 public class OrderController {
 
     @Autowired
@@ -35,22 +34,22 @@ public class OrderController {
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok(orderService.getById(uuid));
+        return R.ok().data(orderService.getById(uuid));
     }
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody Order entity) {
-        return R.ok(orderService.save(entity));
+        return R.ok().data(orderService.save(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody Order entity) {
-        return R.ok(orderService.updateById(entity));
+        return R.ok().data(orderService.updateById(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok(orderService.removeById(uuid));
+        return R.ok().data(orderService.removeById(uuid));
     }
 
 }

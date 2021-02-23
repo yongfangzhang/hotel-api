@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/hotel/role")
-@SuppressWarnings("rawtypes")
 public class RoleController {
 
     @Autowired
@@ -35,22 +34,22 @@ public class RoleController {
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok(roleService.getById(uuid));
+        return R.ok().data(roleService.getById(uuid));
     }
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody Role entity) {
-        return R.ok(roleService.save(entity));
+        return R.ok().data(roleService.save(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody Role entity) {
-        return R.ok(roleService.updateById(entity));
+        return R.ok().data(roleService.updateById(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok(roleService.removeById(uuid));
+        return R.ok().data(roleService.removeById(uuid));
     }
 }
 

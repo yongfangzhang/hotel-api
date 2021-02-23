@@ -36,70 +36,70 @@ import lombok.extern.slf4j.Slf4j;
 public class RRExceptionHandler {
 
     @ExceptionHandler(RRException.class)
-    public R<String> handleRRException(RRException e) {
-        R<String> r = new R<String>();
-        r.setCode(e.getCode());
-        r.setMsg(e.getMsg());
+    public R handleRRException(RRException e) {
+        R r = new R();
+        r.put("code", e.getCode());
+        r.put("msg", e.getMsg());
         this.printRequestInfo(e);
         return r;
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
-    public R<String> handleDuplicateKeyException(DuplicateKeyException e) {
+    public R handleDuplicateKeyException(DuplicateKeyException e) {
         this.printRequestInfo(e);
         return R.error(ErrorCode.RECORD_EXSITED);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public R<String> handleParamException(Exception e) {
+    public R handleParamException(Exception e) {
         this.printRequestInfo(e);
         return R.error(ErrorCode.REQ_INVALID_PARAMS);
     }
 
     @ExceptionHandler(Exception.class)
-    public R<String> handleException(Exception e) {
+    public R handleException(Exception e) {
         this.printRequestInfo(e);
         return R.error("捕获到异常, 请联系管理员");
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public R<String> handleNotSupportedException(Exception e) {
+    public R handleNotSupportedException(Exception e) {
         this.printRequestInfo(e);
         return R.error(ErrorCode.REQ_NOT_SUPPORTED);
     }
 
     @ExceptionHandler(AuthorizationException.class)
-    public R<String> handleAuthorizationException(AuthorizationException e) {
+    public R handleAuthorizationException(AuthorizationException e) {
         this.printRequestInfo(e);
         return R.error(ErrorCode.ACCESS_DENIED);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public R<String> handleUnauthorizedException(UnauthorizedException e) {
+    public R handleUnauthorizedException(UnauthorizedException e) {
         this.printRequestInfo(e);
         return R.error(ErrorCode.AUTH_FORBIDDEN);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public R<String> handleMaxFileSizeException(MaxUploadSizeExceededException e) {
+    public R handleMaxFileSizeException(MaxUploadSizeExceededException e) {
         this.printRequestInfo(e);
         return R.error("文件大小超过上限");
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public R<String> constraintViolationException(SQLIntegrityConstraintViolationException e) {
+    public R constraintViolationException(SQLIntegrityConstraintViolationException e) {
         this.printRequestInfo(e);
         return R.error("部分绑定记录未找到/记录已被使用/存在字段没有默认值, 操作被禁止");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public R<String> dataIntegrityViolationException(DataIntegrityViolationException e) {
+    public R dataIntegrityViolationException(DataIntegrityViolationException e) {
         this.printRequestInfo(e);
         return R.error("部分绑定记录未找到/记录已被使用/存在字段没有默认值, 操作被禁止");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public R<String> handleNotValidException(MethodArgumentNotValidException e) {
+    public R handleNotValidException(MethodArgumentNotValidException e) {
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
         this.printRequestInfo(e);
         return R.errors(ErrorCode.REQ_INVALID_PARAMS,
@@ -107,7 +107,7 @@ public class RRExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public R<String> handleNotValidException(ConstraintViolationException e) {
+    public R handleNotValidException(ConstraintViolationException e) {
         List<String> errors = e.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessage).collect(Collectors.toList());
         this.printRequestInfo(e);
@@ -115,7 +115,7 @@ public class RRExceptionHandler {
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
-    public R<String> handleNotValidException(MissingRequestHeaderException e) {
+    public R handleNotValidException(MissingRequestHeaderException e) {
         this.printRequestInfo(e);
         return R.error("缺少Header: " + e.getHeaderName());
     }

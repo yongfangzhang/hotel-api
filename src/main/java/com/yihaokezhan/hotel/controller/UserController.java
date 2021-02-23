@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/hotel/user")
-@SuppressWarnings("rawtypes")
 public class UserController {
 
     @Autowired
@@ -36,27 +35,27 @@ public class UserController {
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok(userService.getById(uuid));
+        return R.ok().data(userService.getById(uuid));
     }
 
     @GetMapping("/info")
     public R getInfo(@LoginUser User user) {
-        return R.ok(user);
+        return R.ok().data(user);
     }
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody User entity) {
-        return R.ok(userService.save(entity));
+        return R.ok().data(userService.save(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody User entity) {
-        return R.ok(userService.updateById(entity));
+        return R.ok().data(userService.updateById(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok(userService.removeById(uuid));
+        return R.ok().data(userService.removeById(uuid));
     }
 }
 

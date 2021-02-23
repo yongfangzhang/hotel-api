@@ -1,14 +1,13 @@
 package com.yihaokezhan.hotel.common.utils;
 
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.exception.ErrorCode;
-import com.yihaokezhan.hotel.common.exception.RRException;
-import org.apache.commons.lang3.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author zhangyongfang
@@ -17,82 +16,82 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @JsonView(V.XS.class)
-@Slf4j
-public class R<T> implements Serializable {
-
+public class R extends HashMap<String, Object> {
     private static final long serialVersionUID = 1L;
 
-    private Integer code = ErrorCode.SUCCESS.getCode();
-
-    private String msg = ErrorCode.SUCCESS.getMessage();
-
-    private T data;
-
-    private Boolean success;
-
     public R() {
+        put("code", 0);
+        put("msg", "success");
     }
 
-    public R(T d) {
-        this.data = d;
+    public static R error() {
+        return error(500, "未知异常，请联系管理员");
     }
 
-    public R(String msg) {
-        this.msg = msg;
+    public static R error(String msg) {
+        return error(500, msg);
     }
 
-    public R(String msg, Integer code) {
-        this.msg = msg;
-        this.code = code;
+    public static R error(List<String> errors) {
+        return error(500, errors);
     }
 
-    public R(ErrorCode err) {
-        this.msg = err.getMessage();
-        this.code = err.getCode();
+    public static R error(ErrorCode ec) {
+        return error(ec, null);
     }
 
-    public boolean isSuccess() {
-        return ErrorCode.SUCCESS.getCode().equals(this.code)
-                || this.success != null && Boolean.TRUE.equals(this.success);
+    public static R error(ErrorCode ec, String msg) {
+        return error(ec.getCode(), msg == null ? ec.getMessage() : msg);
     }
 
-    public void validate() {
-        if (!this.isSuccess()) {
-            log.error("服务调用失败: {}, {}", this.code, this.msg);
-            throw new RRException(this.msg, this.code);
-        }
+    public static R errors(ErrorCode ec, List<String> errors) {
+        return error(ec.getCode(), errors);
     }
 
-    public T getData() {
-        this.validate();
-        return this.data;
-    }
-
-    public static <T> R<T> error(String msg) {
-        return new R<T>(msg);
-    }
-
-    public static <T> R<T> error(String msg, Integer code) {
-        return new R<T>(msg, code);
-    }
-
-    public static <T> R<T> error(ErrorCode err) {
-        return new R<T>(err);
-    }
-
-    public static <T> R<T> errors(ErrorCode err, List<String> errors) {
-        R<T> r = new R<T>(err);
-        r.setMsg(StringUtils.join(errors));
+    public static R error(int code, String msg) {
+        R r = new R();
+        r.put("code", code);
+        r.put("msg", msg);
         return r;
     }
 
-    public static <T> R<T> ok() {
-        return new R<T>();
+    public static R error(int code, List<String> errors) {
+        R r = new R();
+        r.put("code", code);
+        r.put("msg", CollectionUtils.isEmpty(errors) ? "未知异常，请联系管理员" : errors.get(0));
+        r.put("errors", errors);
+        return r;
     }
 
-    public static <T> R<T> ok(T data) {
-        R<T> re = ok();
-        re.setData(data);
-        return re;
+    public static R ok(String msg) {
+        R r = new R();
+        r.put("msg", msg);
+        return r;
+    }
+
+    public static R ok(Map<String, Object> map) {
+        R r = new R();
+        r.putAll(map);
+        return r;
+    }
+
+    public static R ok() {
+        return new R();
+    }
+
+    @Override
+    public R put(String key, Object value) {
+        super.put(key, value);
+        return this;
+    }
+
+    public R data(Object data) {
+        return this.put("data", data);
+    }
+
+    public boolean isSuccess() {
+        Integer successCode = ErrorCode.SUCCESS.getCode();
+        Object code = this.get("code");
+        return successCode.equals(code) || successCode.toString().equals(code);
     }
 }
