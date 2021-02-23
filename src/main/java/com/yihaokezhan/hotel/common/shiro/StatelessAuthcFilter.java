@@ -34,11 +34,6 @@ public class StatelessAuthcFilter extends AccessControlFilter {
         // 客户端生成的消息摘要
         HttpServletRequest req = (HttpServletRequest) request;
         String openId = wxService.getOpenIdFromRequest(req);
-        // 客户端传入的用户身份
-        if (StringUtils.isBlank(openId)) {
-            // 无需校验
-            return true;
-        }
         if (StringUtils.isBlank(openId)) {
             onLoginFail(response, openId);
             return false;
@@ -56,6 +51,6 @@ public class StatelessAuthcFilter extends AccessControlFilter {
         log.error("shiro login failed: {}", openId);
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        httpResponse.getWriter().write("login error");
+        httpResponse.getWriter().write("Access Denied");
     }
 }
