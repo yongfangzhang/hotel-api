@@ -103,7 +103,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
         WrapperUtils.fillInList(wrapper, params, "codes", "code");
 
+        WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
+        WrapperUtils.fillOrderBy(wrapper, params);
+        WrapperUtils.fillGroupBy(wrapper, params);
         return wrapper;
     }
 }

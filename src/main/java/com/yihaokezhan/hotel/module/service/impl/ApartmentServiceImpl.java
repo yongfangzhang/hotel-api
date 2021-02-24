@@ -63,7 +63,10 @@ public class ApartmentServiceImpl extends ServiceImpl<ApartmentMapper, Apartment
         WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
         WrapperUtils.fillInList(wrapper, params, "tenantUuids", "tenant_uuid");
 
+        WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
+        WrapperUtils.fillOrderBy(wrapper, params);
+        WrapperUtils.fillGroupBy(wrapper, params);
         return wrapper;
     }
 }

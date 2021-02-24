@@ -60,7 +60,10 @@ public class RouteServiceImpl extends ServiceImpl<RouteMapper, Route> implements
 
         WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
 
+        WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
+        WrapperUtils.fillOrderBy(wrapper, params);
+        WrapperUtils.fillGroupBy(wrapper, params);
         return wrapper;
     }
 }

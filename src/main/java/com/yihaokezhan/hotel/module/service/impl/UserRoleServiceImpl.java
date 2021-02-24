@@ -99,7 +99,10 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         WrapperUtils.fillInList(wrapper, params, "userUuids", "user_uuid");
         WrapperUtils.fillInList(wrapper, params, "roleUuids", "role_uuid");
 
+        WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
+        WrapperUtils.fillOrderBy(wrapper, params);
+        WrapperUtils.fillGroupBy(wrapper, params);
         return wrapper;
     }
 }

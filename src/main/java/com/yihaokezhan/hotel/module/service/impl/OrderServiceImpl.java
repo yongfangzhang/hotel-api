@@ -60,8 +60,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
         WrapperUtils.fillInList(wrapper, params, "userUuids", "user_uuid");
 
+        WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
-
+        WrapperUtils.fillOrderBy(wrapper, params);
+        WrapperUtils.fillGroupBy(wrapper, params);
         return wrapper;
     }
 }

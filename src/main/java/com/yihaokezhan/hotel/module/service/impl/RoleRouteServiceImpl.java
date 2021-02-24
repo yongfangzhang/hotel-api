@@ -96,7 +96,10 @@ public class RoleRouteServiceImpl extends ServiceImpl<RoleRouteMapper, RoleRoute
         WrapperUtils.fillInList(wrapper, params, "roleUuids", "role_uuid");
         WrapperUtils.fillInList(wrapper, params, "routeUuids", "route_uuid");
 
+        WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
+        WrapperUtils.fillOrderBy(wrapper, params);
+        WrapperUtils.fillGroupBy(wrapper, params);
         return wrapper;
     }
 }

@@ -62,7 +62,10 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
         WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
         WrapperUtils.fillInList(wrapper, params, "roomUuids", "room_uuid");
 
+        WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
+        WrapperUtils.fillOrderBy(wrapper, params);
+        WrapperUtils.fillGroupBy(wrapper, params);
         return wrapper;
     }
 }
