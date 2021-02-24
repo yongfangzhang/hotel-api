@@ -1,7 +1,7 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Tenant;
 import com.yihaokezhan.hotel.module.mapper.TenantMapper;
@@ -21,7 +21,7 @@ public class TenantServiceImpl extends BaseServiceImpl<TenantMapper, Tenant>
         implements ITenantService {
 
     @Override
-    public QueryWrapper<Tenant> getWrapper(M params) {
+    public QueryWrapper<Tenant> getWrapper(Map<String, Object> params) {
         QueryWrapper<Tenant> wrapper = new QueryWrapper<Tenant>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

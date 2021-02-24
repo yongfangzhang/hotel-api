@@ -66,7 +66,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     }
 
     @Override
-    public QueryWrapper<Role> getWrapper(M params) {
+    public QueryWrapper<Role> getWrapper(Map<String, Object> params) {
         QueryWrapper<Role> wrapper = new QueryWrapper<Role>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

@@ -63,7 +63,7 @@ public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleMapper, UserRol
     }
 
     @Override
-    public QueryWrapper<UserRole> getWrapper(M params) {
+    public QueryWrapper<UserRole> getWrapper(Map<String, Object> params) {
         QueryWrapper<UserRole> wrapper = new QueryWrapper<UserRole>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

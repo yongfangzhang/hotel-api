@@ -1,7 +1,7 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.OrderItem;
 import com.yihaokezhan.hotel.module.mapper.OrderItemMapper;
@@ -21,7 +21,7 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
         implements IOrderItemService {
 
     @Override
-    public QueryWrapper<OrderItem> getWrapper(M params) {
+    public QueryWrapper<OrderItem> getWrapper(Map<String, Object> params) {
         QueryWrapper<OrderItem> wrapper = new QueryWrapper<OrderItem>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

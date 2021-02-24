@@ -1,7 +1,7 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.mapper.RoomMapper;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implements IRoomService {
 
     @Override
-    public QueryWrapper<Room> getWrapper(M params) {
+    public QueryWrapper<Room> getWrapper(Map<String, Object> params) {
         QueryWrapper<Room> wrapper = new QueryWrapper<Room>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

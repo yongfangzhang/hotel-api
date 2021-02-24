@@ -1,6 +1,7 @@
 package com.yihaokezhan.hotel.controller;
 
 
+import java.util.Map;
 import com.yihaokezhan.hotel.common.annotation.LoginUser;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,6 +38,16 @@ public class UserController {
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
         return R.ok().data(userService.mGet(uuid));
+    }
+
+    @GetMapping("/list")
+    public R list(@RequestParam Map<String, Object> params) {
+        return R.ok().data(userService.mList(params));
+    }
+
+    @GetMapping("/page")
+    public R page(@RequestParam Map<String, Object> params) {
+        return R.ok().data(userService.mPage(params));
     }
 
     @GetMapping("/info")

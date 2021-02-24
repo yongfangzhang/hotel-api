@@ -1,7 +1,7 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Order;
 import com.yihaokezhan.hotel.module.mapper.OrderMapper;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implements IOrderService {
 
     @Override
-    public QueryWrapper<Order> getWrapper(M params) {
+    public QueryWrapper<Order> getWrapper(Map<String, Object> params) {
         QueryWrapper<Order> wrapper = new QueryWrapper<Order>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

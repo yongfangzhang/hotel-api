@@ -1,5 +1,6 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
@@ -39,7 +40,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     }
 
     @Override
-    public QueryWrapper<User> getWrapper(M params) {
+    public QueryWrapper<User> getWrapper(Map<String, Object> params) {
         QueryWrapper<User> wrapper = new QueryWrapper<User>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

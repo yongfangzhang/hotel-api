@@ -1,20 +1,20 @@
 package com.yihaokezhan.hotel.module.service;
 
 import java.util.List;
+import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yihaokezhan.hotel.common.remark.RemarkRecord;
-import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.model.Pager;
 
 public interface IBaseService<T> {
 
-    List<T> mList(M params);
+    List<T> mList(Map<String, Object> params);
 
-    Pager<T> mPage(M params);
+    Pager<T> mPage(Map<String, Object> params);
 
     T mGet(String uuid);
 
-    T mOne(M params);
+    T mOne(Map<String, Object> params);
 
     boolean mCreate(T entity);
 
@@ -24,7 +24,7 @@ public interface IBaseService<T> {
 
     List<RemarkRecord> getRemark(String uuid);
 
-    default QueryWrapper<T> getWrapper(M params) {
+    default QueryWrapper<T> getWrapper(Map<String, Object> params) {
         return new QueryWrapper<T>();
     }
 
