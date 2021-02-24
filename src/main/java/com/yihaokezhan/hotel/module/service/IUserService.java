@@ -1,7 +1,5 @@
 package com.yihaokezhan.hotel.module.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.module.entity.User;
 
 /**
@@ -12,11 +10,7 @@ import com.yihaokezhan.hotel.module.entity.User;
  * @author zhangyongfang
  * @since 2021-02-22
  */
-public interface IUserService extends IService<User> {
+public interface IUserService extends IBaseService<User> {
 
-    User mGet(String uuid);
-
-    User mOne(M params);
-
-    User getByOpenId(String openId);
+    User mGetByOpenId(String openId);
 }

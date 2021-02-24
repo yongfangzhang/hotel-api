@@ -1,13 +1,10 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.remark.RemarkRecord;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.RoleRoute;
@@ -27,37 +24,14 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-public class RoleRouteServiceImpl extends ServiceImpl<RoleRouteMapper, RoleRoute>
+public class RoleRouteServiceImpl extends BaseServiceImpl<RoleRouteMapper, RoleRoute>
         implements IRoleRouteService {
 
     @Autowired
     private IRouteService routeService;
 
     @Override
-    public RoleRoute mGet(String uuid) {
-        return join(this.getById(uuid));
-    }
-
-    @Override
-    public List<RoleRoute> mList(M params) {
-        return join(this.list(getWrapper(params)));
-    }
-
-    @Override
-    public RoleRoute mOne(M params) {
-        return join(this.getOne(getWrapper(params)));
-    }
-
-    @Override
-    public List<RemarkRecord> getRemark(String uuid) {
-        RoleRoute entity = this.getById(uuid);
-        if (entity == null) {
-            return new ArrayList<>();
-        }
-        return entity.getRemark();
-    }
-
-    private List<RoleRoute> join(List<RoleRoute> roleRouteList) {
+    public List<RoleRoute> join(List<RoleRoute> roleRouteList) {
         if (CollectionUtils.isEmpty(roleRouteList)) {
             return roleRouteList;
         }
@@ -75,7 +49,8 @@ public class RoleRouteServiceImpl extends ServiceImpl<RoleRouteMapper, RoleRoute
         return roleRouteList;
     }
 
-    private RoleRoute join(RoleRoute roleRoute) {
+    @Override
+    public RoleRoute join(RoleRoute roleRoute) {
         if (roleRoute == null) {
             return roleRoute;
         }
@@ -85,7 +60,8 @@ public class RoleRouteServiceImpl extends ServiceImpl<RoleRouteMapper, RoleRoute
         return roleRoute;
     }
 
-    private QueryWrapper<RoleRoute> getWrapper(M params) {
+    @Override
+    public QueryWrapper<RoleRoute> getWrapper(M params) {
         QueryWrapper<RoleRoute> wrapper = new QueryWrapper<RoleRoute>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

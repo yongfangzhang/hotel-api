@@ -34,22 +34,22 @@ public class TenantController {
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok().data(tenantService.getById(uuid));
+        return R.ok().data(tenantService.mGet(uuid));
     }
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody Tenant entity) {
-        return R.ok().data(tenantService.save(entity));
+        return R.ok().data(tenantService.mCreate(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody Tenant entity) {
-        return R.ok().data(tenantService.updateById(entity));
+        return R.ok().data(tenantService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok().data(tenantService.removeById(uuid));
+        return R.ok().data(tenantService.mDelete(uuid));
     }
 }
 

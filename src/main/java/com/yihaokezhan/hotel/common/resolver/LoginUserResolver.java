@@ -48,7 +48,7 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
             return null;
         }
 
-        User user = userService.getByOpenId(openId);
+        User user = userService.mGetByOpenId(openId);
 
         if (user == null && isRequired) {
             throw new RRException(ErrorCode.ACCESS_DENIED);

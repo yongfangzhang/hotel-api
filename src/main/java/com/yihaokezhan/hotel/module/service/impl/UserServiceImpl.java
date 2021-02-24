@@ -1,7 +1,6 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.User;
@@ -20,27 +19,18 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements IUserService {
 
     @Autowired
     private IUserRoleService userRoleService;
 
     @Override
-    public User mGet(String uuid) {
-        return join(this.getById(uuid));
+    public User mGetByOpenId(String openId) {
+        return mOne(M.m().put("openId", openId));
     }
 
     @Override
-    public User getByOpenId(String openId) {
-        return join(this.getOne(getWrapper(M.m().put("openId", openId))));
-    }
-
-    @Override
-    public User mOne(M params) {
-        return join(this.getOne(getWrapper(params)));
-    }
-
-    private User join(User user) {
+    public User join(User user) {
         if (user == null) {
             return user;
         }
@@ -48,7 +38,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return user;
     }
 
-    private QueryWrapper<User> getWrapper(M params) {
+    @Override
+    public QueryWrapper<User> getWrapper(M params) {
         QueryWrapper<User> wrapper = new QueryWrapper<User>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

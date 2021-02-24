@@ -1,10 +1,6 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.remark.RemarkRecord;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Tenant;
@@ -21,28 +17,11 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> implements ITenantService {
+public class TenantServiceImpl extends BaseServiceImpl<TenantMapper, Tenant>
+        implements ITenantService {
 
     @Override
-    public Tenant mGet(String uuid) {
-        return this.getById(uuid);
-    }
-
-    @Override
-    public Tenant mOne(M params) {
-        return this.getOne(getWrapper(params));
-    }
-
-    @Override
-    public List<RemarkRecord> getRemark(String uuid) {
-        Tenant entity = this.getById(uuid);
-        if (entity == null) {
-            return new ArrayList<>();
-        }
-        return entity.getRemark();
-    }
-
-    private QueryWrapper<Tenant> getWrapper(M params) {
+    public QueryWrapper<Tenant> getWrapper(M params) {
         QueryWrapper<Tenant> wrapper = new QueryWrapper<Tenant>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

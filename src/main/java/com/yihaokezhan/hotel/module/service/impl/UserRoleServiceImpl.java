@@ -1,13 +1,10 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.remark.RemarkRecord;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Role;
@@ -27,28 +24,14 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
+public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleMapper, UserRole>
         implements IUserRoleService {
 
     @Autowired
     private IRoleService roleService;
 
     @Override
-    public UserRole mGet(String uuid) {
-        return join(this.getById(uuid));
-    }
-
-    @Override
-    public List<UserRole> mList(M params) {
-        return join(this.list(getWrapper(params)));
-    }
-
-    @Override
-    public UserRole mOne(M params) {
-        return join(this.getOne(getWrapper(params)));
-    }
-
-    private List<UserRole> join(List<UserRole> userRoleList) {
+    public List<UserRole> join(List<UserRole> userRoleList) {
 
         if (CollectionUtils.isEmpty(userRoleList)) {
             return userRoleList;
@@ -67,7 +50,8 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         return userRoleList;
     }
 
-    private UserRole join(UserRole userRole) {
+    @Override
+    public UserRole join(UserRole userRole) {
 
         if (userRole == null) {
             return userRole;
@@ -79,15 +63,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
     }
 
     @Override
-    public List<RemarkRecord> getRemark(String uuid) {
-        UserRole entity = this.getById(uuid);
-        if (entity == null) {
-            return new ArrayList<>();
-        }
-        return entity.getRemark();
-    }
-
-    private QueryWrapper<UserRole> getWrapper(M params) {
+    public QueryWrapper<UserRole> getWrapper(M params) {
         QueryWrapper<UserRole> wrapper = new QueryWrapper<UserRole>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

@@ -1,13 +1,10 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.remark.RemarkRecord;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Role;
@@ -27,37 +24,13 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
+public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements IRoleService {
 
     @Autowired
     private IRoleRouteService roleRouteService;
 
     @Override
-    public Role mGet(String uuid) {
-        return join(this.getById(uuid));
-    }
-
-    @Override
-    public List<Role> mList(M params) {
-        return join(this.list(getWrapper(params)));
-    }
-
-
-    @Override
-    public Role mOne(M params) {
-        return join(this.getOne(getWrapper(params)));
-    }
-
-    @Override
-    public List<RemarkRecord> getRemark(String uuid) {
-        Role entity = this.getById(uuid);
-        if (entity == null) {
-            return new ArrayList<>();
-        }
-        return entity.getRemark();
-    }
-
-    private List<Role> join(List<Role> roleList) {
+    public List<Role> join(List<Role> roleList) {
 
         if (CollectionUtils.isEmpty(roleList)) {
             return roleList;
@@ -79,7 +52,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         return roleList;
     }
 
-    private Role join(Role role) {
+    @Override
+    public Role join(Role role) {
 
         if (role == null) {
             return role;
@@ -91,7 +65,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         return role;
     }
 
-    private QueryWrapper<Role> getWrapper(M params) {
+    @Override
+    public QueryWrapper<Role> getWrapper(M params) {
         QueryWrapper<Role> wrapper = new QueryWrapper<Role>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

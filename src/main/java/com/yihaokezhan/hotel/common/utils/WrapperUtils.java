@@ -7,15 +7,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 public class WrapperUtils {
 
-    // 前后台都可以用
-    public static final String ASC = "asc";
-    public static final String DESC = "desc";
-    public static final String CREATED_AT_START = "createdAtStart";
-    public static final String CREATED_AT_STOP = "createdAtStop";
-    // 只允许后台用
-    public static final String SQL_SELECT = "__sqlSelect__";
-    public static final String GROUP_BY = "__gb__";
-
     public static <T> QueryWrapper<T> fillEq(QueryWrapper<T> wrapper, M params, String field,
             String column) {
         return wrapper.eq(params.containsKey(field), column, params.get(field));
@@ -35,7 +26,7 @@ public class WrapperUtils {
     }
 
     public static <T> QueryWrapper<T> fillSelect(QueryWrapper<T> wrapper, M params) {
-        String sqlSelects = params.getString(SQL_SELECT);
+        String sqlSelects = params.getString(Constant.SQL_SELECT);
         if (StringUtils.isBlank(sqlSelects)) {
             return wrapper;
         }
@@ -74,7 +65,7 @@ public class WrapperUtils {
     }
 
     public static <T> QueryWrapper<T> fillGroupBy(QueryWrapper<T> wrapper, M params) {
-        String groupBy = params.getString(GROUP_BY);
+        String groupBy = params.getString(Constant.GROUP_BY);
         return wrapper.groupBy(StringUtils.isNotBlank(groupBy), groupBy);
     }
 
@@ -88,12 +79,12 @@ public class WrapperUtils {
     }
 
     public static <T> QueryWrapper<T> fillCreatedAtBetween(QueryWrapper<T> wrapper, M params) {
-        return fillBetween(wrapper, params, CREATED_AT_START, CREATED_AT_STOP, "createdAt");
+        return fillBetween(wrapper, params, Constant.CREATED_AT_START, Constant.CREATED_AT_STOP, "createdAt");
     }
 
     public static <T> QueryWrapper<T> fillOrderBy(QueryWrapper<T> wrapper, M params) {
-        String asc = params.getString(WrapperUtils.ASC);
-        String desc = params.getString(WrapperUtils.DESC);
+        String asc = params.getString(Constant.ASC);
+        String desc = params.getString(Constant.DESC);
 
         wrapper.orderByAsc(StringUtils.isNotBlank(asc), asc);
         wrapper.orderByDesc(StringUtils.isNotBlank(desc), desc);

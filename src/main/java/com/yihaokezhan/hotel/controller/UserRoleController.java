@@ -34,22 +34,22 @@ public class UserRoleController {
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok().data(userRoleService.getById(uuid));
+        return R.ok().data(userRoleService.mGet(uuid));
     }
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody UserRole entity) {
-        return R.ok().data(userRoleService.save(entity));
+        return R.ok().data(userRoleService.mCreate(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody UserRole entity) {
-        return R.ok().data(userRoleService.updateById(entity));
+        return R.ok().data(userRoleService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok().data(userRoleService.removeById(uuid));
+        return R.ok().data(userRoleService.mDelete(uuid));
     }
 }
 

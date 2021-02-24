@@ -35,7 +35,7 @@ public class UserController {
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok().data(userService.getById(uuid));
+        return R.ok().data(userService.mGet(uuid));
     }
 
     @GetMapping("/info")
@@ -45,17 +45,17 @@ public class UserController {
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody User entity) {
-        return R.ok().data(userService.save(entity));
+        return R.ok().data(userService.mCreate(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody User entity) {
-        return R.ok().data(userService.updateById(entity));
+        return R.ok().data(userService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok().data(userService.removeById(uuid));
+        return R.ok().data(userService.mDelete(uuid));
     }
 }
 

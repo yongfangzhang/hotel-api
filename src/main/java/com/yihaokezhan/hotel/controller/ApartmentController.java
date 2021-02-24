@@ -36,22 +36,22 @@ public class ApartmentController {
     @GetMapping("/{uuid}")
     @RequiresPermissions("")
     public R get(@PathVariable String uuid) {
-        return R.ok().data(apartmentService.getById(uuid));
+        return R.ok().data(apartmentService.mGet(uuid));
     }
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody Apartment entity) {
-        return R.ok().data(apartmentService.save(entity));
+        return R.ok().data(apartmentService.mCreate(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody Apartment entity) {
-        return R.ok().data(apartmentService.updateById(entity));
+        return R.ok().data(apartmentService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok().data(apartmentService.removeById(uuid));
+        return R.ok().data(apartmentService.mDelete(uuid));
     }
 
 }

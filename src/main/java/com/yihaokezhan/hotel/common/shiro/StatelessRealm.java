@@ -50,7 +50,7 @@ public class StatelessRealm extends AuthorizingRealm {
             throws AuthenticationException {
         StatelessToken statelessToken = (StatelessToken) authToken;
         String openId = statelessToken.getOpenId();
-        User user = userService.getByOpenId(openId);
+        User user = userService.mGetByOpenId(openId);
 
         return new SimpleAuthenticationInfo(user, statelessToken.getCredentials(), getName());
     }

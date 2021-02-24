@@ -34,22 +34,22 @@ public class RoomController {
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok().data(roomService.getById(uuid));
+        return R.ok().data(roomService.mGet(uuid));
     }
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody Room entity) {
-        return R.ok().data(roomService.save(entity));
+        return R.ok().data(roomService.mCreate(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody Room entity) {
-        return R.ok().data(roomService.updateById(entity));
+        return R.ok().data(roomService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok().data(roomService.removeById(uuid));
+        return R.ok().data(roomService.mDelete(uuid));
     }
 }
 

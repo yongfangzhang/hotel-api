@@ -34,22 +34,22 @@ public class RouteController {
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok().data(routeService.getById(uuid));
+        return R.ok().data(routeService.mGet(uuid));
     }
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody Route entity) {
-        return R.ok().data(routeService.save(entity));
+        return R.ok().data(routeService.mCreate(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody Route entity) {
-        return R.ok().data(routeService.updateById(entity));
+        return R.ok().data(routeService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok().data(routeService.removeById(uuid));
+        return R.ok().data(routeService.mDelete(uuid));
     }
 }
 

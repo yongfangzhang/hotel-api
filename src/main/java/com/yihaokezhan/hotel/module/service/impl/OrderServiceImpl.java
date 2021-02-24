@@ -1,10 +1,6 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.remark.RemarkRecord;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Order;
@@ -21,29 +17,10 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
-
-
-    @Override
-    public Order mGet(String uuid) {
-        return this.getById(uuid);
-    }
+public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implements IOrderService {
 
     @Override
-    public Order mOne(M params) {
-        return this.getOne(getWrapper(params));
-    }
-
-    @Override
-    public List<RemarkRecord> getRemark(String uuid) {
-        Order entity = this.getById(uuid);
-        if (entity == null) {
-            return new ArrayList<>();
-        }
-        return entity.getRemark();
-    }
-
-    private QueryWrapper<Order> getWrapper(M params) {
+    public QueryWrapper<Order> getWrapper(M params) {
         QueryWrapper<Order> wrapper = new QueryWrapper<Order>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");

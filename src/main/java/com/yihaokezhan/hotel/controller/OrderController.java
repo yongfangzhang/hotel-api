@@ -34,22 +34,22 @@ public class OrderController {
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok().data(orderService.getById(uuid));
+        return R.ok().data(orderService.mGet(uuid));
     }
 
     @PostMapping("")
     public R create(@Validated(AddGroup.class) @RequestBody Order entity) {
-        return R.ok().data(orderService.save(entity));
+        return R.ok().data(orderService.mCreate(entity));
     }
 
     @PutMapping("")
     public R update(@Validated(UpdateGroup.class) @RequestBody Order entity) {
-        return R.ok().data(orderService.updateById(entity));
+        return R.ok().data(orderService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok().data(orderService.removeById(uuid));
+        return R.ok().data(orderService.mDelete(uuid));
     }
 
 }

@@ -1,9 +1,5 @@
 package com.yihaokezhan.hotel.module.service;
 
-import java.util.List;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.yihaokezhan.hotel.common.remark.RemarkRecord;
-import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.module.entity.Route;
 
 /**
@@ -14,13 +10,5 @@ import com.yihaokezhan.hotel.module.entity.Route;
  * @author zhangyongfang
  * @since 2021-02-22
  */
-public interface IRouteService extends IService<Route> {
-
-    Route mGet(String uuid);
-
-    List<Route> mList(M params);
-
-    Route mOne(M params);
-
-    List<RemarkRecord> getRemark(String uuid);
+public interface IRouteService extends IBaseService<Route> {
 }
