@@ -44,11 +44,12 @@ public class WrapperUtils {
 
     public static <T> QueryWrapper<T> fillInList(QueryWrapper<T> wrapper, M params, String key,
             String column) {
-        String itemJson = params.getString(key);
-        if (StringUtils.isBlank(itemJson)) {
+        Object itemJson = params.get(key);
+        if (itemJson == null || StringUtils.isBlank(itemJson.toString())) {
             return wrapper;
         }
-        List<String> items = JSONUtils.parseArray(params.getString(key), String.class);
+
+        List<String> items = JSONUtils.parseArray(itemJson, String.class);
         // 包含key，如果list为空时返回不存在
         if (CollectionUtils.isEmpty(items)) {
             return wrapper.apply("1<>1");

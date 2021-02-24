@@ -60,12 +60,18 @@ public class JSONUtils {
      * @param valueTypeRef
      * @return
      */
-    public static <T> List<T> parseArray(String jsonStr, Class<T> valueType) {
+    public static <T> List<T> parseArray(Object jsonStr, Class<T> valueType) {
         try {
+            if (jsonStr == null) {
+                return null;
+            }
             CollectionType javaType =
                     objectMapper.getTypeFactory().constructCollectionType(List.class, valueType);
 
-            return objectMapper.readValue(jsonStr, javaType);
+            if (!(jsonStr instanceof String)) {
+                return objectMapper.readValue(toJSONString(jsonStr), javaType);
+            }
+            return objectMapper.readValue(jsonStr.toString(), javaType);
         } catch (Exception e) {
             e.printStackTrace();
         }
