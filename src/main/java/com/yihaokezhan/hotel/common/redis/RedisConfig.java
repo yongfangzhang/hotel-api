@@ -32,7 +32,7 @@ public class RedisConfig {
     @Value("${yhkz.hotel.redis.database.app:0}")
     private int appDatabase;
 
-    @Value("${yhkz.hotel.redis.database.cache:1}")
+    @Value("${yhkz.hotel.redis.database.cache:3}")
     private int cacheDatabase;
 
     @Value("${yhkz.hotel.redis.host:}")

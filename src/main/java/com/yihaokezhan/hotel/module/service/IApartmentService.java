@@ -1,6 +1,7 @@
 package com.yihaokezhan.hotel.module.service;
 
 import com.yihaokezhan.hotel.module.entity.Apartment;
+import org.springframework.cache.annotation.CacheConfig;
 
 /**
  * <p>
@@ -10,6 +11,7 @@ import com.yihaokezhan.hotel.module.entity.Apartment;
  * @author zhangyongfang
  * @since 2021-02-22
  */
+@CacheConfig(cacheNames = "Apartment")
 public interface IApartmentService extends IBaseService<Apartment> {
 
 }
