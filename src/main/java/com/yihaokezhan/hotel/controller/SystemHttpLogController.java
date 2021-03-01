@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-03-01
  */
 @RestController
-@RequestMapping("/hotel/system/http-log")
+@RequestMapping("/hotel/system/log/http")
 public class SystemHttpLogController {
 
     @Autowired

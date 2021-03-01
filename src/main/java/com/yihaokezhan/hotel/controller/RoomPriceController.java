@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-03-01
  */
 @RestController
-@RequestMapping("/hotel/room-price")
+@RequestMapping("/hotel/room/price")
 public class RoomPriceController {
 
     @Autowired

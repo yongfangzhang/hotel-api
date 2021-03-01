@@ -2,7 +2,7 @@ package com.yihaokezhan.hotel.common.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.yihaokezhan.hotel.common.annotation.Login;
+import com.yihaokezhan.hotel.common.annotation.Annc;
 import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.utils.TokenUtils;
@@ -18,7 +18,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
  * @since 2021-03-01
  */
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class AnncInterceptor implements HandlerInterceptor {
 
     @Autowired
     private TokenUtils tokenUtils;
@@ -26,16 +26,18 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
             Object handler) throws Exception {
-        Login annotation;
-        if (handler instanceof HandlerMethod) {
-            annotation = ((HandlerMethod) handler).getMethodAnnotation(Login.class);
-        } else {
+        // not method
+        if (!(handler instanceof HandlerMethod)) {
             return true;
         }
 
-        if (annotation == null) {
+        Annc annc = ((HandlerMethod) handler).getMethodAnnotation(Annc.class);
+
+        if (annc != null) {
+            // 匿名
             return true;
         }
+        // 需要登录
 
         String token = tokenUtils.getTokenFromReq(request);
         if (tokenUtils.isValidToken(token)) {

@@ -1,6 +1,7 @@
 package com.yihaokezhan.hotel.controller;
 
 import java.util.Map;
+import com.yihaokezhan.hotel.common.annotation.Annc;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.module.service.ICommAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,13 @@ public class CommAreaController {
     @Autowired
     private ICommAreaService commAreaService;
 
+    @Annc
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(commAreaService.mList(params));
     }
 
+    @Annc
     @GetMapping("/{code}")
     public R get(@PathVariable String code) {
         return R.ok().data(commAreaService.mGet(code));

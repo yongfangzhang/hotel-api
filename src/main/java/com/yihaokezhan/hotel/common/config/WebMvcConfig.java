@@ -4,7 +4,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.yihaokezhan.hotel.common.interceptor.LoginInterceptor;
+import com.yihaokezhan.hotel.common.interceptor.AnncInterceptor;
 import com.yihaokezhan.hotel.common.interceptor.ShiroInterceptor;
 import com.yihaokezhan.hotel.common.resolver.LoginUserResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private ShiroInterceptor shiroInterceptor;
 
     @Autowired
-    private LoginInterceptor loginInterceptor;
+    private AnncInterceptor anncInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor);
+        registry.addInterceptor(anncInterceptor);
         registry.addInterceptor(shiroInterceptor);
     }
 
