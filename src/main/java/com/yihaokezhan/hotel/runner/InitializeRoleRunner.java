@@ -14,6 +14,11 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+
+/**
+ * @author zhangyongfang
+ * @since 2021-03-01
+ */
 @Component
 public class InitializeRoleRunner implements ApplicationRunner {
 
@@ -29,7 +34,7 @@ public class InitializeRoleRunner implements ApplicationRunner {
                 .collect(Collectors.groupingBy(AccountRole::getAccountUuid));
 
         accountRoleMap.entrySet().forEach(entry -> {
-            String userUuid = entry.getKey();
+            String accountUuid = entry.getKey();
             List<AccountRole> accountRoles = entry.getValue();
             List<String> perms =
                     accountRoles.stream().flatMap(ur -> ur.getRole().getRoutes().stream())
@@ -37,8 +42,8 @@ public class InitializeRoleRunner implements ApplicationRunner {
                                     Arrays.asList(r.getPermissions().split(","))).stream())
                             .distinct().collect(Collectors.toList());
 
-            shiroUtils.updatePermCache(userUuid, perms);
-            shiroUtils.updateRoleCache(userUuid, accountRoles.stream()
+            shiroUtils.updatePermCache(accountUuid, perms);
+            shiroUtils.updateRoleCache(accountUuid, accountRoles.stream()
                     .map(ur -> ur.getRole().getCode()).collect(Collectors.toList()));
         });
 

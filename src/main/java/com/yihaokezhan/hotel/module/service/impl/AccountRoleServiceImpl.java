@@ -67,12 +67,12 @@ public class AccountRoleServiceImpl extends BaseServiceImpl<AccountRoleMapper, A
         QueryWrapper<AccountRole> wrapper = new QueryWrapper<AccountRole>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");
-        WrapperUtils.fillEq(wrapper, params, "userUuid");
+        WrapperUtils.fillEq(wrapper, params, "accountUuid");
         WrapperUtils.fillEq(wrapper, params, "roleUuid");
 
 
         WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
-        WrapperUtils.fillInList(wrapper, params, "userUuids", "user_uuid");
+        WrapperUtils.fillInList(wrapper, params, "accountUuids", "account_uuid");
         WrapperUtils.fillInList(wrapper, params, "roleUuids", "role_uuid");
 
         WrapperUtils.fillCreatedAtBetween(wrapper, params);

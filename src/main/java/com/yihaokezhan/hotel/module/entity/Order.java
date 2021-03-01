@@ -52,9 +52,9 @@ public class Order extends RemarkEntity {
     private String apartmentUuid;
 
     /**
-     * 用户UUID
+     * 账户UUID
      */
-    private String userUuid;
+    private String accountUuid;
 
     /**
      * 订单号

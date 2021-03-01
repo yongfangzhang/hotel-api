@@ -32,7 +32,10 @@ public class RedisConfig {
     @Value("${yhkz.hotel.redis.database.app:0}")
     private int appDatabase;
 
-    @Value("${yhkz.hotel.redis.database.cache:3}")
+    @Value("${yhkz.hotel.redis.database.app:1}")
+    private int tokenDatabase;
+
+    @Value("${yhkz.hotel.redis.database.cache:2}")
     private int cacheDatabase;
 
     @Value("${yhkz.hotel.redis.host:}")
@@ -125,5 +128,10 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         return getRedisTemplate(appDatabase);
+    }
+
+    @Bean(name = "tokenRedis")
+    public RedisTemplate<String, Object> tokenRedisTemplate() {
+        return getRedisTemplate(tokenDatabase);
     }
 }

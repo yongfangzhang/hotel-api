@@ -5,7 +5,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.yihaokezhan.hotel.common.wx.WXService;
+import com.yihaokezhan.hotel.common.utils.TokenUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 public class StatelessAuthcFilter extends AccessControlFilter {
 
     @Autowired
-    private ShiroUtils shiroUtils;
+    private TokenUtils tokenUtils;
 
     @Autowired
-    private WXService wxService;
+    private ShiroUtils shiroUtils;
 
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
             Object mappedValue) throws Exception {
@@ -33,22 +33,28 @@ public class StatelessAuthcFilter extends AccessControlFilter {
             throws Exception {
         // 客户端生成的消息摘要
         HttpServletRequest req = (HttpServletRequest) request;
-        String openId = wxService.getOpenIdFromRequest(req);
-        if (StringUtils.isBlank(openId)) {
-            onLoginFail(response, openId);
+        String token = tokenUtils.getTokenFromReq(req);
+        // 客户端传入的用户身份
+        if (StringUtils.isBlank(token)) {
+            // 无需校验
+            return true;
+        }
+        String uuid = tokenUtils.getUuidByToken(token);
+        if (StringUtils.isBlank(uuid)) {
+            onLoginFail(response, token);
             return false;
         }
-        if (!shiroUtils.login(openId)) {
+        if (!shiroUtils.login(uuid, token)) {
             // 登录失败
-            onLoginFail(response, openId);
+            onLoginFail(response, token);
             return false;
         }
         return true;
     }
 
     // 登录失败时默认返回401状态码
-    private void onLoginFail(ServletResponse response, String openId) throws IOException {
-        log.error("shiro login failed: {}", openId);
+    private void onLoginFail(ServletResponse response, String token) throws IOException {
+        log.error("shiro login failed: {}", token);
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpResponse.getWriter().write("Access Denied");

@@ -13,23 +13,25 @@ import lombok.Setter;
 public class StatelessToken implements AuthenticationToken {
     private static final long serialVersionUID = 1L;
 
-    private String openId;
+    private String uuid;
+    private String token;
 
     public StatelessToken() {
     };
 
-    public StatelessToken(String openId) {
+    public StatelessToken(String uuid, String token) {
         super();
-        this.openId = openId;
+        this.uuid = uuid;
+        this.token = token;
     };
 
     @Override
     public Object getPrincipal() {
-        return openId;
+        return uuid;
     }
 
     @Override
     public Object getCredentials() {
-        return openId;
+        return token;
     }
 }

@@ -1,7 +1,7 @@
 package com.yihaokezhan.hotel.common.shiro;
 
-import com.yihaokezhan.hotel.module.entity.User;
-import com.yihaokezhan.hotel.module.service.IUserService;
+import com.yihaokezhan.hotel.common.utils.TokenUtils;
+import com.yihaokezhan.hotel.model.TokenUser;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -22,7 +22,7 @@ public class StatelessRealm extends AuthorizingRealm {
     private ShiroUtils shiroUtils;
 
     @Autowired
-    private IUserService userService;
+    private TokenUtils tokenUtils;
 
     public boolean supports(AuthenticationToken token) {
         // 仅支持StatelessToken类型的Token
@@ -34,8 +34,8 @@ public class StatelessRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        User user = (User) principals.getPrimaryPrincipal();
-        ShiroSet shiroSet = shiroUtils.getUserShiroSet(user);
+        TokenUser tokenUser = (TokenUser) principals.getPrimaryPrincipal();
+        ShiroSet shiroSet = shiroUtils.getAccountShiroSet(tokenUser);
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.setStringPermissions(shiroSet.getPermissions());
         info.setRoles(shiroSet.getRoles());
@@ -49,9 +49,9 @@ public class StatelessRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken)
             throws AuthenticationException {
         StatelessToken statelessToken = (StatelessToken) authToken;
-        String openId = statelessToken.getOpenId();
-        User user = userService.mGetByOpenId(openId);
+        String token = statelessToken.getToken();
+        TokenUser tokenUser = tokenUtils.getUserByToken(token);
 
-        return new SimpleAuthenticationInfo(user, statelessToken.getCredentials(), getName());
+        return new SimpleAuthenticationInfo(tokenUser, token, getName());
     }
 }

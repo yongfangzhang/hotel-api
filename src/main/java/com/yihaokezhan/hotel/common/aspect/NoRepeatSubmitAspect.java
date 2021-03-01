@@ -5,7 +5,7 @@ import com.yihaokezhan.hotel.common.annotation.NoRepeatSubmit;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.redis.RedisService;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
-import com.yihaokezhan.hotel.module.entity.User;
+import com.yihaokezhan.hotel.model.TokenUser;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -31,11 +31,11 @@ public class NoRepeatSubmitAspect {
         ServletRequestAttributes attributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        User user = ShiroUtils.getUser();
-        if (user == null || StringUtils.isBlank(user.getUuid())) {
+        TokenUser tokenUser = ShiroUtils.getTokenUser();
+        if (tokenUser == null || StringUtils.isBlank(tokenUser.getUuid())) {
             return pjp.proceed();
         }
-        String key = user.getUuid() + "-" + request.getServletPath();
+        String key = tokenUser.getUuid() + "-" + request.getServletPath();
         if (redisUtils.get(key) == null) {
             redisUtils.set(key, 0, 5); // 5s 过期
             return pjp.proceed();

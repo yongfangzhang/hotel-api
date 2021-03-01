@@ -26,7 +26,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         WrapperUtils.fillEq(wrapper, params, "uuid");
         WrapperUtils.fillEq(wrapper, params, "tenantUuid");
         WrapperUtils.fillEq(wrapper, params, "apartmentUuid");
-        WrapperUtils.fillEq(wrapper, params, "userUuid");
+        WrapperUtils.fillEq(wrapper, params, "accountUuid");
         WrapperUtils.fillEq(wrapper, params, "from");
         WrapperUtils.fillEq(wrapper, params, "number");
         WrapperUtils.fillEq(wrapper, params, "state");
@@ -35,7 +35,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
         WrapperUtils.fillInList(wrapper, params, "tenantUuids", "tenant_uuid");
         WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
-        WrapperUtils.fillInList(wrapper, params, "userUuids", "user_uuid");
+        WrapperUtils.fillInList(wrapper, params, "accountUuids", "account_uuid");
 
         WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
