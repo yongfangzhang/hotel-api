@@ -2,6 +2,7 @@ package com.yihaokezhan.hotel.module.entity;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.utils.Constant;
@@ -61,5 +62,6 @@ public class Tenant extends BaseEntity {
     /**
      * 是否已删除
      */
+    @TableLogic(value = "0", delval = "1")
     private Boolean deleted;
 }

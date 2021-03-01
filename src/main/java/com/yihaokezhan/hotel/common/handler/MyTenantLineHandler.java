@@ -2,6 +2,7 @@ package com.yihaokezhan.hotel.common.handler;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
@@ -16,13 +17,12 @@ public class MyTenantLineHandler implements TenantLineHandler {
 
     @Override
     public Expression getTenantId() {
-        return new StringValue(DynamicTenantHandler.getTenant());
+        return new StringValue(StringUtils.defaultString(DynamicTenantHandler.getTenant(), ""));
     }
 
     @Override
     public boolean ignoreTable(String tableName) {
         // 忽略租户
-        String[] ignores = new String[] {"tenant", "comm_area", "comm_city", "comm_province"};
-        return DynamicTenantHandler.isRootTenant() || ArrayUtils.contains(ignores, tableName);
+        return tableName.startsWith("comm_");
     }
 }

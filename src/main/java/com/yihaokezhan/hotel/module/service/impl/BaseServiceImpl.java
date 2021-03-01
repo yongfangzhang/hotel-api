@@ -7,6 +7,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yihaokezhan.hotel.common.remark.RemarkRecord;
+import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
+import com.yihaokezhan.hotel.common.validator.group.AddGroup;
+import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.BaseEntity;
 import com.yihaokezhan.hotel.model.Pager;
 import com.yihaokezhan.hotel.model.Query;
@@ -50,11 +53,13 @@ public abstract class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEnt
 
     @Override
     public boolean mCreate(T entity) {
+        ValidatorUtils.validateEntity(entity, AddGroup.class);
         return save(entity);
     }
 
     @Override
     public boolean mUpdate(T entity) {
+        ValidatorUtils.validateEntity(entity, UpdateGroup.class);
         return updateById(entity);
     }
 
