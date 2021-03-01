@@ -1,7 +1,6 @@
 package com.yihaokezhan.hotel.common.handler;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import net.sf.jsqlparser.expression.Expression;
