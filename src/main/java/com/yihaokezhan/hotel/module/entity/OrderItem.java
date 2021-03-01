@@ -46,12 +46,6 @@ public class OrderItem extends BaseEntity {
     private String orderUuid;
 
     /**
-     * 租户UUID
-     */
-    @NotBlank(message = "租户不能为空", groups = AddGroup.class)
-    private String tenantUuid;
-
-    /**
      * 公寓UUID
      */
     @NotBlank(message = "公寓不能为空", groups = AddGroup.class)

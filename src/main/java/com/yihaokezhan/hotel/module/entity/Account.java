@@ -40,12 +40,6 @@ public class Account extends BaseEntity {
     public static final String TABLE_NAME = "account";
 
     /**
-     * 所属租户
-     */
-    @NotBlank(message = "租户不能为空", groups = AddGroup.class)
-    private String tenantUuid;
-
-    /**
      * 所属用户
      */
     @NotBlank(message = "用户不能为空", groups = AddGroup.class)

@@ -36,12 +36,6 @@ public class Apartment extends BaseEntity {
     public static final String TABLE_NAME = "apartment";
 
     /**
-     * 租户UUID
-     */
-    @NotBlank(message = "租户不能为空", groups = AddGroup.class)
-    private String tenantUuid;
-
-    /**
      * 名称
      */
     @NotBlank(message = "名称不能为空", groups = AddGroup.class)

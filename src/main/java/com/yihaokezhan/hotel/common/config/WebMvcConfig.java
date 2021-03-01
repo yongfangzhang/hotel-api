@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.yihaokezhan.hotel.common.interceptor.AnncInterceptor;
 import com.yihaokezhan.hotel.common.interceptor.ShiroInterceptor;
+import com.yihaokezhan.hotel.common.interceptor.TenantInterceptor;
 import com.yihaokezhan.hotel.common.resolver.LoginUserResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -23,16 +24,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
-    private LoginUserResolver loginUserResolver;
+    private TenantInterceptor tenantInterceptor;
+
+    @Autowired
+    private AnncInterceptor anncInterceptor;
 
     @Autowired
     private ShiroInterceptor shiroInterceptor;
 
     @Autowired
-    private AnncInterceptor anncInterceptor;
+    private LoginUserResolver loginUserResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(tenantInterceptor);
         registry.addInterceptor(anncInterceptor);
         registry.addInterceptor(shiroInterceptor);
     }

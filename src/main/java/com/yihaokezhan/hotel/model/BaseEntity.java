@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.V;
+import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +32,9 @@ public class BaseEntity extends RemarkEntity {
     @TableId(type = IdType.INPUT)
     @NotBlank(message = "UUID不能为空", groups = UpdateGroup.class)
     private String uuid;
+
+    @NotBlank(message = "租户不能为空", groups = AddGroup.class)
+    private String tenantUuid;
 
     /**
      * 创建时间

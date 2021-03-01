@@ -7,6 +7,11 @@ package com.yihaokezhan.hotel.common.utils;
 public class Constant {
     public static final String ACCESS_TOKEN_HEADER = "Access-Token";
     public static final String WX_OPENID = "Wx-OpenId";
+    public static final String TENANT_SPLIT_HEADER = "Tenant";
+
+    public static final String ROOT_TENANT = "00000000000000000000000000000";
+
+
 
     public static final long REDIS_NOT_EXPIRE = -1L;
 

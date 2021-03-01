@@ -10,6 +10,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.exception.RRException;
+import com.yihaokezhan.hotel.module.entity.Tenant;
+import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.util.Assert;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -72,5 +75,10 @@ public class ValidatorUtils {
         }
         return constraintViolations.stream().map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList());
+    }
+
+    public static void validateTenant(Tenant tenant) {
+        Assert.notNull(tenant, "租户不存在");
+        Assert.state(BooleanUtils.isNotTrue(tenant.getDeleted()), "租户已删除");
     }
 }
