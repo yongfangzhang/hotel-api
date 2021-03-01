@@ -36,18 +36,16 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
             return roleList;
         }
 
-        Map<String, List<RoleRoute>> roleRoutesMap = roleRouteService
-                .mList(M.m().put("roleUuids",
-                        roleList.stream().map(Role::getUuid).collect(Collectors.toList())))
-                .stream().collect(Collectors.groupingBy(RoleRoute::getRoleUuid));
-
-        roleList.forEach(r -> {
-            List<RoleRoute> roleRoutes = roleRoutesMap.get(r.getUuid());
-            if (!CollectionUtils.isEmpty(roleRoutes)) {
-                r.setRoutes(
-                        roleRoutes.stream().map(rr -> rr.getRoute()).collect(Collectors.toList()));
-            }
-        });
+        roleRouteService.attachListItems(roleList,
+                M.m().put("roleUuids",
+                        roleList.stream().map(Role::getUuid).collect(Collectors.toList())),
+                RoleRoute::getRoleUuid, (record, map) -> {
+                    List<RoleRoute> roleRoutes = map.get(record.getUuid());
+                    if (!CollectionUtils.isEmpty(roleRoutes)) {
+                        record.setRoutes(roleRoutes.stream().map(rr -> rr.getRoute())
+                                .collect(Collectors.toList()));
+                    }
+                });
 
         return roleList;
     }
@@ -59,8 +57,11 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
             return role;
         }
 
-        role.setRoutes(roleRouteService.mList(M.m().put("roleUuid", role.getUuid())).stream()
-                .map(rr -> rr.getRoute()).collect(Collectors.toList()));
+        roleRouteService.attachOneItems(role, M.m().put("roleUuid", role.getUuid()),
+                (record, roleRoutes) -> {
+                    record.setRoutes(roleRoutes.stream().map(rr -> rr.getRoute())
+                            .collect(Collectors.toList()));
+                });
 
         return role;
     }

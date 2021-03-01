@@ -6,8 +6,8 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.remark.RemarkRecord;
+import com.yihaokezhan.hotel.model.BaseEntity;
 import com.yihaokezhan.hotel.model.Pager;
 import com.yihaokezhan.hotel.model.Query;
 import com.yihaokezhan.hotel.module.service.IBaseService;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-public abstract class BaseServiceImpl<C extends BaseMapper<T>, T extends RemarkEntity>
+public abstract class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
         extends ServiceImpl<C, T> implements IBaseService<T> {
 
     @Override

@@ -6,10 +6,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.PositiveOrZero;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -17,13 +13,13 @@ import com.yihaokezhan.hotel.common.enums.OrderChannel;
 import com.yihaokezhan.hotel.common.enums.OrderState;
 import com.yihaokezhan.hotel.common.enums.OrderType;
 import com.yihaokezhan.hotel.common.enums.OrderUserType;
-import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.EnumValue;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
+import com.yihaokezhan.hotel.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -41,17 +37,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @JsonView(V.S.class)
 @TableName(value = "order", autoResultMap = true)
-public class Order extends RemarkEntity {
+public class Order extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     public static final String TABLE_NAME = "order";
-
-    /**
-     * UUID
-     */
-    @TableId(type = IdType.INPUT)
-    @NotBlank(message = "UUID不能为空", groups = UpdateGroup.class)
-    private String uuid;
 
     /**
      * 租户UUID
@@ -140,20 +129,6 @@ public class Order extends RemarkEntity {
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     @Past(message = "评价时间无效", groups = {AddGroup.class, UpdateGroup.class})
     private LocalDateTime commentedAt;
-
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    private LocalDateTime createdAt;
-
-    /**
-     * 更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    private LocalDateTime updatedAt;
 
     public String getChannelName() {
         return EnumUtils.getName(OrderChannel.class, this.channel);

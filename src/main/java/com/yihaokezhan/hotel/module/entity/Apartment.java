@@ -1,24 +1,17 @@
 package com.yihaokezhan.hotel.module.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.ApartmentState;
-import com.yihaokezhan.hotel.common.remark.RemarkEntity;
-import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.EnumValue;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
+import com.yihaokezhan.hotel.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -36,19 +29,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @JsonView(V.S.class)
 @TableName(value = "apartment", autoResultMap = true)
-public class Apartment extends RemarkEntity {
+public class Apartment extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     public static final String TABLE_NAME = "apartment";
-
-
-    /**
-     * UUID
-     */
-    @TableId(type = IdType.INPUT)
-    @NotBlank(message = "公寓不能为空", groups = UpdateGroup.class)
-    private String uuid;
 
     /**
      * 租户UUID
@@ -131,20 +116,6 @@ public class Apartment extends RemarkEntity {
      * 是否已删除
      */
     private Boolean deleted;
-
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    private LocalDateTime createdAt;
-
-    /**
-     * 更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    private LocalDateTime updatedAt;
 
     public String getStateName() {
         return EnumUtils.getName(ApartmentState.class, this.state);

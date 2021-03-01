@@ -1,19 +1,12 @@
 package com.yihaokezhan.hotel.module.entity;
 
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.FileType;
 import com.yihaokezhan.hotel.common.enums.ResourceType;
-import com.yihaokezhan.hotel.common.remark.RemarkEntity;
-import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
+import com.yihaokezhan.hotel.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,17 +24,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @JsonView(V.S.class)
 @TableName(value = "resource", autoResultMap = true)
-public class Resource extends RemarkEntity {
+public class Resource extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     public static final String TABLE_NAME = "resource";
-
-
-    /**
-     * UUID
-     */
-    @TableId(type = IdType.INPUT)
-    private String uuid;
 
     /**
      * 资源类型
@@ -77,20 +63,6 @@ public class Resource extends RemarkEntity {
      * 访问路径
      */
     private String visitPath;
-
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    private LocalDateTime createdAt;
-
-    /**
-     * 更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    private LocalDateTime updatedAt;
 
     public String getTypeName() {
         return EnumUtils.getName(ResourceType.class, this.type);

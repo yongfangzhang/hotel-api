@@ -1,64 +1,48 @@
-package ${package.Entity};
+package com.yihaokezhan.hotel.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.V;
-import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-
-/**
- * <p>
- * ${table.comment} 实体类
- * </p>
- *
- * @author ${author}
- * @since ${date}
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonView(V.S.class)
-@TableName(value = "${table.name}", autoResultMap = true)
-public class ${table.entityName} extends BaseEntity {
-    private static final long serialVersionUID = 1L;
-
-    public static final String TABLE_NAME = "${table.name}";
-
-#foreach ($column in $table.fields)
-#if($column.name != "remark")
+public class BaseEntity extends RemarkEntity {
 
     /**
-     * $column.comment
+    *
+    */
+    private static final long serialVersionUID = 3187537386899317917L;
+
+    /**
+     * UUID
      */
-#if($column.name == "uuid")
     @TableId(type = IdType.INPUT)
-#end
-#if($column.name == "created_at")
+    @NotBlank(message = "UUID不能为空", groups = UpdateGroup.class)
+    private String uuid;
+
+    /**
+     * 创建时间
+     */
     @TableField(fill = FieldFill.INSERT)
-#end
-#if($column.name == "updated_at")
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
+    private LocalDateTime createdAt;
+
+    /**
+     * 更新时间
+     */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-#end
-#if("$column.type" == "date")
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-#end
-#if("$column.type" == "datetime")
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-#end
-    private $column.propertyType $column.propertyName;
-#end
-#end
+    private LocalDateTime updatedAt;
 }

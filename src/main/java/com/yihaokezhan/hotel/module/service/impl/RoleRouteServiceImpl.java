@@ -2,13 +2,10 @@ package com.yihaokezhan.hotel.module.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.RoleRoute;
-import com.yihaokezhan.hotel.module.entity.Route;
 import com.yihaokezhan.hotel.module.mapper.RoleRouteMapper;
 import com.yihaokezhan.hotel.module.service.IRoleRouteService;
 import com.yihaokezhan.hotel.module.service.IRouteService;
@@ -36,14 +33,8 @@ public class RoleRouteServiceImpl extends BaseServiceImpl<RoleRouteMapper, RoleR
             return roleRouteList;
         }
 
-        Map<String, Route> routeMap = routeService
-                .mList(M.m().put("uuids",
-                        roleRouteList.stream().map(RoleRoute::getRouteUuid)
-                                .collect(Collectors.toList())))
-                .stream().collect(Collectors.toMap(Route::getUuid, v -> v));
-
-        roleRouteList.forEach(rr -> {
-            rr.setRoute(routeMap.get(rr.getRouteUuid()));
+        routeService.attachList(roleRouteList, RoleRoute::getRouteUuid, (record, map) -> {
+            record.setRoute(map.get(record.getRouteUuid()));
         });
 
         return roleRouteList;
@@ -55,7 +46,9 @@ public class RoleRouteServiceImpl extends BaseServiceImpl<RoleRouteMapper, RoleR
             return roleRoute;
         }
 
-        roleRoute.setRoute(routeService.mGet(roleRoute.getRouteUuid()));
+        routeService.attachOne(roleRoute, roleRoute.getRouteUuid(), (record, route) -> {
+            record.setRoute(route);
+        });
 
         return roleRoute;
     }

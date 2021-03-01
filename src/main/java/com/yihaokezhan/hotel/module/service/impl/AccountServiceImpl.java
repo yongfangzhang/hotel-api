@@ -7,6 +7,8 @@ import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Account;
 import com.yihaokezhan.hotel.module.mapper.AccountMapper;
 import com.yihaokezhan.hotel.module.service.IAccountService;
+import com.yihaokezhan.hotel.module.service.ITenantService;
+import com.yihaokezhan.hotel.module.service.IUserService;
 import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +29,27 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
     @Autowired
     private IAccountRoleService accountRoleService;
 
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private ITenantService tenantService;
 
     @Override
     public Account join(Account account) {
         if (account == null) {
             return account;
         }
-        account.setRoles(accountRoleService.mList(M.m().put("accountUuid", account.getUuid())));
+        userService.attachOne(account, account.getUserUuid(), (record, user) -> {
+            record.setUser(user);
+        });
+        accountRoleService.attachOneItems(account, M.m().put("accountUuid", account.getUuid()),
+                (record, roles) -> {
+                    record.setRoles(roles);
+                });
+        tenantService.attachOne(account, account.getTenantUuid(), (record, tenant) -> {
+            record.setTenant(tenant);
+        });
         return account;
     }
 
