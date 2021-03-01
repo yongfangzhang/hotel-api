@@ -8,8 +8,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.enums.Gender;
 import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
+import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -103,4 +105,9 @@ public class WxUserInfo extends RemarkEntity {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     private LocalDateTime updatedAt;
+
+    public String getGenderName() {
+        return EnumUtils.getName(Gender.class, this.gender);
+    }
+
 }

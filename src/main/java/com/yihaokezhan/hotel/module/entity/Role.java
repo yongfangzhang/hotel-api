@@ -2,6 +2,7 @@ package com.yihaokezhan.hotel.module.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.validation.constraints.NotBlank;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -12,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.V;
+import com.yihaokezhan.hotel.common.validator.group.AddGroup;
+import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -39,16 +42,19 @@ public class Role extends RemarkEntity {
      * UUID
      */
     @TableId(type = IdType.INPUT)
+    @NotBlank(message = "UUID不能为空", groups = UpdateGroup.class)
     private String uuid;
 
     /**
      * 角色编码，后台用
      */
+    @NotBlank(message = "编码不能为空", groups = AddGroup.class)
     private String code;
 
     /**
      * 角色名称
      */
+    @NotBlank(message = "角色名称不能为空", groups = AddGroup.class)
     private String name;
 
     /**

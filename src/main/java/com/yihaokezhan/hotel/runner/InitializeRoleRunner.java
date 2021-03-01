@@ -1,7 +1,5 @@
 package com.yihaokezhan.hotel.runner;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,9 +36,8 @@ public class InitializeRoleRunner implements ApplicationRunner {
             List<AccountRole> accountRoles = entry.getValue();
             List<String> perms =
                     accountRoles.stream().flatMap(ur -> ur.getRole().getRoutes().stream())
-                            .flatMap(r -> new ArrayList<String>(
-                                    Arrays.asList(r.getPermissions().split(","))).stream())
-                            .distinct().collect(Collectors.toList());
+                            .flatMap(r -> r.getPermissions().stream()).distinct()
+                            .collect(Collectors.toList());
 
             shiroUtils.updatePermCache(accountUuid, perms);
             shiroUtils.updateRoleCache(accountUuid, accountRoles.stream()

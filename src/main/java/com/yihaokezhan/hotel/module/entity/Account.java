@@ -2,6 +2,8 @@ package com.yihaokezhan.hotel.module.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -9,9 +11,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.enums.AccountType;
+import com.yihaokezhan.hotel.common.enums.UserState;
 import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
+import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
+import com.yihaokezhan.hotel.common.validator.EnumValue;
+import com.yihaokezhan.hotel.common.validator.group.AddGroup;
+import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -38,41 +46,55 @@ public class Account extends RemarkEntity {
      * UUID
      */
     @TableId(type = IdType.INPUT)
+    @NotBlank(message = "UUID不能为空", groups = UpdateGroup.class)
     private String uuid;
 
     /**
      * 所属租户
      */
+    @NotBlank(message = "租户不能为空", groups = AddGroup.class)
     private String tenantUuid;
 
     /**
      * 所属用户
      */
+    @NotBlank(message = "用户不能为空", groups = AddGroup.class)
     private String userUuid;
 
     /**
      * 登录账号
      */
+    @NotBlank(message = "登录账号不能为空", groups = AddGroup.class)
     private String account;
 
     /**
      * 平台类型
      */
+    @NotNull(message = "平台类型不能为空", groups = AddGroup.class)
+    @EnumValue(enumClass = AccountType.class, message = "平台类型无效", canBeNull = true,
+            groups = {AddGroup.class, UpdateGroup.class})
     private Integer type;
 
     /**
      * 盐值
      */
+    @NotBlank(message = "盐值不能为空", groups = AddGroup.class)
+    @JsonView(V.IGNORE.class)
     private String salt;
 
     /**
      * 密码
      */
+    @NotBlank(message = "密码不能为空", groups = AddGroup.class)
+    @JsonView(V.IGNORE.class)
     private String password;
 
     /**
      * 账号状态
      */
+    @NotNull(message = "账号状态不能为空", groups = AddGroup.class)
+    @EnumValue(enumClass = UserState.class, message = "账号状态无效", canBeNull = true,
+            groups = {AddGroup.class, UpdateGroup.class})
     private Integer state;
 
     /**
@@ -108,4 +130,11 @@ public class Account extends RemarkEntity {
     @TableField(exist = false)
     private List<AccountRole> roles;
 
+    public String getTypeName() {
+        return EnumUtils.getName(AccountType.class, this.type);
+    }
+
+    public String getStateName() {
+        return EnumUtils.getName(UserState.class, this.state);
+    }
 }

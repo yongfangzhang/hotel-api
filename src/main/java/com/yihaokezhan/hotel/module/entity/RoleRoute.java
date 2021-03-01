@@ -1,6 +1,7 @@
 package com.yihaokezhan.hotel.module.entity;
 
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -11,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.V;
+import com.yihaokezhan.hotel.common.validator.group.AddGroup;
+import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -38,16 +41,19 @@ public class RoleRoute extends RemarkEntity {
      * UUID
      */
     @TableId(type = IdType.INPUT)
+    @NotBlank(message = "UUID不能为空", groups = UpdateGroup.class)
     private String uuid;
 
     /**
      * 角色ID
      */
+    @NotBlank(message = "角色不能为空", groups = AddGroup.class)
     private String roleUuid;
 
     /**
      * 路由ID
      */
+    @NotBlank(message = "路由不能为空", groups = AddGroup.class)
     private String routeUuid;
 
     /**

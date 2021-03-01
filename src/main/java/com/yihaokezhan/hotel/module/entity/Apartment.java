@@ -11,9 +11,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.enums.ApartmentState;
 import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
+import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
+import com.yihaokezhan.hotel.common.validator.EnumValue;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import lombok.Data;
@@ -44,13 +47,13 @@ public class Apartment extends RemarkEntity {
      * UUID
      */
     @TableId(type = IdType.INPUT)
-    @NotBlank(message = "公寓UUID不能为空", groups = UpdateGroup.class)
+    @NotBlank(message = "公寓不能为空", groups = UpdateGroup.class)
     private String uuid;
 
     /**
      * 租户UUID
      */
-    @NotBlank(message = "租户UUID不能为空", groups = AddGroup.class)
+    @NotBlank(message = "租户不能为空", groups = AddGroup.class)
     private String tenantUuid;
 
     /**
@@ -109,6 +112,9 @@ public class Apartment extends RemarkEntity {
     /**
      * 公寓状态
      */
+    @NotNull(message = "公寓状态不能为空", groups = AddGroup.class)
+    @EnumValue(enumClass = ApartmentState.class, message = "公寓状态无效", canBeNull = true,
+            groups = {AddGroup.class, UpdateGroup.class})
     private Integer state;
 
     /**
@@ -139,4 +145,8 @@ public class Apartment extends RemarkEntity {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     private LocalDateTime updatedAt;
+
+    public String getStateName() {
+        return EnumUtils.getName(ApartmentState.class, this.state);
+    }
 }

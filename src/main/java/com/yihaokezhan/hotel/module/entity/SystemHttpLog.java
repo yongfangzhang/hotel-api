@@ -77,10 +77,12 @@ public class SystemHttpLog implements Serializable {
     /**
      * 请求body
      */
+    @JsonView(V.F.class)
     private String requestBody;
     /**
      * 响应body
      */
+    @JsonView(V.F.class)
     private String responseBody;
     /**
      * IP
