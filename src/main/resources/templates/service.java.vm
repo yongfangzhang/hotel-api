@@ -1,0 +1,19 @@
+package ${package.Service};
+
+import ${package.Entity}.${table.entityName};
+import org.springframework.cache.annotation.Caching;
+
+
+/**
+ * <p>
+ * ${table.comment} IService
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@CacheConfig(cacheNames = ${table.entityName}.TABLE_NAME)
+public interface I${table.entityName}Service extends IBaseService<${table.entityName}> {
+
+}
+

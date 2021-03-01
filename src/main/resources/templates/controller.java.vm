@@ -1,0 +1,70 @@
+package ${package.Controller};
+
+import com.yihaokezhan.hotel.common.utils.R;
+import com.yihaokezhan.hotel.common.validator.group.AddGroup;
+import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
+import ${package.Entity}.${table.entityName};
+import ${package.Service}.${table.serviceName};
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * <p>
+ * ${table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@RestController
+@RequestMapping("/${table.name}")
+public class ${table.controllerName} {
+
+    @Autowired
+    private I${table.entityName}Service ${table.entityPath}Service;
+
+
+    @GetMapping("/page")
+    public R<Pager<${table.entityName}>> page(@RequestParam Map<String, Object> params) {
+        return R.ok().data(${table.entityPath}Service.mPage(params));
+    }
+
+    @GetMapping("/list")
+    public R<List<${table.entityName}>> list(@RequestParam Map<String, Object> params) {
+        return R.ok().data(${table.entityPath}Service.mList(params));
+    }
+
+    @GetMapping("/one")
+    public R<${table.entityName}> one(@RequestParam Map<String, Object> params) {
+        return R.ok().data(${table.entityPath}Service.mOne(params));
+    }
+
+    @GetMapping("/{uuid}")
+    public R get(@PathVariable String uuid) {
+        return R.ok().data(apartmentService.mGet(uuid));
+    }
+
+    @PostMapping("")
+    public R create(@Validated(AddGroup.class) @RequestBody ${table.entityName} entity) {
+        return R.ok().data(apartmentService.mCreate(entity));
+    }
+
+    @PutMapping("")
+    public R update(@Validated(UpdateGroup.class) @RequestBody ${table.entityName} entity) {
+        return R.ok().data(apartmentService.mUpdate(entity));
+    }
+
+    @DeleteMapping("/{uuid}")
+    public R delete(@PathVariable String uuid) {
+        return R.ok().data(apartmentService.mDelete(uuid));
+    }
+}

@@ -1,0 +1,36 @@
+package ${package.ServiceImpl};
+
+import java.util.Map;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yihaokezhan.hotel.common.utils.WrapperUtils;
+import ${package.Entity}.${table.entityName};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.I${table.serviceName};
+import org.springframework.stereotype.Service;
+
+@Service
+public class ${table.serviceImplName} extends BaseServiceImpl<${table.mapperName}, ${table.entityName}> implements I${table.entityName}Service {
+
+
+    @Override
+    public QueryWrapper<${table.entityName}> getWrapper(Map<String, Object> params) {
+        QueryWrapper<${table.entityName}> wrapper = new QueryWrapper<${table.entityName}>();
+
+#foreach ($column in ${table.fields})
+
+    #if("$column.type" == "char(32)" || "$column.type" == "char(6)" || "$column.propertyType" == "Long" || "$column.propertyType" == "Integer")
+    WrapperUtils.fillEq(wrapper, params, "$column.name");
+    #else
+        #if("$column.propertyType" == "String" && "$column.name" != "remark")
+        WrapperUtils.fillLike(wrapper, params, "$column.name");
+        #end
+    #end
+
+#end
+        WrapperUtils.fillCreatedAtBetween(wrapper, params);
+        WrapperUtils.fillSelect(wrapper, params);
+        WrapperUtils.fillOrderBy(wrapper, params);
+        WrapperUtils.fillGroupBy(wrapper, params);
+        return wrapper;
+    }
+}
