@@ -1,12 +1,11 @@
 package com.yihaokezhan.hotel.controller;
 
-
+import java.util.Map;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.module.entity.Apartment;
 import com.yihaokezhan.hotel.module.service.IApartmentService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author zhangyongfang
- * @since 2021-02-22
+ * @since 2021-03-01
  */
 @RestController
 @RequestMapping("/hotel/apartment")
@@ -33,8 +33,23 @@ public class ApartmentController {
     @Autowired
     private IApartmentService apartmentService;
 
+
+    @GetMapping("/page")
+    public R page(@RequestParam Map<String, Object> params) {
+        return R.ok().data(apartmentService.mPage(params));
+    }
+
+    @GetMapping("/list")
+    public R list(@RequestParam Map<String, Object> params) {
+        return R.ok().data(apartmentService.mList(params));
+    }
+
+    @GetMapping("/one")
+    public R one(@RequestParam Map<String, Object> params) {
+        return R.ok().data(apartmentService.mOne(params));
+    }
+
     @GetMapping("/{uuid}")
-    @RequiresPermissions("")
     public R get(@PathVariable String uuid) {
         return R.ok().data(apartmentService.mGet(uuid));
     }
@@ -53,6 +68,4 @@ public class ApartmentController {
     public R delete(@PathVariable String uuid) {
         return R.ok().data(apartmentService.mDelete(uuid));
     }
-
 }
-

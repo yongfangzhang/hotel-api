@@ -1,51 +1,50 @@
 package com.yihaokezhan.hotel.module.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
+import com.yihaokezhan.hotel.common.utils.V;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
+
 /**
  * <p>
- * 用户表
+ * 用户表 实体类
  * </p>
  *
  * @author zhangyongfang
- * @since 2021-02-22
+ * @since 2021-03-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@JsonView(V.S.class)
+@TableName(value = "user", autoResultMap = true)
 public class User extends RemarkEntity {
-
     private static final long serialVersionUID = 1L;
+
+    public static final String TABLE_NAME = "user";
+
 
     /**
      * UUID
      */
     @TableId(type = IdType.INPUT)
+    @TableField(fill = FieldFill.INSERT)
     private String uuid;
-
-    /**
-     * 所属租户
-     */
-    private String tenantUuid;
 
     /**
      * 姓名
      */
     private String name;
-
-    /**
-     * 昵称
-     */
-    private String nickname;
 
     /**
      * 性别
@@ -58,55 +57,36 @@ public class User extends RemarkEntity {
     private String mobile;
 
     /**
-     * 微信UnionId
+     * 微信UUID
      */
-    private String unionId;
+    private String wxUuid;
 
     /**
-     * 微信OpenId
+     * 获客渠道
      */
-    private String openId;
+    private Integer channel;
 
     /**
-     * 微信头像URL
+     * 用户类型(1:散客,2:会员)
      */
-    private String avatarUrl;
+    private Integer type;
 
     /**
-     * 国家
+     * 用户状态
      */
-    private String country;
-
-    /**
-     * 省份
-     */
-    private String province;
-
-    /**
-     * 城市
-     */
-    private String city;
-
-    /**
-     * 语言
-     */
-    private String language;
+    private Integer state;
 
     /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @TableField(fill = FieldFill.UPDATE)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     private LocalDateTime updatedAt;
-
-    @TableField(exist = false)
-    private List<UserRole> userRole;
-
 }

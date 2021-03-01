@@ -1,7 +1,7 @@
 package ${package.Service};
 
 import ${package.Entity}.${table.entityName};
-import org.springframework.cache.annotation.Caching;
+import org.springframework.cache.annotation.CacheConfig;
 
 
 /**
@@ -13,7 +13,7 @@ import org.springframework.cache.annotation.Caching;
  * @since ${date}
  */
 @CacheConfig(cacheNames = ${table.entityName}.TABLE_NAME)
-public interface I${table.entityName}Service extends IBaseService<${table.entityName}> {
+public interface ${table.serviceName} extends IBaseService<${table.entityName}> {
 
 }
 

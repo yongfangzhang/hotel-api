@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import ${package.Entity}.${table.entityName};
 import ${package.Mapper}.${table.mapperName};
-import ${package.Service}.I${table.serviceName};
+import ${package.Service}.${table.serviceName};
 import org.springframework.stereotype.Service;
 
 @Service
-public class ${table.serviceImplName} extends BaseServiceImpl<${table.mapperName}, ${table.entityName}> implements I${table.entityName}Service {
+public class ${table.serviceImplName} extends BaseServiceImpl<${table.mapperName}, ${table.entityName}> implements ${table.serviceName} {
 
 
     @Override

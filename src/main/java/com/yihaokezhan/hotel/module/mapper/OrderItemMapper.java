@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author zhangyongfang
- * @since 2021-02-22
+ * @since 2021-03-01
  */
 public interface OrderItemMapper extends BaseMapper<OrderItem> {
 

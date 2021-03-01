@@ -12,9 +12,10 @@ public class Constant {
 
     public static final String USER_PERMS_PREFIX = "user:perms:";
 
-    public static final String USER_ROLES_PREFIX = "user:roles:";
+    public static final String ACCOUNT_ROLES_PREFIX = "account:roles:";
 
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String TIMEZONE = "GMT+08:00";
 
 
     public static final String PATTERN_MOBILE = "1\\d{10}";

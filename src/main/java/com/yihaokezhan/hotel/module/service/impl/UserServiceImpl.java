@@ -6,9 +6,7 @@ import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.mapper.UserMapper;
-import com.yihaokezhan.hotel.module.service.IUserRoleService;
 import com.yihaokezhan.hotel.module.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,21 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements IUserService {
 
-    @Autowired
-    private IUserRoleService userRoleService;
-
     @Override
     public User mGetByOpenId(String openId) {
         return mOne(M.m().put("openId", openId));
-    }
-
-    @Override
-    public User join(User user) {
-        if (user == null) {
-            return user;
-        }
-        user.setUserRole(userRoleService.mList(M.m().put("userUuid", user.getUuid())));
-        return user;
     }
 
     @Override

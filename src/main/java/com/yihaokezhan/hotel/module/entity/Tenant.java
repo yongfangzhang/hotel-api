@@ -18,26 +18,32 @@ import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
+
 /**
  * <p>
- * 租户表
+ * 租户表 实体类
  * </p>
  *
  * @author zhangyongfang
- * @since 2021-02-22
+ * @since 2021-03-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonView(V.S.class)
-@TableName(autoResultMap = true)
+@TableName(value = "tenant", autoResultMap = true)
 public class Tenant extends RemarkEntity {
 
     private static final long serialVersionUID = 1L;
+
+    public static final String TABLE_NAME = "tenant";
+
 
     /**
      * 租户UUID
      */
     @TableId(type = IdType.INPUT)
+    @TableField(fill = FieldFill.INSERT)
     @NotBlank(message = "租户UUID不能为空", groups = UpdateGroup.class)
     private String uuid;
 
@@ -68,18 +74,21 @@ public class Tenant extends RemarkEntity {
     private String contactorMobile;
 
     /**
+     * 是否已删除
+     */
+    private Boolean deleted;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @TableField(fill = FieldFill.UPDATE)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     private LocalDateTime updatedAt;
-
-
 }

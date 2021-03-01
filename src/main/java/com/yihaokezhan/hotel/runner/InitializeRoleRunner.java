@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
 import com.yihaokezhan.hotel.common.utils.M;
-import com.yihaokezhan.hotel.module.entity.UserRole;
-import com.yihaokezhan.hotel.module.service.IUserRoleService;
+import com.yihaokezhan.hotel.module.entity.AccountRole;
+import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,27 +18,27 @@ import org.springframework.stereotype.Component;
 public class InitializeRoleRunner implements ApplicationRunner {
 
     @Autowired
-    private IUserRoleService userRoleService;
+    private IAccountRoleService accountRoleService;
 
     @Autowired
     private ShiroUtils shiroUtils;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Map<String, List<UserRole>> userRoleMap = userRoleService.mList(M.m()).stream()
-                .collect(Collectors.groupingBy(UserRole::getUserUuid));
+        Map<String, List<AccountRole>> accountRoleMap = accountRoleService.mList(M.m()).stream()
+                .collect(Collectors.groupingBy(AccountRole::getAccountUuid));
 
-        userRoleMap.entrySet().forEach(entry -> {
+        accountRoleMap.entrySet().forEach(entry -> {
             String userUuid = entry.getKey();
-            List<UserRole> userRoles = entry.getValue();
+            List<AccountRole> accountRoles = entry.getValue();
             List<String> perms =
-                    userRoles.stream().flatMap(ur -> ur.getRole().getRoutes().stream())
+                    accountRoles.stream().flatMap(ur -> ur.getRole().getRoutes().stream())
                             .flatMap(r -> new ArrayList<String>(
                                     Arrays.asList(r.getPermissions().split(","))).stream())
                             .distinct().collect(Collectors.toList());
 
             shiroUtils.updatePermCache(userUuid, perms);
-            shiroUtils.updateRoleCache(userUuid, userRoles.stream()
+            shiroUtils.updateRoleCache(userUuid, accountRoles.stream()
                     .map(ur -> ur.getRole().getCode()).collect(Collectors.toList()));
         });
 

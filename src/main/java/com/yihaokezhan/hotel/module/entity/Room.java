@@ -15,26 +15,31 @@ import com.yihaokezhan.hotel.common.utils.V;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
+
 /**
  * <p>
- * 房间表
+ * 房间表 实体类
  * </p>
  *
  * @author zhangyongfang
- * @since 2021-02-22
+ * @since 2021-03-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonView(V.S.class)
-@TableName(autoResultMap = true)
+@TableName(value = "room", autoResultMap = true)
 public class Room extends RemarkEntity {
-
     private static final long serialVersionUID = 1L;
+
+    public static final String TABLE_NAME = "room";
+
 
     /**
      * UUID
      */
     @TableId(type = IdType.INPUT)
+    @TableField(fill = FieldFill.INSERT)
     private String uuid;
 
     /**
@@ -83,18 +88,21 @@ public class Room extends RemarkEntity {
     private BigDecimal income;
 
     /**
+     * 是否已删除
+     */
+    private Boolean deleted;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    @TableField(fill = FieldFill.UPDATE)
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     private LocalDateTime updatedAt;
-
-
 }

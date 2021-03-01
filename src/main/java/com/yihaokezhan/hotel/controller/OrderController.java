@@ -1,6 +1,6 @@
 package com.yihaokezhan.hotel.controller;
 
-
+import java.util.Map;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author zhangyongfang
- * @since 2021-02-22
+ * @since 2021-03-01
  */
 @RestController
 @RequestMapping("/hotel/order")
@@ -31,6 +32,22 @@ public class OrderController {
 
     @Autowired
     private IOrderService orderService;
+
+
+    @GetMapping("/page")
+    public R page(@RequestParam Map<String, Object> params) {
+        return R.ok().data(orderService.mPage(params));
+    }
+
+    @GetMapping("/list")
+    public R list(@RequestParam Map<String, Object> params) {
+        return R.ok().data(orderService.mList(params));
+    }
+
+    @GetMapping("/one")
+    public R one(@RequestParam Map<String, Object> params) {
+        return R.ok().data(orderService.mOne(params));
+    }
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
@@ -51,6 +68,4 @@ public class OrderController {
     public R delete(@PathVariable String uuid) {
         return R.ok().data(orderService.mDelete(uuid));
     }
-
 }
-

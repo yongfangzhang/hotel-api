@@ -39,15 +39,10 @@ public class ${table.entityName} extends RemarkEntity {
 
 #foreach ($column in $table.fields)
 #if($column.name != "remark")
+
     /**
      * $column.comment
      */
-#if("$column.type" == "date")
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-#end
-#if("$column.type" == "datetime")
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-#end
 #if($column.name == "uuid")
     @TableId(type = IdType.INPUT)
     @TableField(fill = FieldFill.INSERT)
@@ -57,6 +52,12 @@ public class ${table.entityName} extends RemarkEntity {
 #end
 #if($column.name == "updated_at")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+#end
+#if("$column.type" == "date")
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
+#end
+#if("$column.type" == "datetime")
+    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
 #end
     private $column.propertyType $column.propertyName;
 #end
