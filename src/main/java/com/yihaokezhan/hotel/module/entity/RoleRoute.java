@@ -38,7 +38,6 @@ public class RoleRoute extends RemarkEntity {
      * UUID
      */
     @TableId(type = IdType.INPUT)
-    @TableField(fill = FieldFill.INSERT)
     private String uuid;
 
     /**

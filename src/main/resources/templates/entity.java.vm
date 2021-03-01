@@ -45,7 +45,6 @@ public class ${table.entityName} extends RemarkEntity {
      */
 #if($column.name == "uuid")
     @TableId(type = IdType.INPUT)
-    @TableField(fill = FieldFill.INSERT)
 #end
 #if($column.name == "created_at")
     @TableField(fill = FieldFill.INSERT)

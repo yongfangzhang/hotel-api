@@ -3,6 +3,7 @@ package com.yihaokezhan.hotel.common.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author zhangyongfang
  * @since 2021-02-22
  */
+@Component
 public class ShiroInterceptor implements HandlerInterceptor {
 
     @Override

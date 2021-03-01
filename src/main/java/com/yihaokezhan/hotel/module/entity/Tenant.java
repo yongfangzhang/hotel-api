@@ -43,7 +43,6 @@ public class Tenant extends RemarkEntity {
      * 租户UUID
      */
     @TableId(type = IdType.INPUT)
-    @TableField(fill = FieldFill.INSERT)
     @NotBlank(message = "租户UUID不能为空", groups = UpdateGroup.class)
     private String uuid;
 
