@@ -37,3 +37,4 @@ GeneratorApplication.java
 *.ignore
 
 Test*
+dto
