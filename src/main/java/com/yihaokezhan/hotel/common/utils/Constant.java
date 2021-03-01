@@ -9,18 +9,18 @@ public class Constant {
     public static final String WX_OPENID = "Wx-OpenId";
     public static final String TENANT_SPLIT_HEADER = "Tenant";
 
-    public static final String ROOT_TENANT = "00000000000000000000000000000";
+    public static final String ROOT_TENANT = "00000000000000000000000000000000";
 
 
 
     public static final long REDIS_NOT_EXPIRE = -1L;
 
-    public static final String ACCOUNT_PERMS_PREFIX = "user:perms:";
+    public static final String ACCOUNT_PERMS_PREFIX = "account:perms:";
 
     public static final String ACCOUNT_ROLES_PREFIX = "account:roles:";
 
     public static final String TOKEN_KEY_PREFIX = "api:token:";
-    public static final String USER_TOKENS_KEY_PREFIX = "api:user_tokens:";
+    public static final String USER_TOKENS_KEY_PREFIX = "api:tokens:";
 
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public static final String TIMEZONE = "GMT+08:00";

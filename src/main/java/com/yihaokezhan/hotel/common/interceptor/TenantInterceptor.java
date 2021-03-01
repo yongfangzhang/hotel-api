@@ -6,7 +6,6 @@ import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.handler.DynamicTenantHandler;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
-import com.yihaokezhan.hotel.module.entity.Tenant;
 import com.yihaokezhan.hotel.module.service.ITenantService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +38,9 @@ public class TenantInterceptor implements HandlerInterceptor {
             log.error("request uri {}", httpServletRequest.getRequestURI());
             throw new RRException("需要Header " + Constant.TENANT_SPLIT_HEADER);
         }
-        Tenant tenant = tenantService.mGet(tenantUuid);
-        ValidatorUtils.validateTenant(tenant);
+        if (!Constant.ROOT_TENANT.equals(tenantUuid)) {
+            ValidatorUtils.validateTenant(tenantService.mGet(tenantUuid));
+        }
         DynamicTenantHandler.setTenant(tenantUuid);
         return true;
     }

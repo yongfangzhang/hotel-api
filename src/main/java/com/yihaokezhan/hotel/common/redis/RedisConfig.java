@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -86,11 +85,13 @@ public class RedisConfig {
     }
 
     @Bean
-    public CacheManager cacheManager() {
+    public CacheManager cacheManager(RedisTemplate<String, Object> cacheRedis) {
         // 初始化一个RedisCacheWriter
-        JedisConnectionFactory connFac = jedisConnectionFactory();
-        connFac.getStandaloneConfiguration().setDatabase(cacheDatabase);
-        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connFac);
+        // JedisConnectionFactory connFac = jedisConnectionFactory();
+        // connFac.getStandaloneConfiguration().setDatabase(cacheDatabase);
+
+        RedisCacheWriter redisCacheWriter =
+                RedisCacheWriter.nonLockingRedisCacheWriter(cacheRedis.getConnectionFactory());
 
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
         // 默认不过期
@@ -104,7 +105,7 @@ public class RedisConfig {
                 // 不缓存空值
                 .disableCachingNullValues();
         // 初始化RedisCacheManager
-        return new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
+        return new MyRedisCacheManager(redisCacheWriter, defaultCacheConfig);
     }
 
     public RedisTemplate<String, Object> getRedisTemplate(int db) {
@@ -133,5 +134,10 @@ public class RedisConfig {
     @Bean(name = "tokenRedis")
     public RedisTemplate<String, Object> tokenRedisTemplate() {
         return getRedisTemplate(tokenDatabase);
+    }
+
+    @Bean(name = "cacheRedis")
+    public RedisTemplate<String, Object> cacheRedisTemplate() {
+        return getRedisTemplate(cacheDatabase);
     }
 }

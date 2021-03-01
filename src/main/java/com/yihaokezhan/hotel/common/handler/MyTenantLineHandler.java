@@ -22,6 +22,6 @@ public class MyTenantLineHandler implements TenantLineHandler {
     @Override
     public boolean ignoreTable(String tableName) {
         // 忽略租户
-        return tableName.startsWith("comm_");
+        return DynamicTenantHandler.isRootTenant() || tableName.startsWith("comm_");
     }
 }
