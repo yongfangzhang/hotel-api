@@ -3,6 +3,7 @@ package com.yihaokezhan.hotel.common.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.yihaokezhan.hotel.common.annotation.Annc;
+import com.yihaokezhan.hotel.common.config.AppConfig;
 import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.utils.TokenUtils;
@@ -23,11 +24,14 @@ public class AnncInterceptor implements HandlerInterceptor {
     @Autowired
     private TokenUtils tokenUtils;
 
+    @Autowired
+    private AppConfig appConfig;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
             Object handler) throws Exception {
         // not method
-        if (!(handler instanceof HandlerMethod)) {
+        if (appConfig.isDisableAnnc() || !(handler instanceof HandlerMethod)) {
             return true;
         }
 

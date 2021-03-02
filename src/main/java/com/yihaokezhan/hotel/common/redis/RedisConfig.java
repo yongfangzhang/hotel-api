@@ -2,13 +2,9 @@ package com.yihaokezhan.hotel.common.redis;
 
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
@@ -16,7 +12,6 @@ import org.springframework.data.redis.connection.jedis.JedisClientConfiguration.
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -24,7 +19,6 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author zhangyongfang
  * @since 2021-02-22
  */
-@EnableCaching
 @Configuration
 public class RedisConfig {
 
@@ -82,30 +76,6 @@ public class RedisConfig {
         JedisConnectionFactory jedisConFactory =
                 new JedisConnectionFactory(redisConfig, clientConfig.build());
         return jedisConFactory;
-    }
-
-    @Bean
-    public CacheManager cacheManager(RedisTemplate<String, Object> cacheRedis) {
-        // 初始化一个RedisCacheWriter
-        // JedisConnectionFactory connFac = jedisConnectionFactory();
-        // connFac.getStandaloneConfiguration().setDatabase(cacheDatabase);
-
-        RedisCacheWriter redisCacheWriter =
-                RedisCacheWriter.nonLockingRedisCacheWriter(cacheRedis.getConnectionFactory());
-
-        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
-        // 默认不过期
-        defaultCacheConfig = defaultCacheConfig.entryTtl(Duration.ZERO)
-                // 设置 key为string序列化
-                .serializeKeysWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new StringRedisSerializer()))
-                // 设置value为json序列化
-                .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                // 不缓存空值
-                .disableCachingNullValues();
-        // 初始化RedisCacheManager
-        return new MyRedisCacheManager(redisCacheWriter, defaultCacheConfig);
     }
 
     public RedisTemplate<String, Object> getRedisTemplate(int db) {
