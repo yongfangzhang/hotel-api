@@ -77,6 +77,6 @@ public class TokenUser {
 
     @Override
     public String toString() {
-        return JSONUtils.toJSONString(this);
+        return JSONUtils.stringify(this);
     }
 }

@@ -1,41 +1,23 @@
 package com.yihaokezhan.hotel.common.utils;
 
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import com.yihaokezhan.hotel.common.exception.RRException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author zhangyongfang
  * @since 2021-02-22
  */
-@Component
 public class JSONUtils {
 
-    public static ObjectMapper objectMapper;
-
-    @Autowired
-    public JSONUtils(ObjectMapper objectMapper) {
-        JSONUtils.objectMapper = objectMapper;
-    }
-
-    public static String toJSONString(Object obj) {
-        return toJSONString(null, obj);
-    }
-
-    public static String toJSONString(JsonView jv, Object obj) {
-        try {
-            if (jv == null || jv.value().length == 0) {
-                return objectMapper.writeValueAsString(obj);
-            }
-            return objectMapper.writerWithView(jv.value()[0]).writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            throw new RRException("解析结果失败");
+    public static String stringify(Object obj) {
+        if (obj == null) {
+            return null;
         }
+        if (obj instanceof String) {
+            return (String) obj;
+        }
+        return JSON.toJSONStringWithDateFormat(obj, Constant.DATE_TIME_PATTERN);
     }
 
     /**
@@ -45,7 +27,10 @@ public class JSONUtils {
      */
     public static <T> T parse(String jsonStr, Class<T> valueType) {
         try {
-            return objectMapper.readValue(jsonStr, valueType);
+            if (StringUtils.isBlank(jsonStr)) {
+                return null;
+            }
+            return JSON.parseObject(jsonStr, valueType);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,16 +47,11 @@ public class JSONUtils {
      */
     public static <T> List<T> parseArray(Object jsonStr, Class<T> valueType) {
         try {
-            if (jsonStr == null) {
+            String ori = stringify(jsonStr);
+            if (StringUtils.isBlank(ori)) {
                 return null;
             }
-            CollectionType javaType =
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, valueType);
-
-            if (!(jsonStr instanceof String)) {
-                return objectMapper.readValue(toJSONString(jsonStr), javaType);
-            }
-            return objectMapper.readValue(jsonStr.toString(), javaType);
+            return JSON.parseArray(ori, valueType);
         } catch (Exception e) {
             e.printStackTrace();
         }

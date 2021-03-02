@@ -131,7 +131,7 @@ public class RRExceptionHandler {
         log.error("IP : {}", IPUtils.getIpAddr(request));
         log.error("method : {}", request.getMethod());
         log.error("url : {}", request.getRequestURL().toString());
-        log.error("params map : {}", JSONUtils.toJSONString(request.getParameterMap()));
+        log.error("params map : {}", JSONUtils.stringify(request.getParameterMap()));
         log.error("query params : {}", request.getQueryString());
         if (request instanceof ShiroHttpServletRequest) {
             ShiroHttpServletRequest shiroRequest = (ShiroHttpServletRequest) request;

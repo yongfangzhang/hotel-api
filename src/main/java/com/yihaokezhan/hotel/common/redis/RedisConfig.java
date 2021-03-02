@@ -1,6 +1,7 @@
 package com.yihaokezhan.hotel.common.redis;
 
 import java.time.Duration;
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +12,6 @@ import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration.JedisClientConfigurationBuilder;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -25,7 +25,7 @@ public class RedisConfig {
     @Value("${yhkz.hotel.redis.database.app:0}")
     private int appDatabase;
 
-    @Value("${yhkz.hotel.redis.database.app:1}")
+    @Value("${yhkz.hotel.redis.database.token:1}")
     private int tokenDatabase;
 
     @Value("${yhkz.hotel.redis.database.cache:2}")
@@ -85,11 +85,10 @@ public class RedisConfig {
         connFac.getStandaloneConfiguration().setDatabase(db);
         template.setConnectionFactory(connFac);
 
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        template.setKeySerializer(stringRedisSerializer);
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        template.setHashKeySerializer(stringRedisSerializer);
-        template.setHashValueSerializer(stringRedisSerializer);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericFastJsonRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new GenericFastJsonRedisSerializer());
 
         // 开启事务支持
         template.setEnableTransactionSupport(true);

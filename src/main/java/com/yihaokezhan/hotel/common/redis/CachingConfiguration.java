@@ -1,6 +1,7 @@
 package com.yihaokezhan.hotel.common.redis;
 
 import java.time.Duration;
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -33,7 +33,7 @@ public class CachingConfiguration extends CachingConfigurerSupport {
                         .fromSerializer(new StringRedisSerializer()))
                 // 设置value为json序列化
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                        .fromSerializer(new GenericFastJsonRedisSerializer()))
                 // 不缓存空值
                 .disableCachingNullValues();
         // 初始化RedisCacheManager

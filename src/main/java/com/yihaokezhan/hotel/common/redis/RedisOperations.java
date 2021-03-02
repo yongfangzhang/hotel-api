@@ -123,7 +123,7 @@ public class RedisOperations {
                 || object instanceof String) {
             return String.valueOf(object);
         }
-        return JSONUtils.toJSONString(object);
+        return JSONUtils.stringify(object);
     }
 
     /**
