@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yihaokezhan.hotel.module.entity.CommProvince;
-import org.springframework.cache.annotation.CacheConfig;
 
 
 /**
@@ -15,7 +14,6 @@ import org.springframework.cache.annotation.CacheConfig;
  * @author zhangyongfang
  * @since 2021-03-01
  */
-@CacheConfig(cacheNames = CommProvince.TABLE_NAME)
 public interface ICommProvinceService extends IService<CommProvince> {
 
     List<CommProvince> mList(Map<String, Object> params);

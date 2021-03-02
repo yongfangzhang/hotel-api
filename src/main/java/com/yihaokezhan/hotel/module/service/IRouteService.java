@@ -1,7 +1,6 @@
 package com.yihaokezhan.hotel.module.service;
 
 import com.yihaokezhan.hotel.module.entity.Route;
-import org.springframework.cache.annotation.CacheConfig;
 
 
 /**
@@ -12,7 +11,6 @@ import org.springframework.cache.annotation.CacheConfig;
  * @author zhangyongfang
  * @since 2021-03-01
  */
-@CacheConfig(cacheNames = Route.TABLE_NAME)
 public interface IRouteService extends IBaseService<Route> {
 
 }

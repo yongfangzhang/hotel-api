@@ -4,7 +4,6 @@ import java.util.Map;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yihaokezhan.hotel.model.Pager;
 import com.yihaokezhan.hotel.module.entity.SystemHttpLog;
-import org.springframework.cache.annotation.CacheConfig;
 
 
 /**
@@ -15,7 +14,6 @@ import org.springframework.cache.annotation.CacheConfig;
  * @author zhangyongfang
  * @since 2021-03-01
  */
-@CacheConfig(cacheNames = SystemHttpLog.TABLE_NAME)
 public interface ISystemHttpLogService extends IService<SystemHttpLog> {
 
     Pager<SystemHttpLog> mPage(Map<String, Object> params);
