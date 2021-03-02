@@ -5,9 +5,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.yihaokezhan.hotel.common.redis.CacheRedisService;
 import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
+import com.yihaokezhan.hotel.module.entity.Account;
+import com.yihaokezhan.hotel.module.entity.AccountRole;
 import com.yihaokezhan.hotel.module.entity.Role;
 import com.yihaokezhan.hotel.module.entity.RoleRoute;
 import com.yihaokezhan.hotel.module.mapper.RoleMapper;
@@ -26,11 +29,21 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = Role.TABLE_NAME)
+@CacheConfig(cacheNames = Role.TABLE_NAME)
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements IRoleService {
 
     @Autowired
     private IRoleRouteService roleRouteService;
+
+    @Autowired
+    private CacheRedisService cacheRedisService;
+
+    @Override
+    public boolean clearRelationCaches() {
+        cacheRedisService.deleteBatch(CachingConfiguration.getCacheName(AccountRole.TABLE_NAME));
+        cacheRedisService.deleteBatch(CachingConfiguration.getCacheName(Account.TABLE_NAME));
+        return true;
+    }
 
     @Override
     public List<Role> join(List<Role> roleList) {

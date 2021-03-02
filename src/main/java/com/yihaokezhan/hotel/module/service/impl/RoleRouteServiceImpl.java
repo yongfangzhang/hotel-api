@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.yihaokezhan.hotel.common.redis.CacheRedisService;
 import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
+import com.yihaokezhan.hotel.module.entity.Account;
+import com.yihaokezhan.hotel.module.entity.AccountRole;
+import com.yihaokezhan.hotel.module.entity.Role;
 import com.yihaokezhan.hotel.module.entity.RoleRoute;
 import com.yihaokezhan.hotel.module.mapper.RoleRouteMapper;
 import com.yihaokezhan.hotel.module.service.IRoleRouteService;
@@ -23,12 +27,23 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = RoleRoute.TABLE_NAME)
+@CacheConfig(cacheNames = RoleRoute.TABLE_NAME)
 public class RoleRouteServiceImpl extends BaseServiceImpl<RoleRouteMapper, RoleRoute>
         implements IRoleRouteService {
 
     @Autowired
     private IRouteService routeService;
+
+    @Autowired
+    private CacheRedisService cacheRedisService;
+
+    @Override
+    public boolean clearRelationCaches() {
+        cacheRedisService.deleteBatch(CachingConfiguration.getCacheName(Role.TABLE_NAME));
+        cacheRedisService.deleteBatch(CachingConfiguration.getCacheName(AccountRole.TABLE_NAME));
+        cacheRedisService.deleteBatch(CachingConfiguration.getCacheName(Account.TABLE_NAME));
+        return true;
+    }
 
     @Override
     public List<RoleRoute> join(List<RoleRoute> roleRouteList) {

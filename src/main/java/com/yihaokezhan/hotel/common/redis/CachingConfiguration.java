@@ -2,6 +2,8 @@ package com.yihaokezhan.hotel.common.redis;
 
 import java.time.Duration;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
+import com.yihaokezhan.hotel.common.handler.DynamicTenantHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.CacheResolver;
@@ -54,5 +56,13 @@ public class CachingConfiguration {
     @Bean(CACHE_RESOLVER_NAME)
     public CacheResolver cacheResolver(CacheManager cacheManager) {
         return new RuntimeCacheResolver(cacheManager);
+    }
+
+    public static String getCacheName(String name) {
+        String tenant = DynamicTenantHandler.getTenant();
+        if (StringUtils.isBlank(tenant)) {
+            return name;
+        }
+        return (tenant + "::" + name);
     }
 }

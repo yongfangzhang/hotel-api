@@ -4,7 +4,6 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.model.Pager;
 import com.yihaokezhan.hotel.model.Query;
@@ -26,7 +25,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = SystemHttpLog.TABLE_NAME)
+@CacheConfig(cacheNames = SystemHttpLog.TABLE_NAME)
 public class SystemHttpLogServiceImpl extends ServiceImpl<SystemHttpLogMapper, SystemHttpLog>
         implements ISystemHttpLogService {
 

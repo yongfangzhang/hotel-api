@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.CommArea;
 import com.yihaokezhan.hotel.module.mapper.CommAreaMapper;
@@ -22,7 +21,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = CommArea.TABLE_NAME)
+@CacheConfig(cacheNames = CommArea.TABLE_NAME)
 public class CommAreaServiceImpl extends ServiceImpl<CommAreaMapper, CommArea>
         implements ICommAreaService {
 

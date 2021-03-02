@@ -68,7 +68,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     // @formatter:on
     public boolean mCreate(T entity) {
         ValidatorUtils.validateEntity(entity, AddGroup.class);
-        return save(entity) && clearRelationCaches(entity);
+        return save(entity) && clearRelationCaches();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     // @formatter:on
     public boolean mUpdate(T entity) {
         ValidatorUtils.validateEntity(entity, UpdateGroup.class);
-        return updateById(entity) && clearRelationCaches(entity);
+        return updateById(entity) && clearRelationCaches();
     }
 
     @Override
@@ -91,7 +91,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     })
     // @formatter:on
     public boolean mDelete(String uuid) {
-        return removeById(uuid) && clearRelationCaches(uuid);
+        return removeById(uuid) && clearRelationCaches();
     }
 
     @Override

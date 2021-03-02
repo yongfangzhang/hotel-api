@@ -2,7 +2,6 @@ package com.yihaokezhan.hotel.module.service.impl;
 
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Apartment;
 import com.yihaokezhan.hotel.module.mapper.ApartmentMapper;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = Apartment.TABLE_NAME)
+@CacheConfig(cacheNames = Apartment.TABLE_NAME)
 public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apartment>
         implements IApartmentService {
 

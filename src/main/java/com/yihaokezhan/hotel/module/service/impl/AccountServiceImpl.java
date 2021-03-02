@@ -2,7 +2,6 @@ package com.yihaokezhan.hotel.module.service.impl;
 
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Account;
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = Account.TABLE_NAME)
+@CacheConfig(cacheNames = Account.TABLE_NAME)
 public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
         implements IAccountService {
 
