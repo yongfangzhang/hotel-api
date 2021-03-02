@@ -4,12 +4,17 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.model.Pager;
 import com.yihaokezhan.hotel.model.Query;
 import com.yihaokezhan.hotel.module.entity.SystemHttpLog;
 import com.yihaokezhan.hotel.module.mapper.SystemHttpLogMapper;
 import com.yihaokezhan.hotel.module.service.ISystemHttpLogService;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,10 +26,12 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
+@CacheConfig(cacheNames = SystemHttpLog.TABLE_NAME)
 public class SystemHttpLogServiceImpl extends ServiceImpl<SystemHttpLogMapper, SystemHttpLog>
         implements ISystemHttpLogService {
 
     @Override
+    @Cacheable(key = Constant.CACHE_PREFIX_PAGE + "#a1")
     public Pager<SystemHttpLog> mPage(Map<String, Object> params) {
         Page<SystemHttpLog> page = new Query<SystemHttpLog>(params).getPage();
         page(page, getWrapper(params));
@@ -32,6 +39,11 @@ public class SystemHttpLogServiceImpl extends ServiceImpl<SystemHttpLogMapper, S
     }
 
     @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = Constant.CACHE_PREFIX_QUERY, allEntries = true)
+    })
+    // @formatter:on
     public boolean mCreate(SystemHttpLog entity) {
         return save(entity);
     }

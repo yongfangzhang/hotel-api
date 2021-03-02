@@ -6,6 +6,7 @@ import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Tenant;
 import com.yihaokezhan.hotel.module.mapper.TenantMapper;
 import com.yihaokezhan.hotel.module.service.ITenantService;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
+@CacheConfig(cacheNames = Tenant.TABLE_NAME)
 public class TenantServiceImpl extends BaseServiceImpl<TenantMapper, Tenant>
         implements ITenantService {
 
