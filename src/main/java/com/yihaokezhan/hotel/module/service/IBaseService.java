@@ -111,4 +111,12 @@ public interface IBaseService<T extends BaseEntity> {
         }
         consumer.accept(record, mList(params));
     }
+
+    default boolean clearRelationCaches(T entity) {
+        return true;
+    }
+
+    default boolean clearRelationCaches(String uuid) {
+        return true;
+    }
 }

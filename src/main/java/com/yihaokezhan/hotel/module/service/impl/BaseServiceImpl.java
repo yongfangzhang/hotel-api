@@ -31,13 +31,15 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
         extends ServiceImpl<C, T> implements IBaseService<T> {
 
     @Override
-    @Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "'query::list::' + #a0")
+    @Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME,
+            key = "'query::list::' + #a0")
     public List<T> mList(Map<String, Object> params) {
         return join(list(getWrapper(params)));
     }
 
     @Override
-    @Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "'query::page::' + #a0")
+    @Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME,
+            key = "'query::page::' + #a0")
     public Pager<T> mPage(Map<String, Object> params) {
         Page<T> p = new Query<T>(params).getPage();
         page(p, getWrapper(params));
@@ -46,7 +48,8 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     }
 
     @Override
-    @Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "'query::one::' + #a0")
+    @Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME,
+            key = "'query::one::' + #a0")
     public T mOne(Map<String, Object> params) {
         return join(getOne(getWrapper(params)));
     }
@@ -65,7 +68,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     // @formatter:on
     public boolean mCreate(T entity) {
         ValidatorUtils.validateEntity(entity, AddGroup.class);
-        return save(entity);
+        return save(entity) && clearRelationCaches(entity);
     }
 
     @Override
@@ -77,7 +80,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     // @formatter:on
     public boolean mUpdate(T entity) {
         ValidatorUtils.validateEntity(entity, UpdateGroup.class);
-        return updateById(entity);
+        return updateById(entity) && clearRelationCaches(entity);
     }
 
     @Override
@@ -88,7 +91,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     })
     // @formatter:on
     public boolean mDelete(String uuid) {
-        return removeById(uuid);
+        return removeById(uuid) && clearRelationCaches(uuid);
     }
 
     @Override
