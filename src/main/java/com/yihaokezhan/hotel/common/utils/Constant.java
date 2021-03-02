@@ -39,11 +39,4 @@ public class Constant {
     // 只允许后台用
     public static final String SQL_SELECT = "__sqlSelect__";
     public static final String GROUP_BY = "__gb__";
-
-
-    public static final String CACHE_PREFIX_QUERY = "query";
-    public static final String CACHE_PREFIX_PAGE = CACHE_PREFIX_QUERY + "::page::";
-    public static final String CACHE_PREFIX_LIST = CACHE_PREFIX_QUERY + "::list::";
-    public static final String CACHE_PREFIX_ONE = CACHE_PREFIX_QUERY + "::one::";
-
 }

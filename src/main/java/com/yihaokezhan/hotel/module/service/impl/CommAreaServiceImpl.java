@@ -4,15 +4,13 @@ import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.utils.Constant;
+import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.CommArea;
 import com.yihaokezhan.hotel.module.mapper.CommAreaMapper;
 import com.yihaokezhan.hotel.module.service.ICommAreaService;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,17 +22,13 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-@CacheConfig(cacheNames = CommArea.TABLE_NAME)
+@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = CommArea.TABLE_NAME)
 public class CommAreaServiceImpl extends ServiceImpl<CommAreaMapper, CommArea>
         implements ICommAreaService {
 
 
     @Override
-    // @formatter:off
-    @Caching(evict = {
-        @CacheEvict(key = Constant.CACHE_PREFIX_QUERY, allEntries = true)
-    })
-    // @formatter:on
+    @Cacheable(key = "'query::list::'+#a0")
     public List<CommArea> mList(Map<String, Object> params) {
         return list(getWrapper(params));
     }

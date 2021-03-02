@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.AccountRole;
 import com.yihaokezhan.hotel.module.mapper.AccountRoleMapper;
 import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import com.yihaokezhan.hotel.module.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
+@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = AccountRole.TABLE_NAME)
 public class AccountRoleServiceImpl extends BaseServiceImpl<AccountRoleMapper, AccountRole>
         implements IAccountRoleService {
 

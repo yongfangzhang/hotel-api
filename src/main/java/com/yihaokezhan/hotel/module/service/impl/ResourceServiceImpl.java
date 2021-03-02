@@ -2,10 +2,12 @@ package com.yihaokezhan.hotel.module.service.impl;
 
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Resource;
 import com.yihaokezhan.hotel.module.mapper.ResourceMapper;
 import com.yihaokezhan.hotel.module.service.IResourceService;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
+@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = Resource.TABLE_NAME)
 public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resource>
         implements IResourceService {
 

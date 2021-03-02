@@ -2,15 +2,17 @@ package com.yihaokezhan.hotel.module.service.impl;
 
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Account;
 import com.yihaokezhan.hotel.module.mapper.AccountMapper;
+import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import com.yihaokezhan.hotel.module.service.IAccountService;
 import com.yihaokezhan.hotel.module.service.ITenantService;
 import com.yihaokezhan.hotel.module.service.IUserService;
-import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
+@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = Account.TABLE_NAME)
 public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
         implements IAccountService {
 

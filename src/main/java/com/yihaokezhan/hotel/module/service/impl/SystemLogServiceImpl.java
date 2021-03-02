@@ -4,7 +4,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yihaokezhan.hotel.common.utils.Constant;
+import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.model.Pager;
 import com.yihaokezhan.hotel.model.Query;
@@ -26,12 +26,12 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
-@CacheConfig(cacheNames = SystemLog.TABLE_NAME)
+@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = SystemLog.TABLE_NAME)
 public class SystemLogServiceImpl extends ServiceImpl<SystemLogMapper, SystemLog>
         implements ISystemLogService {
 
     @Override
-    @Cacheable(key = Constant.CACHE_PREFIX_PAGE + "#a1")
+    @Cacheable(key = "'query::page::' + #a0")
     public Pager<SystemLog> mPage(Map<String, Object> params) {
         Page<SystemLog> page = new Query<SystemLog>(params).getPage();
         page(page, getWrapper(params));
@@ -41,7 +41,7 @@ public class SystemLogServiceImpl extends ServiceImpl<SystemLogMapper, SystemLog
     @Override
     // @formatter:off
     @Caching(evict = {
-        @CacheEvict(key = Constant.CACHE_PREFIX_QUERY, allEntries = true)
+        @CacheEvict(key = "query", allEntries = true)
     })
     // @formatter:on
     public boolean mCreate(SystemLog entity) {

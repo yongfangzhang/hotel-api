@@ -2,11 +2,13 @@ package com.yihaokezhan.hotel.module.service.impl;
 
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.mapper.UserMapper;
 import com.yihaokezhan.hotel.module.service.IUserService;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
+@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = User.TABLE_NAME)
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements IUserService {
 
     @Override

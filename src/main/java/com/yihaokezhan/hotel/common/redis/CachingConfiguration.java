@@ -4,9 +4,11 @@ import java.time.Duration;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.CacheResolver;
 import org.springframework.cache.support.NoOpCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,11 +21,12 @@ public class CachingConfiguration {
     // public class CachingConfiguration extends CachingConfigurerSupport {
 
 
-    // public final static String CACHE_RESOLVER_NAME = "simpleCacheResolver";
+    public final static String CACHE_RESOLVER_NAME = "simpleCacheResolver";
 
     public final static String NO_CACHE = "noOpCacheManager";
 
     @Bean
+    @Primary
     public CacheManager cacheManager(RedisTemplate<String, Object> cacheRedis) {
         RedisCacheWriter redisCacheWriter =
                 RedisCacheWriter.nonLockingRedisCacheWriter(cacheRedis.getConnectionFactory());
@@ -48,8 +51,8 @@ public class CachingConfiguration {
         return new NoOpCacheManager();
     }
 
-    // @Bean(CACHE_RESOLVER_NAME)
-    // public CacheResolver cacheResolver(CacheManager cacheManager) {
-    // return new RuntimeCacheResolver(cacheManager);
-    // }
+    @Bean(CACHE_RESOLVER_NAME)
+    public CacheResolver cacheResolver(CacheManager cacheManager) {
+        return new RuntimeCacheResolver(cacheManager);
+    }
 }

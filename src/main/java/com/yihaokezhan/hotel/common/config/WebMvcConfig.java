@@ -1,6 +1,11 @@
 package com.yihaokezhan.hotel.common.config;
 
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -9,8 +14,11 @@ import com.yihaokezhan.hotel.common.interceptor.ShiroInterceptor;
 import com.yihaokezhan.hotel.common.interceptor.TenantInterceptor;
 import com.yihaokezhan.hotel.common.resolver.LoginUserResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -49,6 +57,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(jacksonConverter());
+        converters.add(fastJsonConverter());
+        converters.add(responseBodyConverter());
+    }
+
+    @Bean
+    public MappingJackson2HttpMessageConverter jacksonConverter() {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter =
                 new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = jackson2HttpMessageConverter.getObjectMapper();
@@ -60,6 +75,34 @@ public class WebMvcConfig implements WebMvcConfigurer {
         objectMapper.registerModule(simpleModule);
 
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
-        converters.add(0, jackson2HttpMessageConverter);
+        return jackson2HttpMessageConverter;
+    }
+
+    @Bean
+    public FastJsonHttpMessageConverter fastJsonConverter() {
+        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+        FastJsonConfig config = new FastJsonConfig();
+        config.setSerializerFeatures( //
+                SerializerFeature.WriteMapNullValue, // 保留map空的字段
+                SerializerFeature.WriteNullStringAsEmpty, // 将String类型的null转成""
+                SerializerFeature.WriteNullNumberAsZero, // 将Number类型的null转成0
+                SerializerFeature.WriteNullListAsEmpty, // 将List类型的null转成[]
+                SerializerFeature.WriteNullBooleanAsFalse, // 将Boolean类型的null转成false
+                SerializerFeature.DisableCircularReferenceDetect // 避免循环引用
+        );
+        converter.setFastJsonConfig(config);
+        converter.setDefaultCharset(Charset.forName("UTF-8"));
+        List<MediaType> mediaTypeList = new ArrayList<MediaType>();
+        // 解决中文乱码问题，相当于在Controller上的@RequestMapping中加了个属性produces = "application/json"
+        mediaTypeList.add(MediaType.APPLICATION_JSON);
+        converter.setSupportedMediaTypes(mediaTypeList);
+        return converter;
+    }
+
+    @Bean
+    public HttpMessageConverter<String> responseBodyConverter() {
+        StringHttpMessageConverter converter =
+                new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        return converter;
     }
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Role;
@@ -13,6 +14,7 @@ import com.yihaokezhan.hotel.module.mapper.RoleMapper;
 import com.yihaokezhan.hotel.module.service.IRoleRouteService;
 import com.yihaokezhan.hotel.module.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-02-22
  */
 @Service
+@CacheConfig(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, cacheNames = Role.TABLE_NAME)
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements IRoleService {
 
     @Autowired
