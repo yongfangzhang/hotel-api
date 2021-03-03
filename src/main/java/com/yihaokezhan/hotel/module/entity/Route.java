@@ -6,9 +6,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.RouteType;
+import com.yihaokezhan.hotel.common.handler.StringArrayTypeHandler;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
@@ -50,7 +50,7 @@ public class Route extends BaseEntity {
     /**
      * 权限列表(逗号分割)
      */
-    @TableField(typeHandler = JacksonTypeHandler.class)
+    @TableField(typeHandler = StringArrayTypeHandler.class)
     @NotNull(message = "权限列表不能为空", groups = AddGroup.class)
     @Size(min = 1, message = "权限列表无效", groups = {AddGroup.class, UpdateGroup.class})
     private List<String> permissions;

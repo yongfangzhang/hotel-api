@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.handler.RemarkTypeHandler;
 import com.yihaokezhan.hotel.common.utils.V;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +21,7 @@ public class RemarkEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField(typeHandler = FastjsonTypeHandler.class)
+    @TableField(typeHandler = RemarkTypeHandler.class)
     private List<RemarkRecord> remark = new ArrayList<>();
 
     @TableField(exist = false)

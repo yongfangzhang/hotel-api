@@ -3,6 +3,7 @@ package com.yihaokezhan.hotel.runner;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.RoleType;
 import com.yihaokezhan.hotel.common.handler.DynamicTenantHandler;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
@@ -74,14 +75,22 @@ public class InitializeRoleRunner implements ApplicationRunner {
         accountRoleMap.entrySet().forEach(entry -> {
             String accountUuid = entry.getKey();
             List<AccountRole> accountRoles = entry.getValue();
-            List<String> perms =
-                    accountRoles.stream().flatMap(ur -> ur.getRole().getRoutes().stream())
-                            .flatMap(r -> r.getPermissions().stream()).distinct()
-                            .collect(Collectors.toList());
+            List<String> perms = accountRoles.stream()
+            // @formatter:off
+                .filter(ar -> ar.getRole() != null && CollectionUtils.isNotEmpty(ar.getRole().getRoutes()))
+                .flatMap(ar -> ar.getRole().getRoutes().stream())
+                .filter(r -> CollectionUtils.isNotEmpty(r.getPermissions()))
+                .flatMap(r -> r.getPermissions().stream()).distinct()
+                .collect(Collectors.toList());
+            // @formatter:on
 
             shiroUtils.updatePermCache(accountUuid, perms);
             shiroUtils.updateRoleCache(accountUuid, accountRoles.stream()
-                    .map(ur -> ur.getRole().getCode()).collect(Collectors.toList()));
+            // @formatter:off
+                .filter(ar -> ar.getRole() != null)
+                .map(ur -> ur.getRole().getCode())
+                .collect(Collectors.toList()));
+            // @formatter:on
         });
     }
 }
