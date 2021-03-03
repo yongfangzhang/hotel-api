@@ -49,6 +49,11 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
     private ITenantService tenantService;
 
     @Override
+    public Account mCreate(Account account) {
+        return super.mCreate(account);
+    }
+
+    @Override
     public Account login(LoginForm form) {
         try {
             // @formatter:off

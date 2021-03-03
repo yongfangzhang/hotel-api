@@ -2,13 +2,20 @@ package com.yihaokezhan.hotel.controller.account;
 
 import com.yihaokezhan.hotel.captcha.CaptchaService;
 import com.yihaokezhan.hotel.common.annotation.Annc;
+import com.yihaokezhan.hotel.common.annotation.Dev;
 import com.yihaokezhan.hotel.common.annotation.LoginUser;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.TokenUtils;
 import com.yihaokezhan.hotel.form.LoginForm;
+import com.yihaokezhan.hotel.form.RegisterForm;
 import com.yihaokezhan.hotel.model.TokenUser;
+import com.yihaokezhan.hotel.module.entity.Tenant;
+import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.service.IAccountService;
+import com.yihaokezhan.hotel.module.service.ITenantService;
+import com.yihaokezhan.hotel.module.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +35,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class PassportController {
 
     @Autowired
+    private ITenantService tenantService;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
     private IAccountService accountService;
 
     @Autowired
@@ -36,12 +49,23 @@ public class PassportController {
     @Autowired
     private CaptchaService captchaService;
 
-    // @Annc
-    // @PostMapping("/register")
-    // @Transactional(rollbackFor = Exception.class)
-    // public R register(@Validated(AddGroup.class) @RequestBody Account entity) {
-    // return R.ok().data(accountService.mCreate(entity));
-    // }
+    @Dev
+    @PostMapping("/register")
+    @Transactional(rollbackFor = Exception.class)
+    public R register(@Validated @RequestBody RegisterForm form) {
+        if (form.getTenant() != null) {
+            Tenant tenant = tenantService.mCreate(form.getTenant());
+            User user = new User();
+            user.setTenantUuid(tenant.getUuid());
+            form.setUser(user);
+        }
+        if (form.getUser() != null) {
+            User user = userService.mCreate(form.getUser());
+            form.getAccount().setUserUuid(user.getUuid());
+            form.getAccount().setTenantUuid(user.getTenantUuid());
+        }
+        return R.ok().data(accountService.mCreate(form.getAccount()));
+    }
 
     @Annc
     @PostMapping("/login")

@@ -1,7 +1,7 @@
 spring:
   datasource:
     druid:
-      username: yhkz_user
+      username: xxxxxx
       password: xxxxxx
       url: jdbc:mysql://localhost/yhkz_hotel?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
 
@@ -10,7 +10,14 @@ yhkz:
     redis:
       database:
         app: 0
-        cache: 3
+        token: 1
+        cache: 2
       host: localhost
       port: 6379
       passowrd: xxxxxx
+  config:
+    dev: false
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

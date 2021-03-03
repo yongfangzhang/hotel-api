@@ -56,7 +56,7 @@ public class SystemLog implements Serializable {
     /**
      * 级别
      */
-    private Boolean level;
+    private Integer level;
     /**
      * 操作目标
      */

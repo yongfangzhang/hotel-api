@@ -6,6 +6,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.remark.RemarkRecord;
 import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
@@ -66,9 +67,12 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
         @CacheEvict(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "query", allEntries = true)
     })
     // @formatter:on
-    public boolean mCreate(T entity) {
+    public T mCreate(T entity) {
         ValidatorUtils.validateEntity(entity, AddGroup.class);
-        return save(entity) && clearRelationCaches();
+        if (save(entity) && clearRelationCaches()) {
+            return entity;
+        }
+        throw new RRException("保存失败");
     }
 
     @Override
@@ -78,9 +82,12 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
         @CacheEvict(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#entity.getUuid()", allEntries = true)
     })
     // @formatter:on
-    public boolean mUpdate(T entity) {
+    public T mUpdate(T entity) {
         ValidatorUtils.validateEntity(entity, UpdateGroup.class);
-        return updateById(entity) && clearRelationCaches();
+        if (updateById(entity) && clearRelationCaches()) {
+            return entity;
+        }
+        throw new RRException("更新失败");
     }
 
     @Override

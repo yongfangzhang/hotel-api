@@ -31,7 +31,7 @@ public class AnncInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
             Object handler) throws Exception {
         // not method
-        if (appConfig.isDisableAnnc() || !(handler instanceof HandlerMethod)) {
+        if (appConfig.isDev() || !(handler instanceof HandlerMethod)) {
             return true;
         }
 

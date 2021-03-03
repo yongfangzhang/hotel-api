@@ -18,5 +18,5 @@ public class AppConfig implements Serializable {
     */
     private static final long serialVersionUID = 3575718395842760962L;
 
-    private boolean disableAnnc;
+    private boolean dev;
 }

@@ -24,9 +24,9 @@ public interface IBaseService<T extends BaseEntity> {
 
     T mOne(Map<String, Object> params);
 
-    boolean mCreate(T entity);
+    T mCreate(T entity);
 
-    boolean mUpdate(T entity);
+    T mUpdate(T entity);
 
     boolean mDelete(String uuid);
 
