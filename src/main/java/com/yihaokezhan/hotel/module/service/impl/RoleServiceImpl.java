@@ -88,6 +88,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 
         WrapperUtils.fillEq(wrapper, params, "uuid");
         WrapperUtils.fillEq(wrapper, params, "code");
+        WrapperUtils.fillEq(wrapper, params, "accountType");
 
         WrapperUtils.fillLike(wrapper, params, "description");
         WrapperUtils.fillLike(wrapper, params, "name");

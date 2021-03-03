@@ -49,7 +49,12 @@ public class AccountRoleServiceImpl extends BaseServiceImpl<AccountRoleMapper, A
     public AccountRole mCreate(AccountRole accountRole) {
         Role role = accountRole.getRole();
         if (role != null && StringUtils.isNotBlank(role.getCode())) {
-            role = roleService.mOne(M.m().put("code", role.getCode()));
+            // @formatter:off
+            role = roleService.mOne(M.m()
+                .put("code", role.getCode())
+                .put("accountType", role.getAccountType())
+            );
+            // @formatter:on
         }
         if (role != null) {
             accountRole.setRoleUuid(role.getUuid());

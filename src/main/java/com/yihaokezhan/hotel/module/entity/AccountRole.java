@@ -62,8 +62,9 @@ public class AccountRole extends BaseEntity {
             return;
         }
         Role role = new Role();
-        role.setCode(rt.getCode());
         role.setTenantUuid(tenantUuid);
+        role.setAccountType(accountType);
+        role.setCode(rt.getCode());
         this.role = role;
     }
 }

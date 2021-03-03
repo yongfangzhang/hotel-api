@@ -2,6 +2,7 @@ package com.yihaokezhan.hotel.module.entity;
 
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -34,6 +35,12 @@ public class Role extends BaseEntity {
      */
     @NotBlank(message = "编码不能为空", groups = AddGroup.class)
     private String code;
+
+    /**
+     * 账户类型
+     */
+    @NotNull(message = "账户类型不能为空", groups = AddGroup.class)
+    private Integer accountType;
 
     /**
      * 角色名称

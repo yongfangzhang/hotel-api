@@ -25,6 +25,7 @@ import com.yihaokezhan.hotel.module.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +60,12 @@ public class PassportController {
 
     @Autowired
     private ShiroUtils shiroUtils;
+
+    @GetMapping("/info")
+    @JsonView(V.S.class)
+    public R info(@LoginUser TokenUser tokenUser) {
+        return R.ok().data(accountService.mGet(tokenUser.getUuid()));
+    }
 
     @Dev
     @PostMapping("/register")

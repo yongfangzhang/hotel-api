@@ -46,6 +46,7 @@ public class RouteServiceImpl extends BaseServiceImpl<RouteMapper, Route> implem
 
         WrapperUtils.fillEq(wrapper, params, "uuid");
         WrapperUtils.fillEq(wrapper, params, "type");
+        WrapperUtils.fillEq(wrapper, params, "accountType");
 
         WrapperUtils.fillLike(wrapper, params, "path");
         WrapperUtils.fillLike(wrapper, params, "caption");

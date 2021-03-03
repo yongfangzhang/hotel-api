@@ -43,6 +43,12 @@ public class Route extends BaseEntity {
     private String path;
 
     /**
+     * 账户类型
+     */
+    @NotNull(message = "账户类型不能为空", groups = AddGroup.class)
+    private Integer accountType;
+
+    /**
      * 路由类型(菜单、按钮)
      */
     private Integer type;
