@@ -76,7 +76,6 @@ public class Account extends BaseEntity {
     /**
      * 账号状态
      */
-    @NotNull(message = "账号状态不能为空", groups = AddGroup.class)
     @EnumValue(enumClass = UserState.class, message = "账号状态无效", canBeNull = true,
             groups = {AddGroup.class, UpdateGroup.class})
     private Integer state;

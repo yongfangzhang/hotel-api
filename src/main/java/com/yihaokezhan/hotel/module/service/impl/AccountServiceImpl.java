@@ -8,6 +8,7 @@ import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.M;
+import com.yihaokezhan.hotel.common.utils.RandomUtils;
 import com.yihaokezhan.hotel.common.utils.TokenUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.common.validator.Assert;
@@ -57,6 +58,8 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
 
     @Override
     public Account mCreate(Account account) {
+        account.setSalt(RandomUtils.randomString32());
+        account.setPassword(getPasswordHex(account.getPassword(), account.getSalt()));
         return super.mCreate(account);
     }
 
