@@ -54,14 +54,16 @@ public class InitializeRoleRunner implements ApplicationRunner {
         List<Role> roles = roleService.mList(M.m());
         Map<String, Role> roleMap = roles.stream().collect(Collectors.toMap(Role::getCode, v -> v));
         for (RoleType v : RoleType.values()) {
-            if (roleMap.get(v.getCode()) == null) {
-                Role role = new Role();
-                role.setCode(v.getCode());
-                role.setName(v.getName());
-                role.setDescription(v.getName());
-                role.setRemarkContent("自动创建");
-                roleService.mCreate(role);
+            if (RoleType.UNKNOWN.equals(v) || RoleType.END.equals(v)
+                    || roleMap.get(v.getCode()) != null) {
+                continue;
             }
+            Role role = new Role();
+            role.setCode(v.getCode());
+            role.setName(v.getName());
+            role.setDescription(v.getName());
+            role.setRemarkContent("自动创建");
+            roleService.mCreate(role);
         }
     }
 

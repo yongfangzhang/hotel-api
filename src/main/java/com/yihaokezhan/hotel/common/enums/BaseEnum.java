@@ -9,7 +9,5 @@ public interface BaseEnum<E> {
 
     String getName();
 
-    default E getUnknown() {
-        return null;
-    };
+    E getUnknown();
 }
