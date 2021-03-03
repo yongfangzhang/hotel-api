@@ -1,7 +1,9 @@
 package com.yihaokezhan.hotel.controller.system;
 
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.utils.R;
+import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.module.service.ISystemHttpLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,7 @@ public class SystemHttpLogController {
     private ISystemHttpLogService systemHttpLogService;
 
     @GetMapping("/page")
+    @JsonView(V.S.class)
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(systemHttpLogService.mPage(params));
     }

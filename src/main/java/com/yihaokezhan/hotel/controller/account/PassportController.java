@@ -1,5 +1,6 @@
 package com.yihaokezhan.hotel.controller.account;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.captcha.service.ICaptchaService;
 import com.yihaokezhan.hotel.common.annotation.Annc;
 import com.yihaokezhan.hotel.common.annotation.Dev;
@@ -11,6 +12,7 @@ import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.TokenUtils;
+import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.form.LoginForm;
 import com.yihaokezhan.hotel.form.RegisterForm;
 import com.yihaokezhan.hotel.model.TokenUser;
@@ -61,6 +63,7 @@ public class PassportController {
     @Dev
     @PostMapping("/register")
     @Transactional(rollbackFor = Exception.class)
+    @JsonView(V.S.class)
     public R register(@Validated @RequestBody RegisterForm form) {
         if (form.getTenant() != null) {
             Tenant tenant = tenantService.mCreate(form.getTenant());
@@ -79,6 +82,7 @@ public class PassportController {
     @Annc
     @PostMapping("/login")
     @SysLog(operation = Operation.LOGIN, linked = "#form.getAccount()", description = "登录")
+    @JsonView(V.S.class)
     public R login(@Validated @RequestBody LoginForm form) {
         captchaService.validateCaptcha(form.getCaptchaSid(), form.getCaptchaCode());
         Account account = accountService.login(form);
@@ -93,6 +97,7 @@ public class PassportController {
     @RequestMapping("/logout")
     @SysLog(operation = Operation.LOGOUT, linked = "#user.getAccount()", description = "退出",
             position = AspectPos.BEFORE)
+    @JsonView(V.S.class)
     public R logout(@LoginUser(required = false) TokenUser tokenUser) {
         if (tokenUser == null) {
             return R.ok();

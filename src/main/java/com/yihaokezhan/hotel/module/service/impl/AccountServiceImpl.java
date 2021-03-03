@@ -78,7 +78,7 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
         accountRole.setRole(account.getTenantUuid(), account.getType(), form.getRoleType());
         accountRoleService.mCreate(accountRole);
 
-        return join(account);
+        return mGet(account.getUuid());
     }
 
     @Override
