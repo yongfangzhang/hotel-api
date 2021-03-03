@@ -5,7 +5,6 @@ import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.utils.TokenUtils;
 import com.yihaokezhan.hotel.model.TokenUser;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -38,26 +37,16 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
         boolean isRequired = loginUser.required();
         // 获取用户ID
         String token = tokenUtils.getTokenFromReq(request);
-        if (StringUtils.isBlank(token) && !isRequired) {
+        TokenUser tokenUser = tokenUtils.getUserByToken(token);
+
+        if (tokenUser != null) {
+            return tokenUser;
+        }
+
+        if (!isRequired) {
             // Token不传并且不是必须的， 允许通过
             return null;
         }
-        TokenUser tokenUser = tokenUtils.getUserByToken(token);
-        if (tokenUser == null || StringUtils.isBlank(tokenUser.getUuid()) || tokenUser.getAccountType() == null) {
-            tokenUtils.expireToken(token);
-            if (!isRequired) {
-                return null;
-            }
-            throw new RRException(ErrorCode.ACCESS_DENIED);
-        }
-        long expiredAt = tokenUser.getExpiredAt();
-        if (expiredAt < System.currentTimeMillis()) {
-            tokenUtils.expireToken(token);
-            if (!isRequired) {
-                return null;
-            }
-            throw new RRException(ErrorCode.ACCESS_DENIED);
-        }
-        return tokenUser;
+        throw new RRException(ErrorCode.ACCESS_DENIED);
     }
 }

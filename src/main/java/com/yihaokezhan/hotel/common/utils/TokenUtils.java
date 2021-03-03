@@ -44,7 +44,16 @@ public class TokenUtils {
         if (StringUtils.isEmpty(token)) {
             return;
         }
-        TokenUser tokenUser = getUserByToken(token);
+        log.error("expire token {}", token);
+        expireToken(getUserByToken(token));
+    }
+
+    public void expireToken(TokenUser tokenUser) {
+        if (tokenUser == null) {
+            return;
+        }
+        String token = tokenUser.getToken();
+        log.error("expire token {}", token);
         removeAllTokens(tokenUser);
         tokenRedis.delete(tokenCacheKey(token));
     }
@@ -63,12 +72,19 @@ public class TokenUtils {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        TokenUser tu = tokenRedis.get(tokenCacheKey(token), TokenUser.class);
-        if (tu == null) {
+        TokenUser tokenUser = tokenRedis.get(tokenCacheKey(token), TokenUser.class);
+        if (tokenUser == null) {
             log.error("redis 中未查询到 {}", tokenCacheKey(token));
+        } else {
+            long expiredAt = tokenUser.getExpiredAt();
+            if (expiredAt < System.currentTimeMillis()) {
+                expireToken(tokenUser);
+                return null;
+            }
         }
-        log.info("get tokenUser by token {}", tu != null ? tu.toString() : null);
-        return tu;
+        log.info("get tokenUser by token {}", tokenUser != null ? tokenUser.toString() : null);
+
+        return tokenUser;
     }
 
     public String getUuidByToken(String token) {
