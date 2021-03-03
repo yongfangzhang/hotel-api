@@ -1,11 +1,11 @@
-package com.yihaokezhan.hotel.controller;
+package com.yihaokezhan.hotel.controller.role;
 
 import java.util.Map;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
-import com.yihaokezhan.hotel.module.entity.RoomPrice;
-import com.yihaokezhan.hotel.module.service.IRoomPriceService;
+import com.yihaokezhan.hotel.module.entity.RoleRoute;
+import com.yihaokezhan.hotel.module.service.IRoleRouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,52 +20,52 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 房间价格 前端控制器
+ * 角色路由表 前端控制器
  * </p>
  *
  * @author zhangyongfang
  * @since 2021-03-01
  */
 @RestController
-@RequestMapping("/hotel/room/price")
-public class RoomPriceController {
+@RequestMapping("/hotel/role/route")
+public class RoleRouteController {
 
     @Autowired
-    private IRoomPriceService roomPriceService;
+    private IRoleRouteService roleRouteService;
 
 
     @GetMapping("/page")
     public R page(@RequestParam Map<String, Object> params) {
-        return R.ok().data(roomPriceService.mPage(params));
+        return R.ok().data(roleRouteService.mPage(params));
     }
 
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params) {
-        return R.ok().data(roomPriceService.mList(params));
+        return R.ok().data(roleRouteService.mList(params));
     }
 
     @GetMapping("/one")
     public R one(@RequestParam Map<String, Object> params) {
-        return R.ok().data(roomPriceService.mOne(params));
+        return R.ok().data(roleRouteService.mOne(params));
     }
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok().data(roomPriceService.mGet(uuid));
+        return R.ok().data(roleRouteService.mGet(uuid));
     }
 
     @PostMapping("")
-    public R create(@Validated(AddGroup.class) @RequestBody RoomPrice entity) {
-        return R.ok().data(roomPriceService.mCreate(entity));
+    public R create(@Validated(AddGroup.class) @RequestBody RoleRoute entity) {
+        return R.ok().data(roleRouteService.mCreate(entity));
     }
 
     @PutMapping("")
-    public R update(@Validated(UpdateGroup.class) @RequestBody RoomPrice entity) {
-        return R.ok().data(roomPriceService.mUpdate(entity));
+    public R update(@Validated(UpdateGroup.class) @RequestBody RoleRoute entity) {
+        return R.ok().data(roleRouteService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok().data(roomPriceService.mDelete(uuid));
+        return R.ok().data(roleRouteService.mDelete(uuid));
     }
 }

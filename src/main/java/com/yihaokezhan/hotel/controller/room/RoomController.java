@@ -1,11 +1,11 @@
-package com.yihaokezhan.hotel.controller;
+package com.yihaokezhan.hotel.controller.room;
 
 import java.util.Map;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
-import com.yihaokezhan.hotel.module.entity.Resource;
-import com.yihaokezhan.hotel.module.service.IResourceService;
+import com.yihaokezhan.hotel.module.entity.Room;
+import com.yihaokezhan.hotel.module.service.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,52 +20,52 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 资源表 前端控制器
+ * 房间表 前端控制器
  * </p>
  *
  * @author zhangyongfang
  * @since 2021-03-01
  */
 @RestController
-@RequestMapping("/hotel/resource")
-public class ResourceController {
+@RequestMapping("/hotel/room")
+public class RoomController {
 
     @Autowired
-    private IResourceService resourceService;
+    private IRoomService roomService;
 
 
     @GetMapping("/page")
     public R page(@RequestParam Map<String, Object> params) {
-        return R.ok().data(resourceService.mPage(params));
+        return R.ok().data(roomService.mPage(params));
     }
 
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params) {
-        return R.ok().data(resourceService.mList(params));
+        return R.ok().data(roomService.mList(params));
     }
 
     @GetMapping("/one")
     public R one(@RequestParam Map<String, Object> params) {
-        return R.ok().data(resourceService.mOne(params));
+        return R.ok().data(roomService.mOne(params));
     }
 
     @GetMapping("/{uuid}")
     public R get(@PathVariable String uuid) {
-        return R.ok().data(resourceService.mGet(uuid));
+        return R.ok().data(roomService.mGet(uuid));
     }
 
     @PostMapping("")
-    public R create(@Validated(AddGroup.class) @RequestBody Resource entity) {
-        return R.ok().data(resourceService.mCreate(entity));
+    public R create(@Validated(AddGroup.class) @RequestBody Room entity) {
+        return R.ok().data(roomService.mCreate(entity));
     }
 
     @PutMapping("")
-    public R update(@Validated(UpdateGroup.class) @RequestBody Resource entity) {
-        return R.ok().data(resourceService.mUpdate(entity));
+    public R update(@Validated(UpdateGroup.class) @RequestBody Room entity) {
+        return R.ok().data(roomService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     public R delete(@PathVariable String uuid) {
-        return R.ok().data(resourceService.mDelete(uuid));
+        return R.ok().data(roomService.mDelete(uuid));
     }
 }

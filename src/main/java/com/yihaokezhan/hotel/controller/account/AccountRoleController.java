@@ -1,4 +1,4 @@
-package com.yihaokezhan.hotel.controller;
+package com.yihaokezhan.hotel.controller.account;
 
 import java.util.Map;
 import com.yihaokezhan.hotel.common.utils.R;
