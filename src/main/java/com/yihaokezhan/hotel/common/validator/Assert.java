@@ -4,7 +4,7 @@ import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import org.springframework.lang.Nullable;
 
-public abstract class Assert {
+public class Assert {
 
     public static void state(boolean expression, String message) {
         if (!expression) {

@@ -3,7 +3,6 @@ spring:
     name: yhkz-hotel
   profiles:
     active: prod
-
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     druid:
@@ -34,6 +33,23 @@ spring:
       time-between-eviction-runs-millis: 60000
       validation-query: SELECT 1 FROM DUAL
     type: com.alibaba.druid.pool.DruidDataSource
+  servlet:
+    multipart:
+      enabled: true
+      resolve-lazily: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+
+# server
+server:
+  http2:
+    enabled: true
+  compression:
+    enabled: true
+  error:
+    whitelabel:
+      enabled: false
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml

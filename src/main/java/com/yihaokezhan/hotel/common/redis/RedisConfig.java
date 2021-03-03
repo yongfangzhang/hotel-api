@@ -91,7 +91,7 @@ public class RedisConfig {
         template.setHashValueSerializer(new GenericFastJsonRedisSerializer());
 
         // 开启事务支持
-        template.setEnableTransactionSupport(true);
+        // template.setEnableTransactionSupport(true);
         return template;
     }
 

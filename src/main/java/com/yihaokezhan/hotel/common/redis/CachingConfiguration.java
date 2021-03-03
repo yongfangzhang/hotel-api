@@ -41,9 +41,9 @@ public class CachingConfiguration {
                         .fromSerializer(new StringRedisSerializer()))
                 // 设置value为json序列化
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new GenericFastJsonRedisSerializer()))
-                // 不缓存空值
-                .disableCachingNullValues();
+                        .fromSerializer(new GenericFastJsonRedisSerializer()));
+        // 不缓存空值
+        // .disableCachingNullValues();
         // 初始化RedisCacheManager
         return new MyRedisCacheManager(redisCacheWriter, defaultCacheConfig);
     }
