@@ -105,6 +105,9 @@ public class Account extends BaseEntity {
     
     @TableField(exist = false)
     private Tenant tenant;
+    
+    @TableField(exist = false)
+    private String token;
 
     public String getTypeName() {
         return EnumUtils.getName(AccountType.class, this.type);

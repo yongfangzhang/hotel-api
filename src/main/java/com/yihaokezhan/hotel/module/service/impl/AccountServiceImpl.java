@@ -1,5 +1,6 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yihaokezhan.hotel.common.enums.UserState;
@@ -7,11 +8,14 @@ import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.M;
+import com.yihaokezhan.hotel.common.utils.TokenUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.common.validator.Assert;
 import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
 import com.yihaokezhan.hotel.form.LoginForm;
+import com.yihaokezhan.hotel.model.TokenUser;
 import com.yihaokezhan.hotel.module.entity.Account;
+import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.mapper.AccountMapper;
 import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import com.yihaokezhan.hotel.module.service.IAccountService;
@@ -48,6 +52,9 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
     @Autowired
     private ITenantService tenantService;
 
+    @Autowired
+    private TokenUtils tokenUtils;
+
     @Override
     public Account mCreate(Account account) {
         return super.mCreate(account);
@@ -64,7 +71,8 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
             // @formatter:on
             validateAccount(account);
             validatePassword(account, form);
-            return account;
+            createToken(account, form);
+            return updateAfterLogin(account, form);
         } catch (RRException err) {
             throw err;
         } catch (Exception e) {
@@ -130,6 +138,30 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
         // 密码正确性
         String pwdHash = getPasswordHex(form.getPassword(), account.getSalt());
         Assert.isTrue(account.getPassword().equals(pwdHash), ErrorCode.ACCOUNT_PASSWORD_ERROR);
+    }
+
+    private void createToken(Account account, LoginForm form) {
+        // 创建Token
+        TokenUser tokenUser = new TokenUser(account.getUuid(), account.getType());
+        // 自动登录
+        if (form.isAutoLogin()) {
+            tokenUser.setExpiredAt(LocalDateTime.now().plusMonths(1L));
+        }
+        tokenUser.setTenantUuid(account.getTenantUuid());
+        tokenUser.setAccount(account.getAccount());
+        tokenUser.setUserUuid(account.getUserUuid());
+        User user = account.getUser();
+        if (user != null) {
+            tokenUser.setName(user.getName());
+        }
+        account.setToken(tokenUtils.createToken(tokenUser));
+    }
+
+    private Account updateAfterLogin(Account account, LoginForm form) {
+        account.setLastLoginAt(LocalDateTime.now());
+        account.setDevice(form.getDevice());
+        account.setUserAgent(form.getUserAgent());
+        return mUpdate(account);
     }
 
     private String getPasswordHex(String password, String salt) {

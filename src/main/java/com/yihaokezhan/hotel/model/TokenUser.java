@@ -1,5 +1,7 @@
 package com.yihaokezhan.hotel.model;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.utils.JSONUtils;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -78,5 +80,13 @@ public class TokenUser {
     @Override
     public String toString() {
         return JSONUtils.stringify(this);
+    }
+
+    public void setExpiredAt(Long expiredAt) {
+        this.expiredAt = expiredAt;
+    }
+
+    public void setExpiredAt(LocalDateTime datetime) {
+        this.setExpiredAt(datetime.toEpochSecond(ZoneOffset.UTC) * 1000);
     }
 }

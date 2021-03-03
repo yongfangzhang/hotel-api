@@ -1,7 +1,6 @@
 package com.yihaokezhan.hotel.common.utils;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,8 +31,7 @@ public class TokenUtils {
     public String createToken(TokenUser tokenUser) {
         tokenUser.setToken(RandomUtils.randomString64());
         if (tokenUser.getExpiredAt() == null) {
-            tokenUser.setExpiredAt(LocalDateTime.now().plusSeconds(Constant.CACHE_DURATION_TOKEN)
-                    .toEpochSecond(ZoneOffset.UTC) * 1000);
+            tokenUser.setExpiredAt(LocalDateTime.now().plusSeconds(Constant.CACHE_DURATION_TOKEN));
         }
         String key = tokenCacheKey(tokenUser.getToken());
         long expireSeconds = (tokenUser.getExpiredAt() - (System.currentTimeMillis())) / 1000;

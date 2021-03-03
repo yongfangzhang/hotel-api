@@ -4,11 +4,17 @@ import com.yihaokezhan.hotel.captcha.CaptchaService;
 import com.yihaokezhan.hotel.common.annotation.Annc;
 import com.yihaokezhan.hotel.common.annotation.Dev;
 import com.yihaokezhan.hotel.common.annotation.LoginUser;
+import com.yihaokezhan.hotel.common.annotation.SysLog;
+import com.yihaokezhan.hotel.common.enums.AspectPos;
+import com.yihaokezhan.hotel.common.enums.Operation;
+import com.yihaokezhan.hotel.common.exception.RRException;
+import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.TokenUtils;
 import com.yihaokezhan.hotel.form.LoginForm;
 import com.yihaokezhan.hotel.form.RegisterForm;
 import com.yihaokezhan.hotel.model.TokenUser;
+import com.yihaokezhan.hotel.module.entity.Account;
 import com.yihaokezhan.hotel.module.entity.Tenant;
 import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.service.IAccountService;
@@ -49,6 +55,9 @@ public class PassportController {
     @Autowired
     private CaptchaService captchaService;
 
+    @Autowired
+    private ShiroUtils shiroUtils;
+
     @Dev
     @PostMapping("/register")
     @Transactional(rollbackFor = Exception.class)
@@ -69,13 +78,21 @@ public class PassportController {
 
     @Annc
     @PostMapping("/login")
+    @SysLog(operation = Operation.LOGIN, linked = "#form.getAccount()", description = "登录")
     public R login(@Validated @RequestBody LoginForm form) {
         captchaService.validateCaptcha(form.getCaptchaSid(), form.getCaptchaCode());
-        return R.ok().data(accountService.login(form));
+        Account account = accountService.login(form);
+        if (account == null) {
+            throw new RRException("登录失败");
+        }
+        shiroUtils.login(account.getUuid(), account.getToken());
+        return R.ok().data(account);
     }
 
     @Annc
     @RequestMapping("/logout")
+    @SysLog(operation = Operation.LOGOUT, linked = "#user.getAccount()", description = "退出",
+            position = AspectPos.BEFORE)
     public R logout(@LoginUser(required = false) TokenUser tokenUser) {
         if (tokenUser == null) {
             return R.ok();
