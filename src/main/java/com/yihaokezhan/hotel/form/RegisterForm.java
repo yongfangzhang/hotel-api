@@ -21,4 +21,6 @@ public class RegisterForm implements Serializable {
 
     private Tenant tenant;
 
+    private Integer roleType;
+
 }

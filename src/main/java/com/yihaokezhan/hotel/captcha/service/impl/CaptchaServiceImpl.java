@@ -1,10 +1,11 @@
-package com.yihaokezhan.hotel.captcha;
+package com.yihaokezhan.hotel.captcha.service.impl;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import com.google.code.kaptcha.Producer;
+import com.yihaokezhan.hotel.captcha.service.ICaptchaService;
 import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.redis.RedisService;
 import com.yihaokezhan.hotel.common.utils.Constant;
@@ -21,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
-public class CaptchaService {
+public class CaptchaServiceImpl implements ICaptchaService {
 
     @Autowired
     private Producer producer;
@@ -29,6 +30,7 @@ public class CaptchaService {
     @Autowired
     private RedisService redisService;
 
+    @Override
     public String generateBase64Captcha(String sid) throws IOException {
         String text = producer.createText();
         BufferedImage image = producer.createImage(text);
@@ -40,6 +42,7 @@ public class CaptchaService {
         return "data:image/jpg;base64," + base64Img;
     }
 
+    @Override
     public void validateCaptcha(String sid, String code) {
         Assert.state(!StringUtils.isAnyBlank(sid, code), ErrorCode.REQ_INVALID_PARAMS);
         String cachedCode = redisService.get(getCaptchaKey(sid));

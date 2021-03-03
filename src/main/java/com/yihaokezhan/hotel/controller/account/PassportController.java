@@ -1,6 +1,6 @@
 package com.yihaokezhan.hotel.controller.account;
 
-import com.yihaokezhan.hotel.captcha.CaptchaService;
+import com.yihaokezhan.hotel.captcha.service.ICaptchaService;
 import com.yihaokezhan.hotel.common.annotation.Annc;
 import com.yihaokezhan.hotel.common.annotation.Dev;
 import com.yihaokezhan.hotel.common.annotation.LoginUser;
@@ -53,7 +53,7 @@ public class PassportController {
     private TokenUtils tokenUtils;
 
     @Autowired
-    private CaptchaService captchaService;
+    private ICaptchaService captchaService;
 
     @Autowired
     private ShiroUtils shiroUtils;
@@ -73,7 +73,7 @@ public class PassportController {
             form.getAccount().setUserUuid(user.getUuid());
             form.getAccount().setTenantUuid(user.getTenantUuid());
         }
-        return R.ok().data(accountService.mCreate(form.getAccount()));
+        return R.ok().data(accountService.register(form));
     }
 
     @Annc

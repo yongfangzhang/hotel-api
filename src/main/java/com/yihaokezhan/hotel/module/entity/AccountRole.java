@@ -4,6 +4,9 @@ import javax.validation.constraints.NotBlank;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.enums.AccountType;
+import com.yihaokezhan.hotel.common.enums.RoleType;
+import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.model.BaseEntity;
@@ -43,4 +46,24 @@ public class AccountRole extends BaseEntity {
 
     @TableField(exist = false)
     private Role role;
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setRole(String tenantUuid, Integer accountType, Integer roleType) {
+        RoleType rt = EnumUtils.valueOf(RoleType.class, roleType);
+        if (RoleType.UNKNOWN.equals(rt)) {
+            AccountType at = EnumUtils.valueOf(AccountType.class, accountType);
+            rt = at.getRoleType();
+        }
+        if (RoleType.UNKNOWN.equals(rt)) {
+            this.role = null;
+            return;
+        }
+        Role role = new Role();
+        role.setCode(rt.getCode());
+        role.setTenantUuid(tenantUuid);
+        this.role = role;
+    }
 }

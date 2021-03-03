@@ -6,10 +6,11 @@ import lombok.Getter;
 public enum CustomerChannel implements BaseEnum<CustomerChannel> {
     // @formatter:off
     UNKNOWN                     (0,         "未知"),
-    MEITUAN                     (1,         "美团"),
-    WECHAT                      (2,         "微信"),
-    ALIPAY                      (3,         "支付宝"),
-    STORE                       (4,         "门店"),
+    BACKEND                     (1,         "后台添加"),
+    MEITUAN                     (2,         "美团"),
+    WECHAT                      (3,         "微信"),
+    ALIPAY                      (4,         "支付宝"),
+    STORE                       (5,         "门店"),
     END                         (1000,      "END");
     // @formatter:on
 

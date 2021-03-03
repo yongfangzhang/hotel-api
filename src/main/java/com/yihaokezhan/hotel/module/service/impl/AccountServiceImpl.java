@@ -14,8 +14,10 @@ import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.common.validator.Assert;
 import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
 import com.yihaokezhan.hotel.form.LoginForm;
+import com.yihaokezhan.hotel.form.RegisterForm;
 import com.yihaokezhan.hotel.model.TokenUser;
 import com.yihaokezhan.hotel.module.entity.Account;
+import com.yihaokezhan.hotel.module.entity.AccountRole;
 import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.mapper.AccountMapper;
 import com.yihaokezhan.hotel.module.service.IAccountRoleService;
@@ -25,6 +27,8 @@ import com.yihaokezhan.hotel.module.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -57,10 +61,24 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
     private TokenUtils tokenUtils;
 
     @Override
-    public Account mCreate(Account account) {
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true)
+    })
+    // @formatter:on
+    public Account register(RegisterForm form) {
+        Account account = form.getAccount();
+
         account.setSalt(RandomUtils.randomString32());
         account.setPassword(getPasswordHex(account.getPassword(), account.getSalt()));
-        return super.mCreate(account);
+        account = mCreate(account);
+
+        AccountRole accountRole = new AccountRole();
+        accountRole.setAccountUuid(account.getUuid());
+        accountRole.setRole(account.getTenantUuid(), account.getType(), form.getRoleType());
+        accountRoleService.mCreate(accountRole);
+
+        return join(account);
     }
 
     @Override

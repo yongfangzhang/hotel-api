@@ -2,7 +2,7 @@ package com.yihaokezhan.hotel.controller.pub;
 
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import com.yihaokezhan.hotel.captcha.CaptchaService;
+import com.yihaokezhan.hotel.captcha.service.ICaptchaService;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.RandomUtils;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CaptchaController {
 
     @Autowired
-    private CaptchaService captchaService;
+    private ICaptchaService captchaService;
 
     @GetMapping("")
     public R getCaptcha(HttpServletResponse response) throws IOException {
