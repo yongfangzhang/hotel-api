@@ -1,5 +1,6 @@
 package com.yihaokezhan.hotel.module.service;
 
+import com.yihaokezhan.hotel.form.LoginForm;
 import com.yihaokezhan.hotel.module.entity.Account;
 
 
@@ -13,5 +14,6 @@ import com.yihaokezhan.hotel.module.entity.Account;
  */
 public interface IAccountService extends IBaseService<Account> {
 
+    Account login(LoginForm form);
 }
 

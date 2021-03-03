@@ -1,14 +1,23 @@
 package com.yihaokezhan.hotel.common.utils;
 
 import com.fasterxml.uuid.Generators;
+import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  * @author zhangyongfang
  * @since 2021-02-22
  */
-public class UUIDUtils {
+public class RandomUtils {
 
-    public static String generate() {
+    public static String randomString32() {
+        return RandomStringUtils.randomAlphanumeric(32);
+    }
+
+    public static String randomString64() {
+        return RandomStringUtils.randomAlphanumeric(64);
+    }
+
+    public static String uuid() {
         String uuid = "";
         // 加同步锁
         synchronized (uuid) {
@@ -17,7 +26,7 @@ public class UUIDUtils {
         return uuid;
     }
 
-    public static String generateTimeBased() {
+    public static String timeBasedUuid() {
         String uuid = "";
         // 加同步锁
         synchronized (uuid) {

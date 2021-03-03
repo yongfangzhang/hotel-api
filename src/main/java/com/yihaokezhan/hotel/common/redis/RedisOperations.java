@@ -28,13 +28,13 @@ public class RedisOperations {
 
     public void set(String key, Object value, long expire) {
         getRedisTemplate().opsForValue().set(key, toJson(value));
-        if (expire != Constant.REDIS_NOT_EXPIRE) {
+        if (expire != Constant.CACHE_DURATION_FOREVER) {
             getRedisTemplate().expire(key, expire, TimeUnit.SECONDS);
         }
     }
 
     public void permanentSet(String key, Object value) {
-        set(key, value, Constant.REDIS_NOT_EXPIRE);
+        set(key, value, Constant.CACHE_DURATION_FOREVER);
     }
 
     public void set(String key, Object value) {
@@ -43,21 +43,21 @@ public class RedisOperations {
 
     public void add(String key, Object value, long expire) {
         getRedisTemplate().opsForSet().add(key, value);
-        if (expire != Constant.REDIS_NOT_EXPIRE) {
+        if (expire != Constant.CACHE_DURATION_FOREVER) {
             getRedisTemplate().expire(key, expire, TimeUnit.SECONDS);
         }
     }
 
     public <T> T get(String key, Class<T> clazz, long expire) {
         Object value = getRedisTemplate().opsForValue().get(key);
-        if (expire != Constant.REDIS_NOT_EXPIRE) {
+        if (expire != Constant.CACHE_DURATION_FOREVER) {
             getRedisTemplate().expire(key, expire, TimeUnit.SECONDS);
         }
         return value == null ? null : fromJson(value.toString(), clazz);
     }
 
     public <T> T get(String key, Class<T> clazz) {
-        return get(key, clazz, Constant.REDIS_NOT_EXPIRE);
+        return get(key, clazz, Constant.CACHE_DURATION_FOREVER);
     }
 
     public <T> List<T> getList(String key, Class<T> clazz) {
@@ -67,14 +67,14 @@ public class RedisOperations {
 
     public String get(String key, long expire) {
         Object value = getRedisTemplate().opsForValue().get(key);
-        if (expire != Constant.REDIS_NOT_EXPIRE) {
+        if (expire != Constant.CACHE_DURATION_FOREVER) {
             getRedisTemplate().expire(key, expire, TimeUnit.SECONDS);
         }
         return value == null ? null : value.toString();
     }
 
     public String get(String key) {
-        return get(key, Constant.REDIS_NOT_EXPIRE);
+        return get(key, Constant.CACHE_DURATION_FOREVER);
     }
 
     public void delete(String key) {
@@ -99,12 +99,12 @@ public class RedisOperations {
     }
 
     public long increment(String key) {
-        return increment(key, Constant.REDIS_NOT_EXPIRE);
+        return increment(key, Constant.CACHE_DURATION_FOREVER);
     }
 
     public long increment(String key, long expire) {
         long ret = getRedisTemplate().opsForValue().increment(key, 1);
-        if (expire != Constant.REDIS_NOT_EXPIRE) {
+        if (expire != Constant.CACHE_DURATION_FOREVER) {
             getRedisTemplate().expire(key, expire, TimeUnit.SECONDS);
         }
         return ret;

@@ -2,7 +2,7 @@ package com.yihaokezhan.hotel.common.handler;
 
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.yihaokezhan.hotel.common.utils.UUIDUtils;
+import com.yihaokezhan.hotel.common.utils.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -45,7 +45,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         }
         Object uuid = getFieldValByName(field, metaObject);
         if (uuid == null || StringUtils.isBlank(uuid.toString())) {
-            setFieldValByName(field, UUIDUtils.generateTimeBased(), metaObject);
+            setFieldValByName(field, RandomUtils.timeBasedUuid(), metaObject);
         }
     }
 

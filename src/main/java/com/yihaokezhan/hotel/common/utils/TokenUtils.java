@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import com.yihaokezhan.hotel.common.redis.TokenRedisService;
 import com.yihaokezhan.hotel.model.TokenUser;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,30 +25,20 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class TokenUtils {
-    /**
-     * 12小时后过期
-     */
-    private final int EXPIRE = 3600 * 12;
-
-    private final int TOKEN_BIT_COUNT = 64;
 
     @Autowired
     private TokenRedisService tokenRedis;
 
-    public int getDefaultExpire() {
-        return EXPIRE;
-    }
-
     public String createToken(TokenUser tokenUser) {
-        tokenUser.setToken(RandomStringUtils.randomAlphanumeric(TOKEN_BIT_COUNT));
+        tokenUser.setToken(RandomUtils.randomString64());
         if (tokenUser.getExpiredAt() == null) {
-            tokenUser.setExpiredAt(
-                    LocalDateTime.now().plusHours(EXPIRE).toEpochSecond(ZoneOffset.UTC) * 1000);
+            tokenUser.setExpiredAt(LocalDateTime.now().plusSeconds(Constant.CACHE_DURATION_TOKEN)
+                    .toEpochSecond(ZoneOffset.UTC) * 1000);
         }
         String key = tokenCacheKey(tokenUser.getToken());
-        long expire = (tokenUser.getExpiredAt() - (System.currentTimeMillis())) / 1000;
-        tokenRedis.set(key, tokenUser, expire);
-        tokenRedis.add(userTokensCacheKey(tokenUser), tokenUser.getToken(), expire);
+        long expireSeconds = (tokenUser.getExpiredAt() - (System.currentTimeMillis())) / 1000;
+        tokenRedis.set(key, tokenUser, expireSeconds);
+        tokenRedis.add(userTokensCacheKey(tokenUser), tokenUser.getToken(), expireSeconds);
         return tokenUser.getToken();
     }
 
@@ -171,7 +160,7 @@ public class TokenUtils {
     }
 
     private String tokenCacheKey(Object token) {
-        return Constant.TOKEN_KEY_PREFIX + token.toString();
+        return Constant.CACHE_PREFIX_TOKEN_KEY + token.toString();
     }
 
     private String userTokensCacheKey(TokenUser tokenUser) {
@@ -179,6 +168,6 @@ public class TokenUtils {
     }
 
     private String userTokensCacheKey(Integer accountType, String uuid) {
-        return Constant.USER_TOKENS_KEY_PREFIX + accountType.toString() + ":" + uuid;
+        return Constant.CACHE_PREFIX_USER_TOKENS_KEY + accountType.toString() + ":" + uuid;
     }
 }

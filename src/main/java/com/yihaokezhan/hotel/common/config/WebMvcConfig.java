@@ -1,6 +1,5 @@
 package com.yihaokezhan.hotel.common.config;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -13,6 +12,7 @@ import com.yihaokezhan.hotel.common.interceptor.AnncInterceptor;
 import com.yihaokezhan.hotel.common.interceptor.ShiroInterceptor;
 import com.yihaokezhan.hotel.common.interceptor.TenantInterceptor;
 import com.yihaokezhan.hotel.common.resolver.LoginUserResolver;
+import com.yihaokezhan.hotel.common.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -91,7 +91,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 SerializerFeature.DisableCircularReferenceDetect // 避免循环引用
         );
         converter.setFastJsonConfig(config);
-        converter.setDefaultCharset(Charset.forName("UTF-8"));
+        converter.setDefaultCharset(Constant.CHARSET);
         List<MediaType> mediaTypeList = new ArrayList<MediaType>();
         // 解决中文乱码问题，相当于在Controller上的@RequestMapping中加了个属性produces = "application/json"
         mediaTypeList.add(MediaType.APPLICATION_JSON);
@@ -101,8 +101,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
     public HttpMessageConverter<String> responseBodyConverter() {
-        StringHttpMessageConverter converter =
-                new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        StringHttpMessageConverter converter = new StringHttpMessageConverter(Constant.CHARSET);
         return converter;
     }
 }

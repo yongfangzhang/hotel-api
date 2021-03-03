@@ -52,11 +52,11 @@ public class ShiroUtils {
     }
 
     private String getPermKey(String uuid) {
-        return Constant.ACCOUNT_PERMS_PREFIX + uuid;
+        return Constant.CACHE_PREFIX_ACCOUNT_PERMS + uuid;
     }
 
     private String getRoleKey(String uuid) {
-        return Constant.ACCOUNT_ROLES_PREFIX + uuid;
+        return Constant.CACHE_PREFIX_ACCOUNT_ROLES + uuid;
     }
 
     public void updatePermCache(String uuid, List<String> perms) {

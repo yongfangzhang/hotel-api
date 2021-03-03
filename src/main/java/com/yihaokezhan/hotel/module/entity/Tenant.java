@@ -55,7 +55,7 @@ public class Tenant extends BaseEntity {
      * 联系人手机号
      */
     @NotBlank(message = "联系人手机号不能为空", groups = AddGroup.class)
-    @Pattern(regexp = Constant.PATTERN_MOBILE, message = "手机号格式错误",
+    @Pattern(regexp = Constant.PATTERN_MOBILE, message = Constant.PATTERN_MOBILE_MSG,
             groups = {AddGroup.class, UpdateGroup.class})
     private String contactorMobile;
 
