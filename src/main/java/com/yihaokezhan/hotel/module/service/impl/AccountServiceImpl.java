@@ -147,9 +147,9 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
         // 租户存在性
         Assert.notNull(account.getTenant(), ErrorCode.TENANT_NOT_FOUND);
         // 有效性
-        Assert.isTrue(UserState.isForbiddenOrDel(account.getState()), ErrorCode.ACCOUNT_FORBIDDEN);
+        Assert.state(!UserState.isForbiddenOrDel(account.getState()), ErrorCode.ACCOUNT_FORBIDDEN);
         // 用户有效性
-        Assert.isTrue(UserState.isForbiddenOrDel(account.getUser().getState()), ErrorCode.USER_FORBIDDEN);
+        Assert.state(!UserState.isForbiddenOrDel(account.getUser().getState()), ErrorCode.USER_FORBIDDEN);
         // 租户有效性
         ValidatorUtils.validateTenant(account.getTenant(), ErrorCode.TENANT_FORBIDDEN);
         // @formatter:on
