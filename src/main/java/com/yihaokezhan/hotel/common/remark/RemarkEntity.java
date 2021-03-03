@@ -26,8 +26,4 @@ public class RemarkEntity implements Serializable {
 
     @TableField(exist = false)
     private String remarkContent;
-
-    @TableField(exist = false)
-    @JsonView(V.IGNORE.class)
-    private RemarkRecord remarkRecord;
 }

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.remark.RemarkRecord;
+import com.yihaokezhan.hotel.common.remark.RemarkUtils;
 import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
@@ -69,6 +70,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     // @formatter:on
     public T mCreate(T entity) {
         ValidatorUtils.validateEntity(entity, AddGroup.class);
+        RemarkUtils.appendRemark(entity);
         if (save(entity) && clearRelationCaches()) {
             return entity;
         }
@@ -84,6 +86,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     // @formatter:on
     public T mUpdate(T entity) {
         ValidatorUtils.validateEntity(entity, UpdateGroup.class);
+        RemarkUtils.appendRemark(entity, getRemark(entity.getUuid()));
         if (updateById(entity) && clearRelationCaches()) {
             return entity;
         }
