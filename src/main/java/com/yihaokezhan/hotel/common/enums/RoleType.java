@@ -7,8 +7,8 @@ public enum RoleType implements BaseEnum<RoleType> {
     // @formatter:off
     UNKNOWN              (0,     "UNKNOWN",        "未知"),
     SU                   (1,     "SU",             "超级管理员"),
-    ADMIN                (2,     "ADMIN",          "普通管理员"),
-    STAFF                (3,     "STAFF",          "普通员工"),
+    ADMIN                (2,     "ADMIN",          "管理员"),
+    STAFF                (3,     "STAFF",          "员工"),
     END                  (1000,  "END",            "END");
     // @formatter:on
 

@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.yihaokezhan.hotel.common.annotation.DataSource;
 import com.yihaokezhan.hotel.common.enums.RoleType;
 import com.yihaokezhan.hotel.common.handler.DynamicTenantHandler;
+import com.yihaokezhan.hotel.common.redis.CacheRedisService;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
 import com.yihaokezhan.hotel.common.utils.JSONUtils;
 import com.yihaokezhan.hotel.common.utils.M;
@@ -49,8 +49,12 @@ public class InitializeRoleRunner implements ApplicationRunner {
     @Autowired
     private ShiroUtils shiroUtils;
 
+    @Autowired
+    private CacheRedisService cacheRedisService;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        clearCache();
         initRoleData();
         initRouteData();
         List<Tenant> tenants = tenantService.mList(M.m());
@@ -59,6 +63,11 @@ public class InitializeRoleRunner implements ApplicationRunner {
             initAccountRoleCache(tenant.getUuid());
             DynamicTenantHandler.clearTenant();
         });
+    }
+
+    private void clearCache() {
+        cacheRedisService.flushDatabase();
+        shiroUtils.clearPermCache();
     }
 
     private void initRoleData() {
@@ -89,8 +98,7 @@ public class InitializeRoleRunner implements ApplicationRunner {
         }
     }
 
-    @DataSource(tenant = "#tenant")
-    public void initAccountRoleCache(String tenant) {
+    private void initAccountRoleCache(String tenant) {
         Map<String, List<AccountRole>> accountRoleMap = accountRoleService.mList(M.m()).stream()
                 .collect(Collectors.groupingBy(AccountRole::getAccountUuid));
 

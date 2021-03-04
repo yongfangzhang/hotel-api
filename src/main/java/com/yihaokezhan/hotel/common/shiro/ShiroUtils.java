@@ -72,6 +72,11 @@ public class ShiroUtils {
         redisService.delete(getRoleKey(uuid));
     }
 
+    public void clearPermCache() {
+        redisService.deleteBatch(Constant.CACHE_PREFIX_ACCOUNT_PERMS);
+        redisService.deleteBatch(Constant.CACHE_PREFIX_ACCOUNT_ROLES);
+    }
+
     public boolean login(String uuid, String token) {
         // 生成无状态Token
         StatelessToken statelessToken = new StatelessToken(uuid, token);

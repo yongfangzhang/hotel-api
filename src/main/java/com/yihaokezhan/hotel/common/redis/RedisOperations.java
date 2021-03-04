@@ -82,7 +82,7 @@ public class RedisOperations {
     }
 
     public void deleteBatch(String prefix) {
-        getRedisTemplate().delete(getRedisTemplate().keys(prefix + ":*"));
+        getRedisTemplate().delete(getRedisTemplate().keys(prefix + "*"));
     }
 
     public void delete(Set<String> keys) {
@@ -96,6 +96,10 @@ public class RedisOperations {
     public void delete(Stream<String> keys) {
         getRedisTemplate()
                 .delete(keys.filter(StringUtils::isNotBlank).collect(Collectors.toList()));
+    }
+
+    public void flushDatabase() {
+        deleteBatch("");
     }
 
     public long increment(String key) {
