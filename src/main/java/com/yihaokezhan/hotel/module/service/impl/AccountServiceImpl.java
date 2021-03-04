@@ -1,8 +1,10 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.UserState;
 import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.exception.RRException;
@@ -118,6 +120,26 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
             record.setTenant(tenant);
         });
         return account;
+    }
+
+    @Override
+    public List<Account> join(List<Account> accounts) {
+        if (CollectionUtils.isEmpty(accounts)) {
+            return accounts;
+        }
+
+        userService.attachList(accounts, Account::getUserUuid, (record, userMap) -> {
+            record.setUser(userMap.get(record.getUserUuid()));
+        });
+        accountRoleService.attachListItems(accounts,
+                M.m().put("accountUuids", accounts.stream().map(Account::getUuid)),
+                AccountRole::getAccountUuid, (record, rolesMap) -> {
+                    record.setAccountRoles(rolesMap.get(record.getUuid()));
+                });
+        tenantService.attachList(accounts, Account::getTenantUuid, (record, tenantMap) -> {
+            record.setTenant(tenantMap.get(record.getTenantUuid()));
+        });
+        return accounts;
     }
 
     @Override
