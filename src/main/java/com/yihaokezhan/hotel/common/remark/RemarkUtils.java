@@ -3,6 +3,7 @@ package com.yihaokezhan.hotel.common.remark;
 import java.util.ArrayList;
 import java.util.List;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author zhangyongfang
@@ -16,6 +17,9 @@ public class RemarkUtils {
 
     public static <T extends RemarkEntity> void appendRemark(T entity, List<RemarkRecord> remark) {
         String newContent = entity.getRemarkContent();
+        if (StringUtils.isBlank(newContent)) {
+            return;
+        }
         if (CollectionUtils.isEmpty(remark)) {
             remark = new ArrayList<>();
         }
