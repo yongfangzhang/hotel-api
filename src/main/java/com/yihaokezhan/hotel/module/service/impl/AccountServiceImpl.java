@@ -3,6 +3,7 @@ package com.yihaokezhan.hotel.module.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.UserState;
@@ -132,7 +133,8 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
             record.setUser(userMap.get(record.getUserUuid()));
         });
         accountRoleService.attachListItems(accounts,
-                M.m().put("accountUuids", accounts.stream().map(Account::getUuid)),
+                M.m().put("accountUuids",
+                        accounts.stream().map(Account::getUuid).collect(Collectors.toList())),
                 AccountRole::getAccountUuid, (record, rolesMap) -> {
                     record.setAccountRoles(rolesMap.get(record.getUuid()));
                 });
