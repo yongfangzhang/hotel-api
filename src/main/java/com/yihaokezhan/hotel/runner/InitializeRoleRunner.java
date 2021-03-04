@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.annotation.DataSource;
 import com.yihaokezhan.hotel.common.enums.RoleType;
+import com.yihaokezhan.hotel.common.handler.DynamicTenantHandler;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
 import com.yihaokezhan.hotel.common.utils.JSONUtils;
 import com.yihaokezhan.hotel.common.utils.M;
@@ -54,7 +55,9 @@ public class InitializeRoleRunner implements ApplicationRunner {
         initRouteData();
         List<Tenant> tenants = tenantService.mList(M.m());
         tenants.forEach(tenant -> {
+            DynamicTenantHandler.setTenant(tenant.getUuid());
             initAccountRoleCache(tenant.getUuid());
+            DynamicTenantHandler.clearTenant();
         });
     }
 
@@ -87,7 +90,7 @@ public class InitializeRoleRunner implements ApplicationRunner {
     }
 
     @DataSource(tenant = "#tenant")
-    private void initAccountRoleCache(String tenant) {
+    public void initAccountRoleCache(String tenant) {
         Map<String, List<AccountRole>> accountRoleMap = accountRoleService.mList(M.m()).stream()
                 .collect(Collectors.groupingBy(AccountRole::getAccountUuid));
 

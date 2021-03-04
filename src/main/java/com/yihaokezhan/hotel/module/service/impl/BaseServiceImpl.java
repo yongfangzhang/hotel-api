@@ -109,7 +109,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
         }
         ValidatorUtils.validateEntities(entities, AddGroup.class);
         RemarkUtils.appendRemark(entities);
-        if (saveOrUpdateBatch(entities)) {
+        if (saveOrUpdateBatch(entities) && clearRelationCaches()) {
             return entities;
         }
         throw new RRException("批量保存失败");
