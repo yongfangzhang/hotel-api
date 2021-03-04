@@ -96,6 +96,25 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
         throw new RRException("批量保存失败");
     }
 
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, allEntries = true)
+    })
+    // @formatter:on
+    public List<T> mBatchCreateOrUpdate(List<T> entities) {
+        if (CollectionUtils.isEmpty(entities)) {
+            return entities;
+        }
+        ValidatorUtils.validateEntities(entities, AddGroup.class);
+        RemarkUtils.appendRemark(entities);
+        if (saveOrUpdateBatch(entities)) {
+            return entities;
+        }
+        throw new RRException("批量保存失败");
+    }
+
     @Override
     // @formatter:off
     @Caching(evict = {

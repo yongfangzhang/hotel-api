@@ -80,17 +80,7 @@ public class InitializeRoleRunner implements ApplicationRunner {
             ClassPathResource routesResource = new ClassPathResource("routes.json");
             List<Route> presetRoutes =
                     JSONUtils.parseArrayFromFile(routesResource.getFile(), Route.class);
-            if (CollectionUtils.isEmpty(presetRoutes)) {
-                return;
-            }
-            List<String> currentRoutes = routeService.mList(M.m()).stream()
-                    .map(r -> r.getUniqueKey()).collect(Collectors.toList());
-
-            List<Route> unpresetRoutes =
-                    presetRoutes.stream().filter(r -> !currentRoutes.contains(r.getUniqueKey()))
-                            .collect(Collectors.toList());
-
-            routeService.mBatchCreate(unpresetRoutes);
+            routeService.mBatchCreateOrUpdate(presetRoutes);
         } catch (Exception e) {
             log.error("init route data error", e);
         }

@@ -28,6 +28,8 @@ public interface IBaseService<T extends BaseEntity> {
 
     List<T> mBatchCreate(List<T> entities);
 
+    List<T> mBatchCreateOrUpdate(List<T> entities);
+
     T mUpdate(T entity);
 
     boolean mDelete(String uuid);

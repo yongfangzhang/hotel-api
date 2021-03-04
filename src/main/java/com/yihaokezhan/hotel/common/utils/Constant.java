@@ -16,6 +16,14 @@ public class Constant {
     // system variable
     public static final String ROOT_TENANT                        = "00000000000000000000000000000000";
     public static final Charset CHARSET                           = Charset.forName("UTF-8");
+    public static final String[] NO_TENANT_REG                    = new String[] {
+        ROOT_TENANT,
+        "^comm_.*$",
+        "role",
+        "role_route",
+        "route",
+        "tenant",
+    };
 
     // cache
     public static final String CACHE_PREFIX_ACCOUNT_PERMS         = "account:perms:";

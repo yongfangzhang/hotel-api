@@ -58,11 +58,11 @@ public class CachingConfiguration {
         return new RuntimeCacheResolver(cacheManager);
     }
 
-    public static String getCacheName(String name) {
+    public static String getCacheName(String tableName) {
         String tenant = DynamicTenantHandler.getTenant();
         if (StringUtils.isBlank(tenant)) {
-            return name;
+            return tableName;
         }
-        return (tenant + "::" + name);
+        return (tenant + "::" + tableName);
     }
 }
