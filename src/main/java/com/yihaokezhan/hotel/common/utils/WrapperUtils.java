@@ -10,7 +10,8 @@ public class WrapperUtils {
 
     public static <T> QueryWrapper<T> fillEq(QueryWrapper<T> wrapper, Map<String, Object> params,
             String field, String column) {
-        return wrapper.eq(params.containsKey(field), column, params.get(field));
+        String v = MapUtils.getString(params, field);
+        return wrapper.eq(StringUtils.isNotBlank(v), column, v);
     }
 
     public static <T> QueryWrapper<T> fillEq(QueryWrapper<T> wrapper, Map<String, Object> params,
@@ -20,7 +21,8 @@ public class WrapperUtils {
 
     public static <T> QueryWrapper<T> fillLike(QueryWrapper<T> wrapper, Map<String, Object> params,
             String field, String column) {
-        return wrapper.like(params.containsKey(field), column, params.get(field));
+        String v = MapUtils.getString(params, field);
+        return wrapper.like(StringUtils.isNotBlank(v), column, v);
     }
 
     public static <T> QueryWrapper<T> fillLike(QueryWrapper<T> wrapper, Map<String, Object> params,

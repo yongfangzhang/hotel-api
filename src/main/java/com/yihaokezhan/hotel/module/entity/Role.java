@@ -1,10 +1,13 @@
 package com.yihaokezhan.hotel.module.entity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
@@ -54,5 +57,12 @@ public class Role extends BaseEntity {
     private String description;
 
     @TableField(exist = false)
-    private List<Route> routes;
+    private List<RoleRoute> roleRoutes;
+
+    public List<Route> getRoutes() {
+        if (CollectionUtils.isEmpty(roleRoutes)) {
+            return new ArrayList<>();
+        }
+        return roleRoutes.stream().map(rr -> rr.getRoute()).collect(Collectors.toList());
+    }
 }

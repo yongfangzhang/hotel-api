@@ -58,8 +58,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 RoleRoute::getRoleUuid, (record, map) -> {
                     List<RoleRoute> roleRoutes = map.get(record.getUuid());
                     if (!CollectionUtils.isEmpty(roleRoutes)) {
-                        record.setRoutes(roleRoutes.stream().map(rr -> rr.getRoute())
-                                .collect(Collectors.toList()));
+                        record.setRoleRoutes(roleRoutes);
                     }
                 });
 
@@ -75,8 +74,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 
         roleRouteService.attachOneItems(role, M.m().put("roleUuid", role.getUuid()),
                 (record, roleRoutes) -> {
-                    record.setRoutes(roleRoutes.stream().map(rr -> rr.getRoute())
-                            .collect(Collectors.toList()));
+                    record.setRoleRoutes(roleRoutes);
                 });
 
         return role;
