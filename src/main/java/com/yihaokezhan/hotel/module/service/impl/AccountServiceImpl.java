@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.UserState;
 import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.exception.RRException;
+import com.yihaokezhan.hotel.common.remark.RemarkUtils;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.RandomUtils;
@@ -16,6 +17,7 @@ import com.yihaokezhan.hotel.common.utils.TokenUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.common.validator.Assert;
 import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
+import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.form.LoginForm;
 import com.yihaokezhan.hotel.form.RegisterForm;
 import com.yihaokezhan.hotel.model.TokenUser;
@@ -103,6 +105,26 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
             log.error("登录失败", e);
             throw new RRException(ErrorCode.ACCOUNT_PASSWORD_ERROR);
         }
+    }
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true),
+        @CacheEvict(key = "#entity.getUuid()", allEntries = true)
+    })
+    // @formatter:on
+    public Account mUpdate(Account account) {
+        ValidatorUtils.validateEntity(account, UpdateGroup.class);
+        RemarkUtils.appendRemark(account, getRemark(account.getUuid()));
+        if (StringUtils.isNotBlank(account.getPassword())) {
+            account.setSalt(RandomUtils.randomString32());
+            account.setPassword(getPasswordHex(account.getPassword(), account.getSalt()));
+        }
+        if (updateById(account) && clearRelationCaches()) {
+            return account;
+        }
+        throw new RRException("更新失败");
     }
 
     @Override

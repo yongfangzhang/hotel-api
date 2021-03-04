@@ -100,7 +100,6 @@ public class Account extends BaseEntity {
     private LocalDateTime lastLoginAt;
 
     @TableField(exist = false)
-    @JsonView(V.IGNORE.class)
     private List<AccountRole> accountRoles;
 
     @TableField(exist = false)
