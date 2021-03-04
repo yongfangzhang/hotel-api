@@ -7,6 +7,7 @@ import com.yihaokezhan.hotel.common.handler.DynamicTenantHandler;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
 import com.yihaokezhan.hotel.common.utils.ExpressionUtils;
 import com.yihaokezhan.hotel.common.utils.IPUtils;
+import com.yihaokezhan.hotel.common.utils.JSONUtils;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.model.TokenUser;
 import com.yihaokezhan.hotel.module.entity.SystemLog;
@@ -84,8 +85,8 @@ public class SysLogAspect {
 
     private String createLogContent(SysLog sysLog, StandardEvaluationContext context) {
         String content = String.format("【%s】", sysLog.operation().getName());
-        String description =
-                String.format(sysLog.description(), ExpressionUtils.eval(context, sysLog.params()));
+        String description = String.format(sysLog.description(),
+                JSONUtils.stringify(ExpressionUtils.eval(context, sysLog.params())));
         return content + description;
     }
 
@@ -95,8 +96,7 @@ public class SysLogAspect {
             return linked;
         }
         try {
-            Object v = ExpressionUtils.eval1(context, linked);
-            return v == null ? null : v.toString();
+            return JSONUtils.stringify(ExpressionUtils.eval1(context, linked));
         } catch (Exception e) {
             return null;
         }

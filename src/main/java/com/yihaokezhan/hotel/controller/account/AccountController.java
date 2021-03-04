@@ -2,7 +2,9 @@ package com.yihaokezhan.hotel.controller.account;
 
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.annotation.SysLog;
 import com.yihaokezhan.hotel.common.enums.CustomerChannel;
+import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -49,6 +51,7 @@ public class AccountController {
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "分页查看账号列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountService.mPage(params));
     }
@@ -56,6 +59,7 @@ public class AccountController {
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看账号列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountService.mList(params));
     }
@@ -63,6 +67,7 @@ public class AccountController {
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看账号 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountService.mOne(params));
     }
@@ -70,6 +75,7 @@ public class AccountController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
+    @SysLog(operation = Operation.RETRIEVE, linked = "#uuid", description = "查看账号详情")
     public R get(@PathVariable String uuid) {
         return R.ok().data(accountService.mGet(uuid));
     }
@@ -78,6 +84,7 @@ public class AccountController {
     @JsonView(V.S.class)
     @Transactional(rollbackFor = Exception.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_CREATE)
+    @SysLog(operation = Operation.CREATE, description = "创建账号 %s", params = "#form")
     public R create(@Validated(AddGroup.class) @RequestBody RegisterForm form) {
         Assert.notNull(form.getUser(), "用户信息不能为空");
         form.getUser().setChannel(CustomerChannel.BACKEND.getValue());
@@ -90,6 +97,7 @@ public class AccountController {
     @PutMapping("")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_UPDATE)
+    @SysLog(operation = Operation.UPDATE, description = "更新账号 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Account entity) {
         return R.ok().data(accountService.mUpdate(entity));
     }
@@ -97,6 +105,7 @@ public class AccountController {
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_DELETE)
+    @SysLog(operation = Operation.DELETE, linked = "#uuid", description = "删除账号 %s", params = "#uuid")
     public R delete(@PathVariable String uuid) {
         return R.ok().data(accountService.mDelete(uuid));
     }
