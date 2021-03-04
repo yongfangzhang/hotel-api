@@ -4,20 +4,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.yihaokezhan.hotel.common.annotation.DataSource;
 import com.yihaokezhan.hotel.common.enums.RoleType;
-import com.yihaokezhan.hotel.common.handler.DynamicTenantHandler;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
+import com.yihaokezhan.hotel.common.utils.JSONUtils;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.module.entity.AccountRole;
 import com.yihaokezhan.hotel.module.entity.Role;
+import com.yihaokezhan.hotel.module.entity.Route;
 import com.yihaokezhan.hotel.module.entity.Tenant;
 import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import com.yihaokezhan.hotel.module.service.IRoleService;
+import com.yihaokezhan.hotel.module.service.IRouteService;
 import com.yihaokezhan.hotel.module.service.ITenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -25,6 +30,7 @@ import org.springframework.stereotype.Component;
  * @since 2021-03-01
  */
 @Component
+@Slf4j
 public class InitializeRoleRunner implements ApplicationRunner {
 
     @Autowired
@@ -36,19 +42,20 @@ public class InitializeRoleRunner implements ApplicationRunner {
     @Autowired
     private IRoleService roleService;
 
+    @Autowired
+    private IRouteService routeService;
 
     @Autowired
     private ShiroUtils shiroUtils;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        initRoleData();
+        initRouteData();
         List<Tenant> tenants = tenantService.mList(M.m());
         tenants.forEach(tenant -> {
-            DynamicTenantHandler.setTenant(tenant.getUuid());
-            initRoleData();
-            initRoleCache();
+            initAccountRoleCache(tenant.getUuid());
         });
-        DynamicTenantHandler.clearTenant();
     }
 
     private void initRoleData() {
@@ -68,7 +75,29 @@ public class InitializeRoleRunner implements ApplicationRunner {
         }
     }
 
-    private void initRoleCache() {
+    private void initRouteData() {
+        try {
+            ClassPathResource routesResource = new ClassPathResource("routes.json");
+            List<Route> presetRoutes =
+                    JSONUtils.parseArrayFromFile(routesResource.getFile(), Route.class);
+            if (CollectionUtils.isEmpty(presetRoutes)) {
+                return;
+            }
+            List<String> currentRoutes = routeService.mList(M.m()).stream()
+                    .map(r -> r.getUniqueKey()).collect(Collectors.toList());
+
+            List<Route> unpresetRoutes =
+                    presetRoutes.stream().filter(r -> !currentRoutes.contains(r.getUniqueKey()))
+                            .collect(Collectors.toList());
+
+            routeService.mBatchCreate(unpresetRoutes);
+        } catch (Exception e) {
+            log.error("init route data error", e);
+        }
+    }
+
+    @DataSource(tenant = "#tenant")
+    private void initAccountRoleCache(String tenant) {
         Map<String, List<AccountRole>> accountRoleMap = accountRoleService.mList(M.m()).stream()
                 .collect(Collectors.groupingBy(AccountRole::getAccountUuid));
 

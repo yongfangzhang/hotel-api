@@ -67,13 +67,3 @@ yhkz:
           max-wait: -1ms
           max-idle: 10
           min-idle: 5
-
-cors:
-  enabled: true
-  paths:
-    - pattern: /**
-      allow-credentials: true
-      allowed-methods: "*"
-      allowed-headers: "*"
-      allowed-origins: "*"
-      max-age: 1728000

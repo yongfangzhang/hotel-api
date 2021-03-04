@@ -75,4 +75,9 @@ public class Route extends BaseEntity {
     public String getTypeName() {
         return EnumUtils.getName(RouteType.class, this.type);
     }
+
+    @JsonView(V.IGNORE.class)
+    public String getUniqueKey() {
+        return String.format("%d:%s:%d", this.accountType, this.path, this.type);
+    }
 }

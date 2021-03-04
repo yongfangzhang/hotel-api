@@ -25,6 +25,9 @@ public class MyTenantLineHandler implements TenantLineHandler {
         // @formatter:off
         return DynamicTenantHandler.isRootTenant()
             || tableName.startsWith("comm_")
+            || tableName.equals("role")
+            || tableName.equals("role_route")
+            || tableName.equals("route")
             || tableName.equals("tenant");
         // @formatter:on
     }

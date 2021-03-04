@@ -1,0 +1,17 @@
+[
+  { "path": "/", "accountType": 2, "type": 1, "permissions": ["*"], "caption": "根" },
+  { "path": "/dashboard/", "accountType": 2, "type": 1, "permissions": ["hotel:pub:*"], "caption": "首页" },
+  { "path": "/system/account/index", "accountType": 2, "type": 2, "permissions": ["account:get"], "caption": "账号-查看" },
+  { "path": "/system/account/edit", "accountType": 2, "type": 3, "permissions": ["account:create"], "caption": "账号-创建" },
+  { "path": "/system/account/edit", "accountType": 2, "type": 4, "permissions": ["account:update"], "caption": "账号-修改" },
+  { "path": "/system/account/edit", "accountType": 2, "type": 5, "permissions": ["account:delete"], "caption": "账号-删除" },
+  { "path": "/system/role/index", "accountType": 2, "type": 2, "permissions": ["role:get"], "caption": "角色-查看" },
+  { "path": "/system/role/edit", "accountType": 2, "type": 3, "permissions": ["role:create"], "caption": "角色-创建" },
+  { "path": "/system/role/edit", "accountType": 2, "type": 4, "permissions": ["role:update"], "caption": "角色-修改" },
+  { "path": "/system/role/edit", "accountType": 2, "type": 5, "permissions": ["role:delete"], "caption": "角色-删除" },
+  { "path": "/system/permission/index", "accountType": 2, "type": 2, "permissions": ["route:get"], "caption": "路由-查看" },
+  { "path": "/system/permission/index", "accountType": 2, "type": 3, "permissions": ["route:create"], "caption": "路由-创建" },
+  { "path": "/system/permission/index", "accountType": 2, "type": 4, "permissions": ["route:update"], "caption": "路由-修改" },
+  { "path": "/system/permission/index", "accountType": 2, "type": 5, "permissions": ["route:delete"], "caption": "路由-删除" },
+  { "path": "/system/slog/index", "accountType": 2, "type": 2, "permissions": ["system:log:get"], "caption": "日志-查看" }
+]

@@ -22,4 +22,15 @@ public class RemarkUtils {
         remark.add(new RemarkRecord(newContent));
         entity.setRemark(remark);
     }
+
+
+    public static <T extends RemarkEntity> void appendRemark(List<T> entities) {
+        if (CollectionUtils.isEmpty(entities)) {
+            return;
+        }
+        entities.forEach(entity -> {
+            appendRemark(entity, null);
+        });
+    }
+
 }

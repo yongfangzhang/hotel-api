@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yihaokezhan.hotel.common.exception.RRException;
@@ -75,6 +76,24 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
             return entity;
         }
         throw new RRException("保存失败");
+    }
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "query", allEntries = true)
+    })
+    // @formatter:on
+    public List<T> mBatchCreate(List<T> entities) {
+        if (CollectionUtils.isEmpty(entities)) {
+            return entities;
+        }
+        ValidatorUtils.validateEntities(entities, AddGroup.class);
+        RemarkUtils.appendRemark(entities);
+        if (saveBatch(entities) && clearRelationCaches()) {
+            return entities;
+        }
+        throw new RRException("批量保存失败");
     }
 
     @Override

@@ -137,10 +137,10 @@ public class Constant {
 
     // SystemHttpLogController
     // SystemLogController
-    public static final String PERM_SYSTEM_LOG_GET                = "systemm:log:get";
-    public static final String PERM_SYSTEM_LOG_CREATE             = "systemm:log:create";
-    public static final String PERM_SYSTEM_LOG_UPDATE             = "systemm:log:update";
-    public static final String PERM_SYSTEM_LOG_DELETE             = "systemm:log:delete";
+    public static final String PERM_SYSTEM_LOG_GET                = "system:log:get";
+    public static final String PERM_SYSTEM_LOG_CREATE             = "system:log:create";
+    public static final String PERM_SYSTEM_LOG_UPDATE             = "system:log:update";
+    public static final String PERM_SYSTEM_LOG_DELETE             = "system:log:delete";
 
     // @formatter:on
 
