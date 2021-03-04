@@ -1,9 +1,6 @@
 package com.yihaokezhan.hotel.common.config;
 
 import java.util.List;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.yihaokezhan.hotel.common.interceptor.AnncInterceptor;
 import com.yihaokezhan.hotel.common.interceptor.ShiroInterceptor;
 import com.yihaokezhan.hotel.common.interceptor.TenantInterceptor;
@@ -14,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -53,26 +49,26 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(jacksonConverter());
+        // converters.add(jacksonConverter());
         // converters.add(fastJsonConverter());
         converters.add(responseBodyConverter());
     }
 
-    @Bean
-    public MappingJackson2HttpMessageConverter jacksonConverter() {
-        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter =
-                new MappingJackson2HttpMessageConverter();
-        ObjectMapper objectMapper = jackson2HttpMessageConverter.getObjectMapper();
+    // @Bean
+    // public MappingJackson2HttpMessageConverter jacksonConverter() {
+    // MappingJackson2HttpMessageConverter jackson2HttpMessageConverter =
+    // new MappingJackson2HttpMessageConverter();
+    // ObjectMapper objectMapper = jackson2HttpMessageConverter.getObjectMapper();
 
-        // 生成json时，将所有Long转换成String
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
-        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-        objectMapper.registerModule(simpleModule);
+    // // 生成json时，将所有Long转换成String
+    // SimpleModule simpleModule = new SimpleModule();
+    // simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+    // simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+    // objectMapper.registerModule(simpleModule);
 
-        jackson2HttpMessageConverter.setObjectMapper(objectMapper);
-        return jackson2HttpMessageConverter;
-    }
+    // jackson2HttpMessageConverter.setObjectMapper(objectMapper);
+    // return jackson2HttpMessageConverter;
+    // }
 
     // 加上后 @jsonview 失效
     // @Bean
