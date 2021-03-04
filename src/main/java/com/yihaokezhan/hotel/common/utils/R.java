@@ -94,4 +94,9 @@ public class R extends HashMap<String, Object> {
         Object code = this.get("code");
         return successCode.equals(code) || successCode.toString().equals(code);
     }
+
+    @Override
+    public String toString() {
+        return JSONUtils.stringify(this);
+    }
 }

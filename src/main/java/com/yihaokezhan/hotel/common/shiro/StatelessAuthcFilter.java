@@ -5,6 +5,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.yihaokezhan.hotel.common.exception.ErrorCode;
+import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.TokenUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
@@ -26,6 +28,11 @@ public class StatelessAuthcFilter extends AccessControlFilter {
 
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
             Object mappedValue) throws Exception {
+        if (request instanceof HttpServletRequest) {
+            if (((HttpServletRequest) request).getMethod().toUpperCase().equals("OPTIONS")) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -56,7 +63,16 @@ public class StatelessAuthcFilter extends AccessControlFilter {
     private void onLoginFail(ServletResponse response, String token) throws IOException {
         log.error("shiro login failed: {}", token);
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        httpResponse.getWriter().write("Access Denied");
+        httpResponse.setCharacterEncoding("UTF-8");
+        httpResponse.setContentType("application/json");
+        httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "*");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "*");
+        httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        httpResponse.setHeader("Access-Control-Max-Age", "1728000");
+        httpResponse.setHeader("XDomainRequestAllowed", "1");
+        httpResponse.getWriter().write(R.error(ErrorCode.ACCESS_DENIED).toString());
+        httpResponse.getWriter().flush();
+        httpResponse.getWriter().close();
     }
 }
