@@ -2,11 +2,13 @@ package com.yihaokezhan.hotel.controller.account;
 
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.module.entity.Account;
 import com.yihaokezhan.hotel.module.service.IAccountService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,36 +37,42 @@ public class AccountController {
 
     @GetMapping("/page")
     @JsonView(V.S.class)
+    @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountService.mPage(params));
     }
 
     @GetMapping("/list")
     @JsonView(V.S.class)
+    @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountService.mList(params));
     }
 
     @GetMapping("/one")
     @JsonView(V.S.class)
+    @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountService.mOne(params));
     }
 
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
+    @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
     public R get(@PathVariable String uuid) {
         return R.ok().data(accountService.mGet(uuid));
     }
 
     @PutMapping("")
     @JsonView(V.S.class)
+    @RequiresPermissions(Constant.PERM_ACCOUNT_UPDATE)
     public R update(@Validated(UpdateGroup.class) @RequestBody Account entity) {
         return R.ok().data(accountService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
+    @RequiresPermissions(Constant.PERM_ACCOUNT_DELETE)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(accountService.mDelete(uuid));
     }

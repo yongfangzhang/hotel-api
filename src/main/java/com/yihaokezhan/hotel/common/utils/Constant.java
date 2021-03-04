@@ -51,6 +51,97 @@ public class Constant {
     // 只允许后台用
     public static final String SQL_SELECT                         = "__sqlSelect__";
     public static final String GROUP_BY                           = "__gb__";
+
+
+    // permissions
+    
+    // EnumController
+    
+    // ResourceController
+    
+    // CaptchaController
+    
+    // CommAreaController
+    
+    // CommCityController
+    
+    // CommProvinceController
+    
+    // PassportController
+
+    // AccountController
+    public static final String PERM_ACCOUNT_GET                   = "account:get";
+    public static final String PERM_ACCOUNT_CREATE                = "account:create";
+    public static final String PERM_ACCOUNT_UPDATE                = "account:update";
+    public static final String PERM_ACCOUNT_DELETE                = "account:delete";
+    
+    // AccountRoleController
+    public static final String PERM_ACCOUNT_ROLE_GET              = "account:role:get";
+    public static final String PERM_ACCOUNT_ROLE_CREATE           = "account:role:create";
+    public static final String PERM_ACCOUNT_ROLE_UPDATE           = "account:role:update";
+    public static final String PERM_ACCOUNT_ROLE_DELETE           = "account:role:delete";
+    
+    // RoleController
+    public static final String PERM_ROLE_GET                      = "role:get";
+    public static final String PERM_ROLE_CREATE                   = "role:create";
+    public static final String PERM_ROLE_UPDATE                   = "role:update";
+    public static final String PERM_ROLE_DELETE                   = "role:delete";
+    
+    // RoleRouteController
+    public static final String PERM_ROLE_ROUTE_GET                = "role:route:get";
+    public static final String PERM_ROLE_ROUTE_CREATE             = "role:route:create";
+    public static final String PERM_ROLE_ROUTE_UPDATE             = "role:route:update";
+    public static final String PERM_ROLE_ROUTE_DELETE             = "role:route:delete";
+    
+    // RouteController
+    public static final String PERM_ROUTE_GET                     = "route:get";
+    public static final String PERM_ROUTE_CREATE                  = "route:create";
+    public static final String PERM_ROUTE_UPDATE                  = "route:update";
+    public static final String PERM_ROUTE_DELETE                  = "route:delete";
+
+    // ApartmentController
+    public static final String PERM_APARTMENT_GET                 = "apartment:get";
+    public static final String PERM_APARTMENT_CREATE              = "apartment:create";
+    public static final String PERM_APARTMENT_UPDATE              = "apartment:update";
+    public static final String PERM_APARTMENT_DELETE              = "apartment:delete";
+    
+    // RoomController
+    public static final String PERM_ROOM_GET                      = "room:get";
+    public static final String PERM_ROOM_CREATE                   = "room:create";
+    public static final String PERM_ROOM_UPDATE                   = "room:update";
+    public static final String PERM_ROOM_DELETE                   = "room:delete";
+    
+    // RoomPriceController
+    public static final String PERM_ROOM_PRICE_GET                = "room:price:get";
+    public static final String PERM_ROOM_PRICE_CREATE             = "room:price:create";
+    public static final String PERM_ROOM_PRICE_UPDATE             = "room:price:update";
+    public static final String PERM_ROOM_PRICE_DELETE             = "room:price:delete";
+
+    // OrderController
+    public static final String PERM_ORDER_GET                     = "order:get";
+    public static final String PERM_ORDER_CREATE                  = "order:create";
+    public static final String PERM_ORDER_UPDATE                  = "order:update";
+    public static final String PERM_ORDER_DELETE                  = "order:delete";
+
+    // OrderItemController
+    public static final String PERM_ORDER_ITEM_GET                = "order:item:get";
+    public static final String PERM_ORDER_ITEM_CREATE             = "order:item:create";
+    public static final String PERM_ORDER_ITEM_UPDATE             = "order:item:update";
+    public static final String PERM_ORDER_ITEM_DELETE             = "order:item:delete";
+
+    // TenantController
+    public static final String PERM_TENANT_GET                    = "tenant:get";
+    public static final String PERM_TENANT_CREATE                 = "tenant:create";
+    public static final String PERM_TENANT_UPDATE                 = "tenant:update";
+    public static final String PERM_TENANT_DELETE                 = "tenant:delete";
+
+    // SystemHttpLogController
+    // SystemLogController
+    public static final String PERM_SYSTEM_LOG_GET                = "systemm:log:get";
+    public static final String PERM_SYSTEM_LOG_CREATE             = "systemm:log:create";
+    public static final String PERM_SYSTEM_LOG_UPDATE             = "systemm:log:update";
+    public static final String PERM_SYSTEM_LOG_DELETE             = "systemm:log:delete";
+
     // @formatter:on
 
 }
