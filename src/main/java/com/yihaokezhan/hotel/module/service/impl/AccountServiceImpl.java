@@ -112,7 +112,7 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
         });
         accountRoleService.attachOneItems(account, M.m().put("accountUuid", account.getUuid()),
                 (record, roles) -> {
-                    record.setRoles(roles);
+                    record.setAccountRoles(roles);
                 });
         tenantService.attachOne(account, account.getTenantUuid(), (record, tenant) -> {
             record.setTenant(tenant);

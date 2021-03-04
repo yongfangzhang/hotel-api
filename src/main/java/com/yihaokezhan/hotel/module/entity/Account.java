@@ -1,11 +1,14 @@
 package com.yihaokezhan.hotel.module.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.AccountType;
@@ -97,14 +100,15 @@ public class Account extends BaseEntity {
     private LocalDateTime lastLoginAt;
 
     @TableField(exist = false)
-    private List<AccountRole> roles;
-    
+    @JsonView(V.IGNORE.class)
+    private List<AccountRole> accountRoles;
+
     @TableField(exist = false)
     private User user;
-    
+
     @TableField(exist = false)
     private Tenant tenant;
-    
+
     @TableField(exist = false)
     private String token;
 
@@ -114,5 +118,22 @@ public class Account extends BaseEntity {
 
     public String getStateName() {
         return EnumUtils.getName(UserState.class, this.state);
+    }
+
+    public List<Role> getRoles() {
+        if (CollectionUtils.isEmpty(this.accountRoles)) {
+            return new ArrayList<>();
+        }
+        return this.accountRoles.stream().map(ar -> ar.getRole()).collect(Collectors.toList());
+    }
+
+    public List<Route> getRoutes() {
+        // @formatter:off
+        return this.getRoles()
+            .stream()
+            .filter(r -> CollectionUtils.isNotEmpty(r.getRoutes()))
+            .flatMap(r -> r.getRoutes().stream())
+            .collect(Collectors.toList());
+        // @formatter:on
     }
 }
