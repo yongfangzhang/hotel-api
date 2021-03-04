@@ -16,6 +16,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -76,28 +77,34 @@ public class WebMvcConfig implements WebMvcConfigurer {
     // 加上后 @jsonview 失效
     // @Bean
     // public FastJsonHttpMessageConverter fastJsonConverter() {
-    //     FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
-    //     FastJsonConfig config = new FastJsonConfig();
-    //     config.setSerializerFeatures( //
-    //             SerializerFeature.WriteMapNullValue, // 保留map空的字段
-    //             SerializerFeature.WriteNullStringAsEmpty, // 将String类型的null转成""
-    //             SerializerFeature.WriteNullNumberAsZero, // 将Number类型的null转成0
-    //             SerializerFeature.WriteNullListAsEmpty, // 将List类型的null转成[]
-    //             SerializerFeature.WriteNullBooleanAsFalse, // 将Boolean类型的null转成false
-    //             SerializerFeature.DisableCircularReferenceDetect // 避免循环引用
-    //     );
-    //     converter.setFastJsonConfig(config);
-    //     converter.setDefaultCharset(Constant.CHARSET);
-    //     List<MediaType> mediaTypeList = new ArrayList<MediaType>();
-    //     // 解决中文乱码问题，相当于在Controller上的@RequestMapping中加了个属性produces = "application/json"
-    //     mediaTypeList.add(MediaType.APPLICATION_JSON);
-    //     converter.setSupportedMediaTypes(mediaTypeList);
-    //     return converter;
+    // FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+    // FastJsonConfig config = new FastJsonConfig();
+    // config.setSerializerFeatures( //
+    // SerializerFeature.WriteMapNullValue, // 保留map空的字段
+    // SerializerFeature.WriteNullStringAsEmpty, // 将String类型的null转成""
+    // SerializerFeature.WriteNullNumberAsZero, // 将Number类型的null转成0
+    // SerializerFeature.WriteNullListAsEmpty, // 将List类型的null转成[]
+    // SerializerFeature.WriteNullBooleanAsFalse, // 将Boolean类型的null转成false
+    // SerializerFeature.DisableCircularReferenceDetect // 避免循环引用
+    // );
+    // converter.setFastJsonConfig(config);
+    // converter.setDefaultCharset(Constant.CHARSET);
+    // List<MediaType> mediaTypeList = new ArrayList<MediaType>();
+    // // 解决中文乱码问题，相当于在Controller上的@RequestMapping中加了个属性produces = "application/json"
+    // mediaTypeList.add(MediaType.APPLICATION_JSON);
+    // converter.setSupportedMediaTypes(mediaTypeList);
+    // return converter;
     // }
 
     @Bean
     public HttpMessageConverter<String> responseBodyConverter() {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(Constant.CHARSET);
         return converter;
+    }
+
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
     }
 }
