@@ -13,20 +13,21 @@
   { "uuid": "11eb7cb772eff5acb541df28a8971999", "path": "/system/permission/index", "accountType": 2, "type": 3, "permissions": ["route:create"], "caption": "路由-创建" },
   { "uuid": "11eb7cb772f043cdb541834d01b7676f", "path": "/system/permission/index", "accountType": 2, "type": 4, "permissions": ["route:update"], "caption": "路由-修改" },
   { "uuid": "11eb7cb772f091eeb541d3f0c80e35b1", "path": "/system/permission/index", "accountType": 2, "type": 5, "permissions": ["route:delete"], "caption": "路由-删除" },
-  { "uuid": "11eb7cb772f0e00fb541dfb239de3fa2", "path": "/system/slog/index", "accountType": 2, "type": 2, "permissions": ["system:log:get"], "caption": "日志-查看" }
+  { "uuid": "11eb7cb772f0e00fb541dfb239de3fa2", "path": "/system/slog/index", "accountType": 2, "type": 2, "permissions": ["system:log:get"], "caption": "日志-查看" },
+  { "uuid": "11eb7d5c73aa848f87a4f90fa0e15eeb", "path": "/apartment/management/index", "accountType": 2, "type": 2, "permissions": ["apartment:get"], "caption": "公寓-查看" },
+  { "uuid": "11eb7d5c73b029e087a43930ad7db1d6", "path": "/apartment/management/edit", "accountType": 2, "type": 3, "permissions": ["apartment:create"], "caption": "公寓-创建" },
+  { "uuid": "11eb7d5c73b0c62187a49dd6369f3872", "path": "/apartment/management/edit", "accountType": 2, "type": 4, "permissions": ["apartment:update"], "caption": "公寓-修改" },
+  { "uuid": "11eb7d5c73b13b5287a4810151b4f00f", "path": "/apartment/management/edit", "accountType": 2, "type": 5, "permissions": ["apartment:delete"], "caption": "公寓-删除" },
+  { "uuid": "11eb7d5c73b1626387a48110d6aa7fca", "path": "/room/management/index", "accountType": 2, "type": 2, "permissions": ["room:get", "room:price:get"], "caption": "房间-查看" },
+  { "uuid": "11eb7d5c73b1b08487a48544ec4f5ae7", "path": "/room/management/edit", "accountType": 2, "type": 3, "permissions": ["room:create"], "caption": "房间-创建" },
+  { "uuid": "11eb7d5c73b1d79587a4ef041fe19ab9", "path": "/room/management/edit", "accountType": 2, "type": 4, "permissions": ["room:update"], "caption": "房间-修改" },
+  { "uuid": "11eb7d5c73b1fea687a489dedd941d6c", "path": "/room/management/edit", "accountType": 2, "type": 5, "permissions": ["room:delete"], "caption": "房间-删除" },
+  { "uuid": "11eb7d5c73b3ac5787a47d9d8908f17d", "path": "/room/price/index", "accountType": 2, "type": 2, "permissions": ["room:price:get"], "caption": "房价-查看" },
+  { "uuid": "11eb7d5c73b4218887a455030dddb629", "path": "/room/price/edit", "accountType": 2, "type": 3, "permissions": ["room:price:create"], "caption": "房价-创建" },
+  { "uuid": "11eb7d5c73b46fa987a40d9753093aa3", "path": "/room/price/edit", "accountType": 2, "type": 4, "permissions": ["room:price:update"], "caption": "房价-修改" },
+  { "uuid": "11eb7d5c73b4e4da87a423ef068d013f", "path": "/room/price/edit", "accountType": 2, "type": 5, "permissions": ["room:price:delete"], "caption": "房价-删除" },
+  { "uuid": "11eb7d5c73b5a82b87a4ddca9ea026ee", "path": "/order/management/index", "accountType": 2, "type": 2, "permissions": ["order:get","order:item:get"], "caption": "订单-查看" },
+  { "uuid": "11eb7d5c73b61d5c87a4e96b4dc9dea7", "path": "/order/management/edit", "accountType": 2, "type": 3, "permissions": ["order:create","order:item:create"], "caption": "订单-创建" },
+  { "uuid": "11eb7d5c73b6446d87a48564664dd08f", "path": "/order/management/edit", "accountType": 2, "type": 4, "permissions": ["order:update","order:item:update"], "caption": "订单-修改" },
+  { "uuid": "11eb7d5c73b6928e87a41f4f3af42e5d", "path": "/order/management/edit", "accountType": 2, "type": 5, "permissions": ["order:delete","order:item:delete"], "caption": "订单-删除" }
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
