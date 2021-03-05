@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.redis.CacheRedisService;
 import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
+import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Account;
@@ -64,6 +65,7 @@ public class AccountRoleServiceImpl extends BaseServiceImpl<AccountRoleMapper, A
 
     @Override
     public boolean clearRelationCaches() {
+        cacheRedisService.deleteBatch(Constant.CACHE_PREFIX_SHRIO);
         cacheRedisService.deleteBatch(CachingConfiguration.getCacheName(Account.TABLE_NAME));
         return true;
     }

@@ -26,8 +26,7 @@ public class Constant {
     };
 
     // cache
-    public static final String CACHE_PREFIX_ACCOUNT_PERMS         = "account:perms:";
-    public static final String CACHE_PREFIX_ACCOUNT_ROLES         = "account:roles:";
+    public static final String CACHE_PREFIX_SHRIO                 = "shiro::";
     public static final String CACHE_PREFIX_TOKEN_KEY             = "api:token:";
     public static final String CACHE_PREFIX_USER_TOKENS_KEY       = "api:tokens:";
     public static final String CACHE_PREFIX_CAPTCHA               = "captcha:"; 

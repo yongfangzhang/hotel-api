@@ -3,6 +3,7 @@ package com.yihaokezhan.hotel.controller.role;
 import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.annotation.Dev;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -74,9 +75,9 @@ public class RoleRouteController {
         return R.ok().data(roleRouteService.mCreate(entity));
     }
 
+    @Dev
     @PostMapping("/batch")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_ROLE_ROUTE_CREATE)
     public R batchCreate(@Validated(AddGroup.class) @RequestBody List<RoleRoute> entities) {
         return R.ok().data(roleRouteService.mBatchCreateOrUpdate(entities));
     }

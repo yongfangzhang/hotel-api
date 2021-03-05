@@ -3,21 +3,14 @@ package com.yihaokezhan.hotel.runner;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.RoleType;
-import com.yihaokezhan.hotel.common.handler.DynamicTenantHandler;
 import com.yihaokezhan.hotel.common.redis.CacheRedisService;
-import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
 import com.yihaokezhan.hotel.common.utils.JSONUtils;
 import com.yihaokezhan.hotel.common.utils.M;
-import com.yihaokezhan.hotel.module.entity.AccountRole;
 import com.yihaokezhan.hotel.module.entity.Role;
 import com.yihaokezhan.hotel.module.entity.Route;
-import com.yihaokezhan.hotel.module.entity.Tenant;
-import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import com.yihaokezhan.hotel.module.service.IRoleService;
 import com.yihaokezhan.hotel.module.service.IRouteService;
-import com.yihaokezhan.hotel.module.service.ITenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -35,19 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 public class InitializeRoleRunner implements ApplicationRunner {
 
     @Autowired
-    private IAccountRoleService accountRoleService;
-
-    @Autowired
-    private ITenantService tenantService;
-
-    @Autowired
     private IRoleService roleService;
 
     @Autowired
     private IRouteService routeService;
-
-    @Autowired
-    private ShiroUtils shiroUtils;
 
     @Autowired
     private CacheRedisService cacheRedisService;
@@ -57,17 +41,10 @@ public class InitializeRoleRunner implements ApplicationRunner {
         clearCache();
         initRoleData();
         initRouteData();
-        List<Tenant> tenants = tenantService.mList(M.m());
-        tenants.forEach(tenant -> {
-            DynamicTenantHandler.setTenant(tenant.getUuid());
-            initAccountRoleCache(tenant.getUuid());
-            DynamicTenantHandler.clearTenant();
-        });
     }
 
     private void clearCache() {
         cacheRedisService.flushDatabase();
-        shiroUtils.clearPermCache();
     }
 
     private void initRoleData() {
@@ -96,31 +73,5 @@ public class InitializeRoleRunner implements ApplicationRunner {
         } catch (Exception e) {
             log.error("init route data error", e);
         }
-    }
-
-    private void initAccountRoleCache(String tenant) {
-        Map<String, List<AccountRole>> accountRoleMap = accountRoleService.mList(M.m()).stream()
-                .collect(Collectors.groupingBy(AccountRole::getAccountUuid));
-
-        accountRoleMap.entrySet().forEach(entry -> {
-            String accountUuid = entry.getKey();
-            List<AccountRole> accountRoles = entry.getValue();
-            List<String> perms = accountRoles.stream()
-            // @formatter:off
-                .filter(ar -> ar.getRole() != null && CollectionUtils.isNotEmpty(ar.getRole().getRoutes()))
-                .flatMap(ar -> ar.getRole().getRoutes().stream())
-                .filter(r -> CollectionUtils.isNotEmpty(r.getPermissions()))
-                .flatMap(r -> r.getPermissions().stream()).distinct()
-                .collect(Collectors.toList());
-            // @formatter:on
-
-            shiroUtils.updatePermCache(accountUuid, perms);
-            shiroUtils.updateRoleCache(accountUuid, accountRoles.stream()
-            // @formatter:off
-                .filter(ar -> ar.getRole() != null)
-                .map(ur -> ur.getRole().getCode())
-                .collect(Collectors.toList()));
-            // @formatter:on
-        });
     }
 }
