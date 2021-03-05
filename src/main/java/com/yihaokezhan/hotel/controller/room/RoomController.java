@@ -1,12 +1,16 @@
 package com.yihaokezhan.hotel.controller.room;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
+import com.yihaokezhan.hotel.model.RoomPrice;
 import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.service.IRoomService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -80,7 +84,37 @@ public class RoomController {
     @RequiresPermissions(Constant.PERM_ROOM_UPDATE)
     @Transactional(rollbackFor = Exception.class)
     public R update(@Validated(UpdateGroup.class) @RequestBody Room entity) {
+        // 价格不能在这里更新
+        entity.setPrice(null);
+        entity.setPrices(null);
         return R.ok().data(roomService.mUpdate(entity));
+    }
+
+    @PutMapping("/{uuid}/price")
+    @JsonView(V.S.class)
+    @RequiresPermissions(Constant.PERM_ROOM_PRICE_UPDATE)
+    @Transactional(rollbackFor = Exception.class)
+    public R updatePrice(@PathVariable String uuid,
+            @Validated(UpdateGroup.class) @RequestBody RoomPrice entity) {
+
+        Room room = roomService.mGet(uuid);
+        if (room == null) {
+            return R.error("房间不存在");
+        }
+
+        List<RoomPrice> prices = room.getPrices();
+
+        if (CollectionUtils.isEmpty(prices)) {
+            prices = new ArrayList<>();
+        }
+
+        for (RoomPrice price : prices) {
+            if (price.getType().equals(entity.getType())) {
+                price.setPrice(entity.getPrice());
+            }
+        }
+
+        return R.ok().data(roomService.mUpdate(room));
     }
 
     @DeleteMapping("/{uuid}")

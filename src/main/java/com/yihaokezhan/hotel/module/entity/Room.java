@@ -79,7 +79,7 @@ public class Room extends BaseEntity {
     private BigDecimal price;
 
     @NotNull(message = "价格数组不能为空", groups = AddGroup.class)
-    @Size(min = 1, message = "至少添加一种价格", groups = {AddGroup.class, UpdateGroup.class})
+    @Size(min = 1, message = "至少添加一种价格", groups = AddGroup.class)
     @TableField(typeHandler = RoomPriceTypeHandler.class)
     private List<RoomPrice> prices;
 
