@@ -75,7 +75,7 @@ public class AccountController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
-    @SysLog(operation = Operation.RETRIEVE, linked = "#uuid", description = "查看账号详情")
+    @SysLog(operation = Operation.RETRIEVE, description = "查看账号详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(accountService.mGet(uuid));
     }
@@ -105,7 +105,8 @@ public class AccountController {
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_DELETE)
-    @SysLog(operation = Operation.DELETE, linked = "#uuid", description = "删除账号 %s", params = "#uuid")
+    @SysLog(operation = Operation.DELETE, linked = "#uuid", description = "删除账号 %s",
+            params = "#uuid")
     public R delete(@PathVariable String uuid) {
         return R.ok().data(accountService.mDelete(uuid));
     }
