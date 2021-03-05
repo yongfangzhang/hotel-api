@@ -8,7 +8,7 @@ public enum ApartmentState implements BaseEnum<ApartmentState> {
     UNKNOWN                     (0,         "未知"),
     NORMAL                      (1,         "正常"),
     FORBIDDEN                   (10,        "已禁用"),
-    DELETED                     (11,        "已删除"),
+    // DELETED                     (11,        "已删除"),
     END                         (1000,      "END");
     // @formatter:on
 
