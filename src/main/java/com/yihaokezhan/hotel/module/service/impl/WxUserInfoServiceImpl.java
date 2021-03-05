@@ -28,8 +28,8 @@ public class WxUserInfoServiceImpl extends BaseServiceImpl<WxUserInfoMapper, WxU
         QueryWrapper<WxUserInfo> wrapper = new QueryWrapper<WxUserInfo>();
 
         WrapperUtils.fillEq(wrapper, params, "uuid");
-        WrapperUtils.fillEq(wrapper, params, "open_id");
-        WrapperUtils.fillEq(wrapper, params, "union_id");
+        WrapperUtils.fillEq(wrapper, params, "openId");
+        WrapperUtils.fillEq(wrapper, params, "unionId");
         WrapperUtils.fillEq(wrapper, params, "gender");
         WrapperUtils.fillEq(wrapper, params, "mobile");
 

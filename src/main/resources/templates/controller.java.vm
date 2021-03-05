@@ -55,16 +55,19 @@ public class ${table.controllerName} {
     }
 
     @PostMapping("")
+    @Transactional(rollbackFor = Exception.class)
     public R create(@Validated(AddGroup.class) @RequestBody ${table.entityName} entity) {
         return R.ok().data(${table.entityPath}Service.mCreate(entity));
     }
 
     @PutMapping("")
+    @Transactional(rollbackFor = Exception.class)
     public R update(@Validated(UpdateGroup.class) @RequestBody ${table.entityName} entity) {
         return R.ok().data(${table.entityPath}Service.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
+    @Transactional(rollbackFor = Exception.class)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(${table.entityPath}Service.mDelete(uuid));
     }

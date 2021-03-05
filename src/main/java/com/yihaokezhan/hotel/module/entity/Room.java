@@ -5,17 +5,20 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.RoomState;
+import com.yihaokezhan.hotel.common.handler.RoomPriceTypeHandler;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.EnumValue;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.BaseEntity;
+import com.yihaokezhan.hotel.model.RoomPrice;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -69,11 +72,16 @@ public class Room extends BaseEntity {
     private String number;
 
     /**
-     * 价格
+     * 基础价格
      */
-    @NotNull(message = "价格不能为空", groups = AddGroup.class)
-    @PositiveOrZero(message = "价格无效", groups = {AddGroup.class, UpdateGroup.class})
+    @NotNull(message = "基础价格不能为空", groups = AddGroup.class)
+    @PositiveOrZero(message = "基础价格无效", groups = {AddGroup.class, UpdateGroup.class})
     private BigDecimal price;
+
+    @NotNull(message = "价格数组不能为空", groups = AddGroup.class)
+    @Size(min = 1, message = "至少添加一种价格", groups = {AddGroup.class, UpdateGroup.class})
+    @TableField(typeHandler = RoomPriceTypeHandler.class)
+    private List<RoomPrice> prices;
 
     /**
      * 房间状态
@@ -98,9 +106,6 @@ public class Room extends BaseEntity {
      */
     @TableLogic(value = "0", delval = "1")
     private Boolean deleted;
-
-    @TableField(exist = false)
-    private List<RoomPrice> prices;
 
     public String getStateName() {
         return EnumUtils.getName(RoomState.class, this.state);

@@ -11,6 +11,7 @@ import com.yihaokezhan.hotel.module.entity.OrderItem;
 import com.yihaokezhan.hotel.module.service.IOrderItemService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,6 +70,7 @@ public class OrderItemController {
     @PostMapping("")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_ITEM_CREATE)
+    @Transactional(rollbackFor = Exception.class)
     public R create(@Validated(AddGroup.class) @RequestBody OrderItem entity) {
         return R.ok().data(orderItemService.mCreate(entity));
     }
@@ -76,6 +78,7 @@ public class OrderItemController {
     @PutMapping("")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_ITEM_UPDATE)
+    @Transactional(rollbackFor = Exception.class)
     public R update(@Validated(UpdateGroup.class) @RequestBody OrderItem entity) {
         return R.ok().data(orderItemService.mUpdate(entity));
     }
@@ -83,6 +86,7 @@ public class OrderItemController {
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_ITEM_DELETE)
+    @Transactional(rollbackFor = Exception.class)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(orderItemService.mDelete(uuid));
     }

@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.remark.RemarkRecord;
 import com.yihaokezhan.hotel.common.utils.M;
+import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
 import com.yihaokezhan.hotel.model.BaseEntity;
 import com.yihaokezhan.hotel.model.Pager;
 import org.apache.commons.lang3.StringUtils;
@@ -118,5 +119,13 @@ public interface IBaseService<T extends BaseEntity> {
 
     default boolean clearRelationCaches() {
         return true;
+    }
+
+    default void beforeAction(T entity, Class<?> group) {
+        ValidatorUtils.validateEntity(entity, group);
+    }
+
+    default void beforeAction(List<T> entities, Class<?> group) {
+        ValidatorUtils.validateEntities(entities, group);
     }
 }

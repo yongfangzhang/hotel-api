@@ -42,7 +42,7 @@ public class CommAreaServiceImpl extends ServiceImpl<CommAreaMapper, CommArea>
         QueryWrapper<CommArea> wrapper = new QueryWrapper<CommArea>();
 
         WrapperUtils.fillEq(wrapper, params, "code");
-        WrapperUtils.fillEq(wrapper, params, "city_code");
+        WrapperUtils.fillEq(wrapper, params, "cityCode");
 
         WrapperUtils.fillLike(wrapper, params, "name");
 

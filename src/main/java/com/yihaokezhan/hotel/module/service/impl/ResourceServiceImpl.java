@@ -30,10 +30,10 @@ public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resourc
 
         WrapperUtils.fillEq(wrapper, params, "uuid");
         WrapperUtils.fillEq(wrapper, params, "type");
-        WrapperUtils.fillEq(wrapper, params, "file_type");
-        WrapperUtils.fillLike(wrapper, params, "file_name");
-        WrapperUtils.fillEq(wrapper, params, "owner_type");
-        WrapperUtils.fillEq(wrapper, params, "owner_uuid");
+        WrapperUtils.fillEq(wrapper, params, "fileType");
+        WrapperUtils.fillLike(wrapper, params, "fileName");
+        WrapperUtils.fillEq(wrapper, params, "ownerType");
+        WrapperUtils.fillEq(wrapper, params, "ownerUuid");
 
         WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);

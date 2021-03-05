@@ -11,7 +11,6 @@ import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
 import com.yihaokezhan.hotel.common.remark.RemarkRecord;
 import com.yihaokezhan.hotel.common.remark.RemarkUtils;
-import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.BaseEntity;
@@ -70,7 +69,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     })
     // @formatter:on
     public T mCreate(T entity) {
-        ValidatorUtils.validateEntity(entity, AddGroup.class);
+        beforeAction(entity, AddGroup.class);
         RemarkUtils.appendRemark(entity);
         if (save(entity) && clearRelationCaches()) {
             return entity;
@@ -88,7 +87,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
         if (CollectionUtils.isEmpty(entities)) {
             return entities;
         }
-        ValidatorUtils.validateEntities(entities, AddGroup.class);
+        beforeAction(entities, AddGroup.class);
         RemarkUtils.appendRemark(entities);
         if (saveBatch(entities) && clearRelationCaches()) {
             return entities;
@@ -107,7 +106,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
         if (CollectionUtils.isEmpty(entities)) {
             return entities;
         }
-        ValidatorUtils.validateEntities(entities, AddGroup.class);
+        beforeAction(entities, AddGroup.class);
         RemarkUtils.appendRemark(entities);
         if (saveOrUpdateBatch(entities) && clearRelationCaches()) {
             return entities;
@@ -123,7 +122,7 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     })
     // @formatter:on
     public T mUpdate(T entity) {
-        ValidatorUtils.validateEntity(entity, UpdateGroup.class);
+        beforeAction(entity, UpdateGroup.class);
         RemarkUtils.appendRemark(entity, getRemark(entity.getUuid()));
         if (updateById(entity) && clearRelationCaches()) {
             return entity;
@@ -139,7 +138,10 @@ public class BaseServiceImpl<C extends BaseMapper<T>, T extends BaseEntity>
     })
     // @formatter:on
     public boolean mDelete(String uuid) {
-        return removeById(uuid) && clearRelationCaches();
+        if (removeById(uuid) && clearRelationCaches()) {
+            return true;
+        }
+        throw new RRException("删除失败");
     }
 
     @Override

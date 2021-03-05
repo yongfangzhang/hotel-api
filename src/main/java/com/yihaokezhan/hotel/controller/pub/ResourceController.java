@@ -9,6 +9,7 @@ import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.module.entity.Resource;
 import com.yihaokezhan.hotel.module.service.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,18 +63,21 @@ public class ResourceController {
 
     @PostMapping("")
     @JsonView(V.S.class)
+    @Transactional(rollbackFor = Exception.class)
     public R create(@Validated(AddGroup.class) @RequestBody Resource entity) {
         return R.ok().data(resourceService.mCreate(entity));
     }
 
     @PutMapping("")
     @JsonView(V.S.class)
+    @Transactional(rollbackFor = Exception.class)
     public R update(@Validated(UpdateGroup.class) @RequestBody Resource entity) {
         return R.ok().data(resourceService.mUpdate(entity));
     }
 
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
+    @Transactional(rollbackFor = Exception.class)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(resourceService.mDelete(uuid));
     }

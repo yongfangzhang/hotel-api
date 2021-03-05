@@ -1,12 +1,21 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yihaokezhan.hotel.common.enums.ApartmentState;
+import com.yihaokezhan.hotel.common.enums.RoomState;
+import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Apartment;
+import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.mapper.ApartmentMapper;
 import com.yihaokezhan.hotel.module.service.IApartmentService;
+import com.yihaokezhan.hotel.module.service.IRoomService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,6 +30,37 @@ import org.springframework.stereotype.Service;
 @CacheConfig(cacheNames = Apartment.TABLE_NAME)
 public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apartment>
         implements IApartmentService {
+
+    @Autowired
+    private IRoomService roomService;
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true),
+        @CacheEvict(key = "#entity.getUuid()", allEntries = true)
+    })
+    // @formatter:on
+    public Apartment mUpdate(Apartment apartment) {
+        super.mUpdate(apartment);
+        if (ApartmentState.FORBIDDEN.getValue().equals(apartment.getState())) {
+            updateRoomState(apartment.getUuid(), RoomState.APARTMENT_FORBIDDEN);
+        }
+        return apartment;
+    }
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true),
+        @CacheEvict(key = "#uuid", allEntries = true)
+    })
+    // @formatter:on
+    public boolean mDelete(String uuid) {
+        super.mDelete(uuid);
+        updateRoomState(uuid, RoomState.APARTMENT_DELETED);
+        return true;
+    }
 
     @Override
     public QueryWrapper<Apartment> getWrapper(Map<String, Object> params) {
@@ -48,5 +88,14 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
         WrapperUtils.fillOrderBy(wrapper, params);
         WrapperUtils.fillGroupBy(wrapper, params);
         return wrapper;
+    }
+
+    private void updateRoomState(String apartmentUuid, RoomState state) {
+        // 禁用/删除 公寓同时 禁用/删除 房间
+        List<Room> rooms = roomService.mList(M.m().put("apartmentUuid", apartmentUuid));
+        rooms.forEach(room -> {
+            room.setState(state.getValue());
+        });
+        roomService.mBatchCreateOrUpdate(rooms);
     }
 }

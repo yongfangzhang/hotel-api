@@ -51,14 +51,14 @@ public class SystemLogServiceImpl extends ServiceImpl<SystemLogMapper, SystemLog
         QueryWrapper<SystemLog> wrapper = new QueryWrapper<SystemLog>();
 
         WrapperUtils.fillEq(wrapper, params, "id");
-        WrapperUtils.fillEq(wrapper, params, "tenant_uuid");
-        WrapperUtils.fillEq(wrapper, params, "account_uuid");
-        WrapperUtils.fillEq(wrapper, params, "account_type");
+        WrapperUtils.fillEq(wrapper, params, "tenantUuid");
+        WrapperUtils.fillEq(wrapper, params, "accountUuid");
+        WrapperUtils.fillEq(wrapper, params, "accountType");
         WrapperUtils.fillEq(wrapper, params, "target");
         WrapperUtils.fillEq(wrapper, params, "type");
         WrapperUtils.fillEq(wrapper, params, "linked");
         WrapperUtils.fillEq(wrapper, params, "ip");
-        WrapperUtils.fillEq(wrapper, params, "account_name");
+        WrapperUtils.fillEq(wrapper, params, "accountName");
 
         WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);

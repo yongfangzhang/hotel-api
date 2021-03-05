@@ -51,7 +51,7 @@ public class SystemHttpLogServiceImpl extends ServiceImpl<SystemHttpLogMapper, S
         QueryWrapper<SystemHttpLog> wrapper = new QueryWrapper<SystemHttpLog>();
 
         WrapperUtils.fillEq(wrapper, params, "id");
-        WrapperUtils.fillEq(wrapper, params, "tenant_uuid");
+        WrapperUtils.fillEq(wrapper, params, "tenantUuid");
         WrapperUtils.fillEq(wrapper, params, "module");
         WrapperUtils.fillEq(wrapper, params, "method");
         WrapperUtils.fillEq(wrapper, params, "path");

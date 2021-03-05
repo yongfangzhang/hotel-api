@@ -41,7 +41,7 @@ public class CommCityServiceImpl extends ServiceImpl<CommCityMapper, CommCity>
         QueryWrapper<CommCity> wrapper = new QueryWrapper<CommCity>();
 
         WrapperUtils.fillEq(wrapper, params, "code");
-        WrapperUtils.fillEq(wrapper, params, "province_code");
+        WrapperUtils.fillEq(wrapper, params, "provinceCode");
 
         WrapperUtils.fillLike(wrapper, params, "name");
 

@@ -1,8 +1,11 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
+import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
 import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.mapper.RoomMapper;
 import com.yihaokezhan.hotel.module.service.IRoomService;
@@ -20,6 +23,24 @@ import org.springframework.stereotype.Service;
 @Service
 @CacheConfig(cacheNames = Room.TABLE_NAME)
 public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implements IRoomService {
+
+    @Override
+    public void beforeAction(Room room, Class<?> group) {
+        if (room == null) {
+            super.beforeAction(room, group);
+        }
+        ValidatorUtils.validateEntities(room.getPrices(), group);
+    }
+
+    @Override
+    public void beforeAction(List<Room> rooms, Class<?> group) {
+        if (CollectionUtils.isEmpty(rooms)) {
+            super.beforeAction(rooms, group);
+        }
+        rooms.forEach(room -> {
+            ValidatorUtils.validateEntities(room.getPrices(), group);
+        });
+    }
 
     @Override
     public QueryWrapper<Room> getWrapper(Map<String, Object> params) {

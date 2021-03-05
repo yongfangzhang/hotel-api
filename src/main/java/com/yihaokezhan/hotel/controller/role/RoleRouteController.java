@@ -13,6 +13,7 @@ import com.yihaokezhan.hotel.module.entity.RoleRoute;
 import com.yihaokezhan.hotel.module.service.IRoleRouteService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,6 +72,7 @@ public class RoleRouteController {
     @PostMapping("")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROLE_ROUTE_CREATE)
+    @Transactional(rollbackFor = Exception.class)
     public R create(@Validated(AddGroup.class) @RequestBody RoleRoute entity) {
         return R.ok().data(roleRouteService.mCreate(entity));
     }
@@ -85,6 +87,7 @@ public class RoleRouteController {
     @PutMapping("")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROLE_ROUTE_UPDATE)
+    @Transactional(rollbackFor = Exception.class)
     public R update(@Validated(UpdateGroup.class) @RequestBody RoleRoute entity) {
         return R.ok().data(roleRouteService.mUpdate(entity));
     }
@@ -92,6 +95,7 @@ public class RoleRouteController {
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROLE_ROUTE_DELETE)
+    @Transactional(rollbackFor = Exception.class)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(roleRouteService.mDelete(uuid));
     }

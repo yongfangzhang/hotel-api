@@ -69,8 +69,8 @@ public class PassportController {
 
     @Dev
     @PostMapping("/register")
-    @Transactional(rollbackFor = Exception.class)
     @JsonView(V.S.class)
+    @Transactional(rollbackFor = Exception.class)
     public R register(@Validated @RequestBody RegisterForm form) {
         if (form.getTenant() != null) {
             Tenant tenant = tenantService.mCreate(form.getTenant());

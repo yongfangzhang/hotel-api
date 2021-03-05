@@ -11,6 +11,7 @@ import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.service.IRoomService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,6 +70,7 @@ public class RoomController {
     @PostMapping("")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_CREATE)
+    @Transactional(rollbackFor = Exception.class)
     public R create(@Validated(AddGroup.class) @RequestBody Room entity) {
         return R.ok().data(roomService.mCreate(entity));
     }
@@ -76,6 +78,7 @@ public class RoomController {
     @PutMapping("")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_UPDATE)
+    @Transactional(rollbackFor = Exception.class)
     public R update(@Validated(UpdateGroup.class) @RequestBody Room entity) {
         return R.ok().data(roomService.mUpdate(entity));
     }
@@ -83,6 +86,7 @@ public class RoomController {
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_DELETE)
+    @Transactional(rollbackFor = Exception.class)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(roomService.mDelete(uuid));
     }

@@ -11,6 +11,7 @@ import com.yihaokezhan.hotel.module.entity.AccountRole;
 import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,6 +70,7 @@ public class AccountRoleController {
     @PostMapping("")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_ROLE_CREATE)
+    @Transactional(rollbackFor = Exception.class)
     public R create(@Validated(AddGroup.class) @RequestBody AccountRole entity) {
         return R.ok().data(accountRoleService.mCreate(entity));
     }
@@ -76,6 +78,7 @@ public class AccountRoleController {
     @PutMapping("")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_ROLE_UPDATE)
+    @Transactional(rollbackFor = Exception.class)
     public R update(@Validated(UpdateGroup.class) @RequestBody AccountRole entity) {
         return R.ok().data(accountRoleService.mUpdate(entity));
     }
@@ -83,6 +86,7 @@ public class AccountRoleController {
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_ROLE_DELETE)
+    @Transactional(rollbackFor = Exception.class)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(accountRoleService.mDelete(uuid));
     }

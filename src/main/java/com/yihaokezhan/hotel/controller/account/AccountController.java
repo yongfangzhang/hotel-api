@@ -82,9 +82,9 @@ public class AccountController {
 
     @PostMapping("")
     @JsonView(V.S.class)
-    @Transactional(rollbackFor = Exception.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_CREATE)
     @SysLog(operation = Operation.CREATE, description = "创建账号 %s", params = "#form")
+    @Transactional(rollbackFor = Exception.class)
     public R create(@Validated(AddGroup.class) @RequestBody RegisterForm form) {
         Assert.notNull(form.getUser(), "用户信息不能为空");
         form.getUser().setChannel(CustomerChannel.BACKEND.getValue());
@@ -98,6 +98,7 @@ public class AccountController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_UPDATE)
     @SysLog(operation = Operation.UPDATE, description = "更新账号 %s", params = "#entity")
+    @Transactional(rollbackFor = Exception.class)
     public R update(@Validated(UpdateGroup.class) @RequestBody Account entity) {
         return R.ok().data(accountService.mUpdate(entity));
     }
@@ -107,6 +108,7 @@ public class AccountController {
     @RequiresPermissions(Constant.PERM_ACCOUNT_DELETE)
     @SysLog(operation = Operation.DELETE, linked = "#uuid", description = "删除账号 %s",
             params = "#uuid")
+    @Transactional(rollbackFor = Exception.class)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(accountService.mDelete(uuid));
     }
