@@ -9,7 +9,7 @@ public enum RoomState implements BaseEnum<RoomState> {
     NORMAL                      (1,         "正常"),
     UNCLEAN                     (2,         "待打扫"),
     FORBIDDEN                   (10,        "已禁用"),
-    DELETED                     (11,        "已删除"),
+    // DELETED                     (11,        "已删除"),
     END                         (1000,      "END");
     // @formatter:on
 
