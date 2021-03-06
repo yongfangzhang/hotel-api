@@ -1,6 +1,7 @@
 package com.yihaokezhan.hotel.controller.account;
 
 import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.annotation.SysLog;
 import com.yihaokezhan.hotel.common.enums.CustomerChannel;
@@ -16,6 +17,7 @@ import com.yihaokezhan.hotel.module.entity.Account;
 import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.service.IAccountService;
 import com.yihaokezhan.hotel.module.service.IUserService;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,8 +108,7 @@ public class AccountController {
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_DELETE)
-    @SysLog(operation = Operation.DELETE, linked = "#uuid", description = "删除账号 %s",
-            params = "#uuid")
+    @SysLog(operation = Operation.DELETE, linked = "#uuid", description = "删除账号 %s", params = "#uuid")
     @Transactional(rollbackFor = Exception.class)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(accountService.mDelete(uuid));

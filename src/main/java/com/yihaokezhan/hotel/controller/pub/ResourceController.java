@@ -1,13 +1,17 @@
 package com.yihaokezhan.hotel.controller.pub;
 
 import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.annotation.SysLog;
+import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.module.entity.Resource;
 import com.yihaokezhan.hotel.module.service.IResourceService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -36,27 +40,30 @@ public class ResourceController {
     @Autowired
     private IResourceService resourceService;
 
-
     @GetMapping("/page")
     @JsonView(V.S.class)
+    @SysLog(operation = Operation.RETRIEVE, description = "分页查看资源列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(resourceService.mPage(params));
     }
 
     @GetMapping("/list")
     @JsonView(V.S.class)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看资源列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(resourceService.mList(params));
     }
 
     @GetMapping("/one")
     @JsonView(V.S.class)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看资源 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(resourceService.mOne(params));
     }
 
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看资源详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(resourceService.mGet(uuid));
     }
@@ -64,6 +71,7 @@ public class ResourceController {
     @PostMapping("")
     @JsonView(V.S.class)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.CREATE, description = "创建资源 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody Resource entity) {
         return R.ok().data(resourceService.mCreate(entity));
     }
@@ -71,6 +79,7 @@ public class ResourceController {
     @PutMapping("")
     @JsonView(V.S.class)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.UPDATE, description = "更新资源 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Resource entity) {
         return R.ok().data(resourceService.mUpdate(entity));
     }
@@ -78,6 +87,7 @@ public class ResourceController {
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.DELETE, description = "删除资源 %s", params = "#uuid")
     public R delete(@PathVariable String uuid) {
         return R.ok().data(resourceService.mDelete(uuid));
     }

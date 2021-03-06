@@ -1,11 +1,15 @@
 package com.yihaokezhan.hotel.controller.pub;
 
 import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.annotation.Annc;
+import com.yihaokezhan.hotel.common.annotation.SysLog;
+import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.module.service.ICommAreaService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +35,7 @@ public class CommAreaController {
     @Annc
     @GetMapping("/list")
     @JsonView(V.S.class)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看区域列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(commAreaService.mList(params));
     }
@@ -38,6 +43,7 @@ public class CommAreaController {
     @Annc
     @GetMapping("/{code}")
     @JsonView(V.S.class)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看区域详情 %s", params = "#code")
     public R get(@PathVariable String code) {
         return R.ok().data(commAreaService.mGet(code));
     }

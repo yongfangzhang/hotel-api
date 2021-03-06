@@ -22,6 +22,7 @@ import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.service.IAccountService;
 import com.yihaokezhan.hotel.module.service.ITenantService;
 import com.yihaokezhan.hotel.module.service.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -102,8 +103,7 @@ public class PassportController {
 
     @Annc
     @RequestMapping("/logout")
-    @SysLog(operation = Operation.LOGOUT, linked = "#user.getAccount()", description = "退出",
-            position = AspectPos.BEFORE)
+    @SysLog(operation = Operation.LOGOUT, linked = "#user.getAccount()", description = "退出", position = AspectPos.BEFORE)
     @JsonView(V.S.class)
     public R logout(@LoginUser(required = false) TokenUser tokenUser) {
         if (tokenUser == null) {

@@ -3,8 +3,11 @@ package com.yihaokezhan.hotel.controller.room;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.annotation.SysLog;
+import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -13,6 +16,7 @@ import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.RoomPrice;
 import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.service.IRoomService;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,10 +46,10 @@ public class RoomController {
     @Autowired
     private IRoomService roomService;
 
-
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "分页查看房间列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(roomService.mPage(params));
     }
@@ -53,6 +57,7 @@ public class RoomController {
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看房间列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(roomService.mList(params));
     }
@@ -60,6 +65,7 @@ public class RoomController {
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看房间 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(roomService.mOne(params));
     }
@@ -67,6 +73,7 @@ public class RoomController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看房间详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(roomService.mGet(uuid));
     }
@@ -75,6 +82,7 @@ public class RoomController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_CREATE)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.CREATE, description = "创建房间 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody Room entity) {
         return R.ok().data(roomService.mCreate(entity));
     }
@@ -83,6 +91,7 @@ public class RoomController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_UPDATE)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.UPDATE, description = "更新房间 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Room entity) {
         // 价格不能在这里更新
         entity.setPrice(null);
@@ -94,8 +103,7 @@ public class RoomController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_PRICE_UPDATE)
     @Transactional(rollbackFor = Exception.class)
-    public R updatePrice(@PathVariable String uuid,
-            @Validated(UpdateGroup.class) @RequestBody RoomPrice entity) {
+    public R updatePrice(@PathVariable String uuid, @Validated(UpdateGroup.class) @RequestBody RoomPrice entity) {
 
         Room room = roomService.mGet(uuid);
         if (room == null) {
@@ -121,6 +129,7 @@ public class RoomController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_DELETE)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.DELETE, description = "删除房间 %s", params = "#uuid")
     public R delete(@PathVariable String uuid) {
         return R.ok().data(roomService.mDelete(uuid));
     }

@@ -1,7 +1,10 @@
 package com.yihaokezhan.hotel.controller.order;
 
 import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.annotation.SysLog;
+import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -9,6 +12,7 @@ import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.module.entity.Order;
 import com.yihaokezhan.hotel.module.service.IOrderService;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +46,7 @@ public class OrderController {
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "分页查看订单列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(orderService.mPage(params));
     }
@@ -49,6 +54,7 @@ public class OrderController {
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看订单列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(orderService.mList(params));
     }
@@ -56,6 +62,7 @@ public class OrderController {
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看订单 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(orderService.mOne(params));
     }
@@ -63,6 +70,7 @@ public class OrderController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看订单详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(orderService.mGet(uuid));
     }
@@ -71,6 +79,7 @@ public class OrderController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_CREATE)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.CREATE, description = "创建订单 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody Order entity) {
         return R.ok().data(orderService.mCreate(entity));
     }
@@ -79,6 +88,7 @@ public class OrderController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_UPDATE)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.UPDATE, description = "更新订单 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Order entity) {
         return R.ok().data(orderService.mUpdate(entity));
     }
@@ -87,6 +97,7 @@ public class OrderController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_DELETE)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.DELETE, description = "删除订单 %s", params = "#uuid")
     public R delete(@PathVariable String uuid) {
         return R.ok().data(orderService.mDelete(uuid));
     }

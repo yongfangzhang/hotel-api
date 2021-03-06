@@ -2,6 +2,7 @@ package com.yihaokezhan.hotel.controller.pub;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import com.yihaokezhan.hotel.common.annotation.Annc;
 import com.yihaokezhan.hotel.common.enums.BaseEnum;
 import com.yihaokezhan.hotel.common.exception.ErrorCode;
@@ -9,6 +10,7 @@ import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.PackageUtils;
 import com.yihaokezhan.hotel.common.utils.R;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/hotel/pub/enum")
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class EnumController {
 
     @Annc

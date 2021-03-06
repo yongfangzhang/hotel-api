@@ -1,7 +1,10 @@
 package com.yihaokezhan.hotel.controller.route;
 
 import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.annotation.SysLog;
+import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -9,6 +12,7 @@ import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.module.entity.Route;
 import com.yihaokezhan.hotel.module.service.IRouteService;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,10 +42,10 @@ public class RouteController {
     @Autowired
     private IRouteService routeService;
 
-
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROUTE_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "分页查看路由列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(routeService.mPage(params));
     }
@@ -49,6 +53,7 @@ public class RouteController {
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROUTE_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看路由列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(routeService.mList(params));
     }
@@ -56,6 +61,7 @@ public class RouteController {
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROUTE_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看路由 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(routeService.mOne(params));
     }
@@ -63,6 +69,7 @@ public class RouteController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROUTE_GET)
+    @SysLog(operation = Operation.RETRIEVE, description = "查看路由详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(routeService.mGet(uuid));
     }
@@ -71,6 +78,7 @@ public class RouteController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROUTE_CREATE)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.CREATE, description = "创建路由 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody Route entity) {
         return R.ok().data(routeService.mCreate(entity));
     }
@@ -79,6 +87,7 @@ public class RouteController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROUTE_UPDATE)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.UPDATE, description = "更新路由 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Route entity) {
         return R.ok().data(routeService.mUpdate(entity));
     }
@@ -87,6 +96,7 @@ public class RouteController {
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROUTE_DELETE)
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.DELETE, description = "删除路由 %s", params = "#uuid")
     public R delete(@PathVariable String uuid) {
         return R.ok().data(routeService.mDelete(uuid));
     }
