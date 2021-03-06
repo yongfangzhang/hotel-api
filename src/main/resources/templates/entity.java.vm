@@ -33,25 +33,17 @@ import lombok.EqualsAndHashCode;
 @JsonView(V.S.class)
 @TableName(value = "${table.name}", autoResultMap = true)
 public class ${table.entityName} extends BaseEntity {
+
     private static final long serialVersionUID = 1L;
 
     public static final String TABLE_NAME = "${table.name}";
 
 #foreach ($column in $table.fields)
-#if($column.name != "remark")
+#if($column.name != "remark" && $column.name != "uuid" && $column.name != "created_at" && $column.name != "updated_at")
 
     /**
      * $column.comment
      */
-#if($column.name == "uuid")
-    @TableId(type = IdType.INPUT)
-#end
-#if($column.name == "created_at")
-    @TableField(fill = FieldFill.INSERT)
-#end
-#if($column.name == "updated_at")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-#end
 #if("$column.type" == "date")
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
 #end
