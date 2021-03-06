@@ -22,8 +22,6 @@ import com.yihaokezhan.hotel.model.RoomPrice;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-
-
 /**
  * <p>
  * 房间表 实体类
@@ -75,7 +73,7 @@ public class Room extends BaseEntity {
      * 基础价格
      */
     @NotNull(message = "基础价格不能为空", groups = AddGroup.class)
-    @PositiveOrZero(message = "基础价格无效", groups = {AddGroup.class, UpdateGroup.class})
+    @PositiveOrZero(message = "基础价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal price;
 
     @NotNull(message = "价格数组不能为空", groups = AddGroup.class)
@@ -87,8 +85,8 @@ public class Room extends BaseEntity {
      * 房间状态
      */
     @NotNull(message = "房间状态不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = RoomState.class, message = "房间状态无效", canBeNull = true,
-            groups = {AddGroup.class, UpdateGroup.class})
+    @EnumValue(enumClass = RoomState.class, message = "房间状态无效", canBeNull = true, groups = { AddGroup.class,
+            UpdateGroup.class })
     private Integer state;
 
     /**
@@ -111,4 +109,17 @@ public class Room extends BaseEntity {
         return EnumUtils.getName(RoomState.class, this.state);
     }
 
+    public Room removeUpdateIgnores() {
+        this.saleTimes = null;
+        this.income = null;
+        this.price = null;
+        this.prices = null;
+        return this;
+    }
+
+    public Room removeCreateIgnores() {
+        this.saleTimes = null;
+        this.income = null;
+        return this;
+    }
 }

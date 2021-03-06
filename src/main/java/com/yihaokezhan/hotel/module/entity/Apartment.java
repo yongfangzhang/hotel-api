@@ -1,22 +1,25 @@
 package com.yihaokezhan.hotel.module.entity;
 
 import java.math.BigDecimal;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.ApartmentState;
+import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.EnumValue;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.BaseEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-
 
 /**
  * <p>
@@ -87,14 +90,16 @@ public class Apartment extends BaseEntity {
      * 联系人手机号
      */
     @NotBlank(message = "联系人手机号不能为空", groups = AddGroup.class)
+    @Pattern(regexp = Constant.PATTERN_MOBILE, message = Constant.PATTERN_MOBILE_MSG, groups = { AddGroup.class,
+            UpdateGroup.class })
     private String contactorMobile;
 
     /**
      * 公寓状态
      */
     @NotNull(message = "公寓状态不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = ApartmentState.class, message = "公寓状态无效", canBeNull = true,
-            groups = {AddGroup.class, UpdateGroup.class})
+    @EnumValue(enumClass = ApartmentState.class, message = "公寓状态无效", canBeNull = true, groups = { AddGroup.class,
+            UpdateGroup.class })
     private Integer state;
 
     /**
@@ -115,5 +120,11 @@ public class Apartment extends BaseEntity {
 
     public String getStateName() {
         return EnumUtils.getName(ApartmentState.class, this.state);
+    }
+
+    public Apartment removeIgnores() {
+        this.saleTimes = null;
+        this.income = null;
+        return this;
     }
 }

@@ -80,6 +80,7 @@ public class ApartmentController {
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.CREATE, description = "创建公寓 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody Apartment entity) {
+        entity.removeIgnores();
         return R.ok().data(apartmentService.mCreate(entity));
     }
 
@@ -89,6 +90,7 @@ public class ApartmentController {
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.UPDATE, description = "更新公寓 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Apartment entity) {
+        entity.removeIgnores();
         return R.ok().data(apartmentService.mUpdate(entity));
     }
 

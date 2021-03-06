@@ -28,8 +28,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @CacheConfig(cacheNames = Apartment.TABLE_NAME)
-public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apartment>
-        implements IApartmentService {
+public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apartment> implements IApartmentService {
 
     @Autowired
     private IRoomService roomService;

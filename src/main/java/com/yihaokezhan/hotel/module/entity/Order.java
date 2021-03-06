@@ -38,7 +38,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonView(V.S.class)
-@TableName(value = "order", autoResultMap = true)
+@TableName(value = "`order`", autoResultMap = true)
 public class Order extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

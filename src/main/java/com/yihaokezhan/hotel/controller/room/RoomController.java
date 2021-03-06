@@ -80,10 +80,11 @@ public class RoomController {
 
     @PostMapping("")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_ROOM_CREATE)
+    @RequiresPermissions({ Constant.PERM_ROOM_CREATE, Constant.PERM_ROOM_PRICE_UPDATE })
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.CREATE, description = "创建房间 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody Room entity) {
+        entity.removeCreateIgnores();
         return R.ok().data(roomService.mCreate(entity));
     }
 
@@ -93,16 +94,15 @@ public class RoomController {
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.UPDATE, description = "更新房间 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Room entity) {
-        // 价格不能在这里更新
-        entity.setPrice(null);
-        entity.setPrices(null);
+        entity.removeUpdateIgnores();
         return R.ok().data(roomService.mUpdate(entity));
     }
 
     @PutMapping("/{uuid}/price")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_ROOM_PRICE_UPDATE)
+    @RequiresPermissions({ Constant.PERM_ROOM_CREATE, Constant.PERM_ROOM_PRICE_UPDATE })
     @Transactional(rollbackFor = Exception.class)
+    @SysLog(operation = Operation.UPDATE, description = "修改房间 %s 价格 %s", params = { "#uuid", "#entity" })
     public R updatePrice(@PathVariable String uuid, @Validated(UpdateGroup.class) @RequestBody RoomPrice entity) {
 
         Room room = roomService.mGet(uuid);

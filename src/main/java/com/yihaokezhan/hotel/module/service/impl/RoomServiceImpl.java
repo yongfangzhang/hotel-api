@@ -48,6 +48,7 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
 
         WrapperUtils.fillEq(wrapper, params, "uuid");
         WrapperUtils.fillEq(wrapper, params, "apartmentUuid");
+        WrapperUtils.fillEq(wrapper, params, "typeUuid");
         WrapperUtils.fillEq(wrapper, params, "type");
         WrapperUtils.fillEq(wrapper, params, "state");
         WrapperUtils.fillEq(wrapper, params, "saleTimes");
@@ -58,6 +59,7 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
 
         WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
         WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
+        WrapperUtils.fillInList(wrapper, params, "typeUuids", "type_uuid");
 
         WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
