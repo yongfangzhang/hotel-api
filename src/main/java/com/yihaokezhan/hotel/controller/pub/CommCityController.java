@@ -4,8 +4,6 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.annotation.Annc;
-import com.yihaokezhan.hotel.common.annotation.SysLog;
-import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.module.service.ICommCityService;
@@ -35,7 +33,6 @@ public class CommCityController {
     @Annc
     @GetMapping("/list")
     @JsonView(V.S.class)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看城市列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(commCityService.mList(params));
     }
@@ -43,7 +40,6 @@ public class CommCityController {
     @Annc
     @GetMapping("/{code}")
     @JsonView(V.S.class)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看城市详情 %s", params = "#code")
     public R get(@PathVariable String code) {
         return R.ok().data(commCityService.mGet(code));
     }
