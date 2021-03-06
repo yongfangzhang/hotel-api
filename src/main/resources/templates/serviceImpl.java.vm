@@ -9,6 +9,7 @@ import ${package.Service}.${table.serviceName};
 import org.springframework.stereotype.Service;
 
 @Service
+@CacheConfig(cacheNames = ${table.entityName}.TABLE_NAME)
 public class ${table.serviceImplName} extends BaseServiceImpl<${table.mapperName}, ${table.entityName}> implements ${table.serviceName} {
 
 

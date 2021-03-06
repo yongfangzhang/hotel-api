@@ -149,6 +149,12 @@ public class Constant {
     public static final String PERM_SYSTEM_LOG_UPDATE             = "system:log:update";
     public static final String PERM_SYSTEM_LOG_DELETE             = "system:log:delete";
 
+    // SystemDictController
+    public static final String PERM_SYSTEM_DICT_GET                = "system:dict:get";
+    public static final String PERM_SYSTEM_DICT_CREATE             = "system:dict:create";
+    public static final String PERM_SYSTEM_DICT_UPDATE             = "system:dict:update";
+    public static final String PERM_SYSTEM_DICT_DELETE             = "system:dict:delete";
+
     // @formatter:on
 
 }
