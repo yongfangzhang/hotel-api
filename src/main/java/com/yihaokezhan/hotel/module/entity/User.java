@@ -42,6 +42,7 @@ public class User extends BaseEntity {
      * 姓名
      */
     @NotBlank(message = "姓名不能为空", groups = AddGroup.class)
+    @JsonView(V.XS.class)
     private String name;
 
     /**

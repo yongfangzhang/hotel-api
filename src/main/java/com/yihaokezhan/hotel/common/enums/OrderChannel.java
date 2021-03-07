@@ -10,7 +10,7 @@ public enum OrderChannel implements BaseEnum<OrderChannel> {
     WECHAT                      (2,         "微信"),
     ALIPAY                      (3,         "支付宝"),
     STORE                       (4,         "门店"),
-    ADMIN                       (10,        "管理员代下单"),
+    ADMIN                       (10,        "代下单"),
     END                         (1000,      "END");
     // @formatter:on
 

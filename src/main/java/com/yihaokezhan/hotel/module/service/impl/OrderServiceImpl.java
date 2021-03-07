@@ -3,17 +3,22 @@ package com.yihaokezhan.hotel.module.service.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.utils.M;
+import com.yihaokezhan.hotel.common.utils.RandomUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Order;
 import com.yihaokezhan.hotel.module.entity.OrderItem;
 import com.yihaokezhan.hotel.module.mapper.OrderMapper;
 import com.yihaokezhan.hotel.module.service.IOrderItemService;
 import com.yihaokezhan.hotel.module.service.IOrderService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,14 +37,30 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
     private IOrderItemService orderItemService;
 
     @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true)
+    })
+    // @formatter:on
+    public Order mCreate(Order order) {
+        order.setNumber(RandomUtils.generateNumer());
+        super.mCreate(order);
+        orderItemService.mBatchCreate(order.getItems().stream().map(item -> {
+            item.setOrderUuid(order.getUuid());
+            item.setState(order.getState());
+            return item;
+        }).collect(Collectors.toList()));
+        return order;
+    }
+
+    @Override
     public Order join(Order order) {
         if (order == null) {
             return order;
         }
-        orderItemService.attachOneItems(order, M.m().put("orderUuid", order.getUuid()),
-                (record, items) -> {
-                    record.setItems(items);
-                });
+        orderItemService.attachOneItems(order, M.m().put("orderUuid", order.getUuid()), (record, items) -> {
+            record.setItems(items);
+        });
         return order;
     }
 
@@ -50,8 +71,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         }
 
         orderItemService.attachListItems(orders,
-                M.m().put("orderUuids",
-                        orders.stream().map(Order::getUuid).collect(Collectors.toList())),
+                M.m().put("orderUuids", orders.stream().map(Order::getUuid).collect(Collectors.toList())),
                 OrderItem::getOrderUuid, (record, itemsMap) -> {
                     record.setItems(itemsMap.get(record.getUuid()));
                 });

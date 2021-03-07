@@ -1,5 +1,8 @@
 package com.yihaokezhan.hotel.common.utils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import com.fasterxml.uuid.Generators;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -34,5 +37,12 @@ public class RandomUtils {
         }
         String[] pos = uuid.split("-");
         return pos[2] + pos[1] + pos[0] + pos[3] + pos[4];
+    }
+
+    public static String generateNumer() {
+        LocalDateTime datetime = LocalDateTime.now();
+        String fmtTime = datetime.format(DateTimeFormatter.ofPattern(Constant.DATE_TIME_PATTERN_NUMBER));
+        String identifier = RandomStringUtils.random(5);
+        return String.format("T%s%s", fmtTime, identifier);
     }
 }

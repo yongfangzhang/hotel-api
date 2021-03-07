@@ -1,7 +1,9 @@
 package com.yihaokezhan.hotel.model;
 
 import java.time.LocalDateTime;
+
 import javax.validation.constraints.NotBlank;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -12,6 +14,7 @@ import com.yihaokezhan.hotel.common.remark.RemarkEntity;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,6 +33,7 @@ public class BaseEntity extends RemarkEntity {
      */
     @TableId(type = IdType.INPUT)
     @NotBlank(message = "UUID不能为空", groups = UpdateGroup.class)
+    @JsonView(V.XS.class)
     private String uuid;
 
     private String tenantUuid;

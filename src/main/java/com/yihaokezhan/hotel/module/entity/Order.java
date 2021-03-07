@@ -25,8 +25,6 @@ import com.yihaokezhan.hotel.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-
-
 /**
  * <p>
  * 订单表 实体类
@@ -64,66 +62,66 @@ public class Order extends BaseEntity {
      * 订单渠道
      */
     @NotNull(message = "订单渠道不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = OrderChannel.class, message = "订单渠道无效", canBeNull = true,
-            groups = {AddGroup.class, UpdateGroup.class})
+    @EnumValue(enumClass = OrderChannel.class, message = "订单渠道无效", canBeNull = true, groups = { AddGroup.class,
+            UpdateGroup.class })
     private Integer channel;
 
     /**
      * 原始价格
      */
     @NotNull(message = "原始价格不能为空", groups = AddGroup.class)
-    @PositiveOrZero(message = "原始价格无效", groups = {AddGroup.class, UpdateGroup.class})
+    @PositiveOrZero(message = "原始价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal originalPrice;
 
     /**
      * 支付价格
      */
     @NotNull(message = "支付价格不能为空", groups = AddGroup.class)
-    @PositiveOrZero(message = "支付价格无效", groups = {AddGroup.class, UpdateGroup.class})
+    @PositiveOrZero(message = "支付价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal paidPrice;
 
     /**
      * 订单状态
      */
     @NotNull(message = "订单状态不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = OrderState.class, message = "订单状态无效", canBeNull = true,
-            groups = {AddGroup.class, UpdateGroup.class})
+    @EnumValue(enumClass = OrderState.class, message = "订单状态无效", canBeNull = true, groups = { AddGroup.class,
+            UpdateGroup.class })
     private Integer state;
 
     /**
      * 订单类型
      */
     @NotNull(message = "订单类型不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = OrderType.class, message = "订单类型无效", canBeNull = true,
-            groups = {AddGroup.class, UpdateGroup.class})
+    @EnumValue(enumClass = OrderType.class, message = "订单类型无效", canBeNull = true, groups = { AddGroup.class,
+            UpdateGroup.class })
     private Integer type;
 
     @NotNull(message = "用户类型不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = OrderUserType.class, message = "用户类型无效", canBeNull = true,
-            groups = {AddGroup.class, UpdateGroup.class})
+    @EnumValue(enumClass = OrderUserType.class, message = "用户类型无效", canBeNull = true, groups = { AddGroup.class,
+            UpdateGroup.class })
     private Integer userType;
 
-    @EnumValue(enumClass = OrderType.class, message = "账户类型无效", canBeNull = true,
-            groups = {AddGroup.class, UpdateGroup.class})
+    @EnumValue(enumClass = OrderType.class, message = "账户类型无效", canBeNull = true, groups = { AddGroup.class,
+            UpdateGroup.class })
     private Integer accountType;
 
     /**
      * 支付时间
      */
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @Past(message = "支付时间无效", groups = {AddGroup.class, UpdateGroup.class})
+    @Past(message = "支付时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime paidAt;
 
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @Past(message = "取消时间无效", groups = {AddGroup.class, UpdateGroup.class})
+    @Past(message = "取消时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime canceledAt;
 
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @Past(message = "完成时间无效", groups = {AddGroup.class, UpdateGroup.class})
+    @Past(message = "完成时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime finishedAt;
 
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @Past(message = "评价时间无效", groups = {AddGroup.class, UpdateGroup.class})
+    @Past(message = "评价时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime commentedAt;
 
     public String getChannelName() {
@@ -138,6 +136,28 @@ public class Order extends BaseEntity {
         return EnumUtils.getName(OrderType.class, this.type);
     }
 
+    public String getUserTypeName() {
+        return EnumUtils.getName(OrderUserType.class, this.userType);
+    }
+
     @TableField(exist = false)
     private List<OrderItem> items;
+
+    public Order removeUpdateIgnores() {
+        this.apartmentUuid = null;
+        this.userUuid = null;
+        this.number = null;
+        this.channel = null;
+        this.originalPrice = null;
+        this.paidPrice = null;
+        // this.state = null;
+        this.type = null;
+        this.userType = null;
+        this.accountType = null;
+        this.paidAt = null;
+        // this.canceledAt = null;
+        // this.finishedAt = null;
+        // this.commentedAt = null;
+        return this;
+    }
 }

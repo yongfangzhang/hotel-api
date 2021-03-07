@@ -3,13 +3,16 @@ package com.yihaokezhan.hotel.controller.order;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.annotation.LoginUser;
 import com.yihaokezhan.hotel.common.annotation.SysLog;
 import com.yihaokezhan.hotel.common.enums.Operation;
+import com.yihaokezhan.hotel.common.enums.OrderType;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
+import com.yihaokezhan.hotel.model.TokenUser;
 import com.yihaokezhan.hotel.module.entity.Order;
 import com.yihaokezhan.hotel.module.service.IOrderService;
 
@@ -17,7 +20,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +43,6 @@ public class OrderController {
 
     @Autowired
     private IOrderService orderService;
-
 
     @GetMapping("/page")
     @JsonView(V.S.class)
@@ -80,7 +81,9 @@ public class OrderController {
     @RequiresPermissions(Constant.PERM_ORDER_CREATE)
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.CREATE, description = "创建订单 %s", params = "#entity")
-    public R create(@Validated(AddGroup.class) @RequestBody Order entity) {
+    public R create(@Validated(AddGroup.class) @RequestBody Order entity, @LoginUser TokenUser tokenUser) {
+        entity.setType(OrderType.LIVE_IN.getValue());
+        entity.setAccountType(tokenUser.getAccountType());
         return R.ok().data(orderService.mCreate(entity));
     }
 
@@ -90,15 +93,17 @@ public class OrderController {
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.UPDATE, description = "更新订单 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Order entity) {
+        entity.removeUpdateIgnores();
         return R.ok().data(orderService.mUpdate(entity));
     }
 
-    @DeleteMapping("/{uuid}")
-    @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_ORDER_DELETE)
-    @Transactional(rollbackFor = Exception.class)
-    @SysLog(operation = Operation.DELETE, description = "删除订单 %s", params = "#uuid")
-    public R delete(@PathVariable String uuid) {
-        return R.ok().data(orderService.mDelete(uuid));
-    }
+    // @DeleteMapping("/{uuid}")
+    // @JsonView(V.S.class)
+    // @RequiresPermissions(Constant.PERM_ORDER_DELETE)
+    // @Transactional(rollbackFor = Exception.class)
+    // @SysLog(operation = Operation.DELETE, description = "删除订单 %s", params =
+    // "#uuid")
+    // public R delete(@PathVariable String uuid) {
+    // return R.ok().data(orderService.mDelete(uuid));
+    // }
 }

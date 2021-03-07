@@ -11,6 +11,7 @@ public enum OrderState implements BaseEnum<OrderState> {
     UNCOMMENT                   (3,         "待评价"),
     FINISHED                    (4,         "已完成"),
     CANCELD                     (10,        "已取消"),
+    ABANDON                     (11,        "已作废"),
     END                         (1000,      "END");
     // @formatter:on
 
