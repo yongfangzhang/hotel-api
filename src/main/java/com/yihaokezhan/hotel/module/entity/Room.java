@@ -2,10 +2,12 @@ package com.yihaokezhan.hotel.module.entity;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -19,6 +21,7 @@ import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.BaseEntity;
 import com.yihaokezhan.hotel.model.RoomPrice;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -84,7 +87,6 @@ public class Room extends BaseEntity {
     /**
      * 房间状态
      */
-    @NotNull(message = "房间状态不能为空", groups = AddGroup.class)
     @EnumValue(enumClass = RoomState.class, message = "房间状态无效", canBeNull = true, groups = { AddGroup.class,
             UpdateGroup.class })
     private Integer state;

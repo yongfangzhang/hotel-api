@@ -1,12 +1,23 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.yihaokezhan.hotel.common.enums.RoomState;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.OrderItem;
+import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.mapper.OrderItemMapper;
 import com.yihaokezhan.hotel.module.service.IOrderItemService;
+import com.yihaokezhan.hotel.module.service.IRoomService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,8 +30,63 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @CacheConfig(cacheNames = OrderItem.TABLE_NAME)
-public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, OrderItem>
-        implements IOrderItemService {
+public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, OrderItem> implements IOrderItemService {
+
+    @Autowired
+    private IRoomService roomService;
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true)
+    })
+    // @formatter:on
+    public OrderItem mCreate(OrderItem entity) {
+        super.mCreate(entity);
+        return entity;
+    }
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true)
+    })
+    // @formatter:on
+    public List<OrderItem> mBatchCreate(List<OrderItem> entities) {
+        super.mBatchCreate(entities);
+        List<Room> rooms = entities.stream().map(entity -> {
+            Room room = new Room();
+            room.setUuid(entity.getRoomUuid());
+            room.setState(RoomState.IN_USE.getValue());
+            return room;
+        }).collect(Collectors.toList());
+
+        roomService.mBatchUpdate(rooms);
+
+        return entities;
+    }
+
+    @Override
+    public OrderItem join(OrderItem item) {
+        if (item == null) {
+            return item;
+        }
+        roomService.attachOne(item, item.getRoomUuid(), (record, room) -> {
+            item.setRoom(room);
+        });
+        return item;
+    }
+
+    @Override
+    public List<OrderItem> join(List<OrderItem> items) {
+        if (CollectionUtils.isEmpty(items)) {
+            return items;
+        }
+        roomService.attachList(items, OrderItem::getRoomUuid, (record, roomMap) -> {
+            record.setRoom(roomMap.get(record.getRoomUuid()));
+        });
+        return items;
+    }
 
     @Override
     public QueryWrapper<OrderItem> getWrapper(Map<String, Object> params) {

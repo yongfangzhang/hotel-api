@@ -14,6 +14,7 @@
   { "uuid": "11eb7cb772f043cdb541834d01b7676f", "path": "/system/permission/index", "accountType": 2, "type": 4, "permissions": ["route:update"], "caption": "路由-修改" },
   { "uuid": "11eb7cb772f091eeb541d3f0c80e35b1", "path": "/system/permission/index", "accountType": 2, "type": 5, "permissions": ["route:delete"], "caption": "路由-删除" },
   { "uuid": "11eb7cb772f0e00fb541dfb239de3fa2", "path": "/system/slog/index", "accountType": 2, "type": 2, "permissions": ["system:log:get"], "caption": "日志-查看" },
+  { "uuid": "11eb7f17ca551122a07d0f5a71aa598d", "path": "/system/dict/index", "accountType": 2, "type": 2, "permissions": ["system:dict:get"], "caption": "字典-查看" },
   { "uuid": "11eb7d5c73aa848f87a4f90fa0e15eeb", "path": "/apartment/management/index", "accountType": 2, "type": 2, "permissions": ["apartment:get"], "caption": "公寓-查看" },
   { "uuid": "11eb7d5c73b029e087a43930ad7db1d6", "path": "/apartment/management/edit", "accountType": 2, "type": 3, "permissions": ["apartment:create"], "caption": "公寓-创建" },
   { "uuid": "11eb7d5c73b0c62187a49dd6369f3872", "path": "/apartment/management/edit", "accountType": 2, "type": 4, "permissions": ["apartment:update"], "caption": "公寓-修改" },

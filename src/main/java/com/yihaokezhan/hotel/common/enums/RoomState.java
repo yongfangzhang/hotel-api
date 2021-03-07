@@ -8,6 +8,7 @@ public enum RoomState implements BaseEnum<RoomState> {
     UNKNOWN                     (0,         "未知"),
     NORMAL                      (1,         "正常"),
     UNCLEAN                     (2,         "待打扫"),
+    IN_USE                      (3,         "已入住"),
     FORBIDDEN                   (10,        "已禁用"),
     APARTMENT_FORBIDDEN         (11,        "公寓已禁用"),
     APARTMENT_DELETED           (12,        "公寓已删除"),

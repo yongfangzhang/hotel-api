@@ -23,6 +23,7 @@ public class Constant {
         "role_route",
         "route",
         "tenant",
+        "system_dict"
     };
 
     // cache

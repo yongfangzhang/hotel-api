@@ -73,6 +73,7 @@ public class SystemDict extends BaseEntity implements TreeNode<SystemDict> {
     /**
      * 顺序
      */
+    @TableField("`sequence`")
     private Integer sequence;
 
     /**

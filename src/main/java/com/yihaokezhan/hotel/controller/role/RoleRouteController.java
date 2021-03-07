@@ -89,7 +89,7 @@ public class RoleRouteController {
     @PostMapping("/batch")
     @JsonView(V.S.class)
     public R batchCreate(@Validated(AddGroup.class) @RequestBody List<RoleRoute> entities) {
-        return R.ok().data(roleRouteService.mBatchCreateOrUpdate(entities));
+        return R.ok().data(roleRouteService.mBatchCreate(entities));
     }
 
     @PutMapping("")

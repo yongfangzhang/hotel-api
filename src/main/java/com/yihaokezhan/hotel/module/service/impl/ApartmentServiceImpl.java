@@ -95,6 +95,6 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
         rooms.forEach(room -> {
             room.setState(state.getValue());
         });
-        roomService.mBatchCreateOrUpdate(rooms);
+        roomService.mBatchUpdate(rooms);
     }
 }

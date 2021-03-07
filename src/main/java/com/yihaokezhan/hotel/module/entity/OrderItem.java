@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -106,6 +107,9 @@ public class OrderItem extends BaseEntity {
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
     @FutureOrPresent(message = "离店时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime leaveAt;
+
+    @TableField(exist = false)
+    private Room room;
 
     public String getStateName() {
         return EnumUtils.getName(OrderState.class, this.state);

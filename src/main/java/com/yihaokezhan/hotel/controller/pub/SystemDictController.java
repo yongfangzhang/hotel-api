@@ -1,10 +1,10 @@
-package com.yihaokezhan.hotel.controller;
+package com.yihaokezhan.hotel.controller.pub;
 
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.yihaokezhan.hotel.common.utils.Constant;
+import com.yihaokezhan.hotel.common.annotation.Dev;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.TreeUtils;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -13,7 +13,6 @@ import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.module.entity.SystemDict;
 import com.yihaokezhan.hotel.module.service.ISystemDictService;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -36,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-03-06
  */
 @RestController
-@RequestMapping("/hotel/SYSTEM_DICT")
+@RequestMapping("/hotel/pub/dict")
 public class SystemDictController {
 
     @Autowired
@@ -44,21 +43,18 @@ public class SystemDictController {
 
     @GetMapping("/page")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_SYSTEM_DICT_GET)
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(systemDictService.mPage(params));
     }
 
     @GetMapping("/list")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_SYSTEM_DICT_GET)
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(systemDictService.mList(params));
     }
 
     @GetMapping("/tree")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_SYSTEM_DICT_GET)
     public R tree(@RequestParam Map<String, Object> params) {
         List<SystemDict> records = systemDictService.mList(params);
         return R.ok().data(TreeUtils.bulid(records));
@@ -66,21 +62,19 @@ public class SystemDictController {
 
     @GetMapping("/one")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_SYSTEM_DICT_GET)
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(systemDictService.mOne(params));
     }
 
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_SYSTEM_DICT_GET)
     public R get(@PathVariable String uuid) {
         return R.ok().data(systemDictService.mGet(uuid));
     }
 
+    @Dev
     @PostMapping("")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_SYSTEM_DICT_CREATE)
     @Transactional(rollbackFor = Exception.class)
     public R create(@Validated(AddGroup.class) @RequestBody SystemDict entity) {
         return R.ok().data(systemDictService.mCreate(entity));
@@ -88,7 +82,6 @@ public class SystemDictController {
 
     @PutMapping("")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_SYSTEM_DICT_UPDATE)
     @Transactional(rollbackFor = Exception.class)
     public R update(@Validated(UpdateGroup.class) @RequestBody SystemDict entity) {
         return R.ok().data(systemDictService.mUpdate(entity));
@@ -96,7 +89,6 @@ public class SystemDictController {
 
     @DeleteMapping("/{uuid}")
     @JsonView(V.S.class)
-    @RequiresPermissions(Constant.PERM_SYSTEM_DICT_DELETE)
     @Transactional(rollbackFor = Exception.class)
     public R delete(@PathVariable String uuid) {
         return R.ok().data(systemDictService.mDelete(uuid));
