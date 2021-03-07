@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.yihaokezhan.hotel.common.config.AppConfig;
 import com.yihaokezhan.hotel.common.enums.RoleType;
 import com.yihaokezhan.hotel.common.redis.CacheRedisService;
 import com.yihaokezhan.hotel.common.utils.JSONUtils;
@@ -39,11 +40,16 @@ public class InitializeRoleRunner implements ApplicationRunner {
     @Autowired
     private CacheRedisService cacheRedisService;
 
+    @Autowired
+    private AppConfig appConfig;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         clearCache();
-        initRoleData();
-        initRouteData();
+        if (appConfig.isDev()) {
+            initRoleData();
+            initRouteData();
+        }
     }
 
     private void clearCache() {
