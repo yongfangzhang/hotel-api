@@ -49,9 +49,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @CacheConfig(cacheNames = Account.TABLE_NAME)
 @Slf4j
-public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
-        implements IAccountService {
-
+public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account> implements IAccountService {
 
     @Autowired
     private IAccountRoleService accountRoleService;
@@ -135,10 +133,9 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
         userService.attachOne(account, account.getUserUuid(), (record, user) -> {
             record.setUser(user);
         });
-        accountRoleService.attachOneItems(account, M.m().put("accountUuid", account.getUuid()),
-                (record, roles) -> {
-                    record.setAccountRoles(roles);
-                });
+        accountRoleService.attachOneItems(account, M.m().put("accountUuid", account.getUuid()), (record, roles) -> {
+            record.setAccountRoles(roles);
+        });
         tenantService.attachOne(account, account.getTenantUuid(), (record, tenant) -> {
             record.setTenant(tenant);
         });
@@ -155,8 +152,7 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
             record.setUser(userMap.get(record.getUserUuid()));
         });
         accountRoleService.attachListItems(accounts,
-                M.m().put("accountUuids",
-                        accounts.stream().map(Account::getUuid).collect(Collectors.toList())),
+                M.m().put("accountUuids", accounts.stream().map(Account::getUuid).collect(Collectors.toList())),
                 AccountRole::getAccountUuid, (record, rolesMap) -> {
                     record.setAccountRoles(rolesMap.get(record.getUuid()));
                 });
@@ -204,6 +200,7 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account>
     private void validatePassword(Account account, LoginForm form) {
         // 密码正确性
         String pwdHash = getPasswordHex(form.getPassword(), account.getSalt());
+        log.info("current: {}, saved: {}", pwdHash, account.getPassword());
         Assert.isTrue(account.getPassword().equals(pwdHash), ErrorCode.ACCOUNT_PASSWORD_ERROR);
     }
 
