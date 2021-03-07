@@ -42,7 +42,7 @@ public class RandomUtils {
     public static String generateNumer() {
         LocalDateTime datetime = LocalDateTime.now();
         String fmtTime = datetime.format(DateTimeFormatter.ofPattern(Constant.DATE_TIME_PATTERN_NUMBER));
-        String identifier = RandomStringUtils.random(5);
+        String identifier = RandomStringUtils.randomNumeric(5);
         return String.format("T%s%s", fmtTime, identifier);
     }
 }

@@ -3,7 +3,6 @@ package com.yihaokezhan.hotel.module.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -98,14 +97,14 @@ public class OrderItem extends BaseEntity {
      * 入住时间
      */
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @FutureOrPresent(message = "入住时间无效", groups = { AddGroup.class, UpdateGroup.class })
+    // @FutureOrPresent(message = "入住时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime liveAt;
 
     /**
      * 离店时间
      */
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @FutureOrPresent(message = "离店时间无效", groups = { AddGroup.class, UpdateGroup.class })
+    // @FutureOrPresent(message = "离店时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime leaveAt;
 
     @TableField(exist = false)

@@ -46,6 +46,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         order.setNumber(RandomUtils.generateNumer());
         super.mCreate(order);
         orderItemService.mBatchCreate(order.getItems().stream().map(item -> {
+            item.setApartmentUuid(order.getApartmentUuid());
             item.setOrderUuid(order.getUuid());
             item.setState(order.getState());
             return item;

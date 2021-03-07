@@ -3,14 +3,16 @@ package com.yihaokezhan.hotel.module.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.PositiveOrZero;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.enums.AccountType;
 import com.yihaokezhan.hotel.common.enums.OrderChannel;
 import com.yihaokezhan.hotel.common.enums.OrderState;
 import com.yihaokezhan.hotel.common.enums.OrderType;
@@ -22,6 +24,7 @@ import com.yihaokezhan.hotel.common.validator.EnumValue;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.BaseEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -69,14 +72,14 @@ public class Order extends BaseEntity {
     /**
      * 原始价格
      */
-    @NotNull(message = "原始价格不能为空", groups = AddGroup.class)
+    // @NotNull(message = "原始价格不能为空", groups = AddGroup.class)
     @PositiveOrZero(message = "原始价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal originalPrice;
 
     /**
      * 支付价格
      */
-    @NotNull(message = "支付价格不能为空", groups = AddGroup.class)
+    // @NotNull(message = "支付价格不能为空", groups = AddGroup.class)
     @PositiveOrZero(message = "支付价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal paidPrice;
 
@@ -91,17 +94,17 @@ public class Order extends BaseEntity {
     /**
      * 订单类型
      */
-    @NotNull(message = "订单类型不能为空", groups = AddGroup.class)
+    // @NotNull(message = "订单类型不能为空", groups = AddGroup.class)
     @EnumValue(enumClass = OrderType.class, message = "订单类型无效", canBeNull = true, groups = { AddGroup.class,
             UpdateGroup.class })
-    private Integer type;
+    private Integer type = OrderType.LIVE_IN.getValue();
 
     @NotNull(message = "用户类型不能为空", groups = AddGroup.class)
     @EnumValue(enumClass = OrderUserType.class, message = "用户类型无效", canBeNull = true, groups = { AddGroup.class,
             UpdateGroup.class })
     private Integer userType;
 
-    @EnumValue(enumClass = OrderType.class, message = "账户类型无效", canBeNull = true, groups = { AddGroup.class,
+    @EnumValue(enumClass = AccountType.class, message = "账户类型无效", canBeNull = true, groups = { AddGroup.class,
             UpdateGroup.class })
     private Integer accountType;
 
@@ -109,19 +112,19 @@ public class Order extends BaseEntity {
      * 支付时间
      */
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @Past(message = "支付时间无效", groups = { AddGroup.class, UpdateGroup.class })
+    // @Past(message = "支付时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime paidAt;
 
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @Past(message = "取消时间无效", groups = { AddGroup.class, UpdateGroup.class })
+    // @Past(message = "取消时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime canceledAt;
 
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @Past(message = "完成时间无效", groups = { AddGroup.class, UpdateGroup.class })
+    // @Past(message = "完成时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime finishedAt;
 
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    @Past(message = "评价时间无效", groups = { AddGroup.class, UpdateGroup.class })
+    // @Past(message = "评价时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime commentedAt;
 
     public String getChannelName() {

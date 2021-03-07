@@ -11,10 +11,12 @@ import javax.validation.constraints.Size;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.RoomState;
 import com.yihaokezhan.hotel.common.handler.RoomPriceTypeHandler;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
+import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.EnumValue;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
@@ -109,6 +111,21 @@ public class Room extends BaseEntity {
 
     public String getStateName() {
         return EnumUtils.getName(RoomState.class, this.state);
+    }
+
+    public String getName() {
+        return String.format("%s-%s-%s", this.floorNumber, this.unitNumber, this.number);
+    }
+
+    public M getPriceTypeMap() {
+        if (CollectionUtils.isEmpty(this.prices)) {
+            return M.m();
+        }
+        M m = M.m();
+        for (RoomPrice item : this.prices) {
+            m.put(item.getType().toString(), item.getPrice());
+        }
+        return m;
     }
 
     public Room removeUpdateIgnores() {
