@@ -221,7 +221,9 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account> 
         account.setToken(tokenUtils.createToken(tokenUser));
     }
 
-    private Account updateAfterLogin(Account account, LoginForm form) {
+    private Account updateAfterLogin(Account entity, LoginForm form) {
+        Account account = new Account();
+        account.setUuid(entity.getUuid());
         account.setLastLoginAt(LocalDateTime.now());
         account.setDevice(form.getDevice());
         account.setUserAgent(form.getUserAgent());
