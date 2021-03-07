@@ -227,7 +227,8 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account> 
         account.setLastLoginAt(LocalDateTime.now());
         account.setDevice(form.getDevice());
         account.setUserAgent(form.getUserAgent());
-        return mUpdate(account);
+        mUpdate(account);
+        return entity;
     }
 
     private String getPasswordHex(String password, String salt) {
