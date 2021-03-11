@@ -45,6 +45,10 @@ public class Room extends BaseEntity {
     public static final String TABLE_NAME = "room";
 
     /**
+     * 当前入住订单项目
+     */
+    private String orderItemUuid;
+    /**
      * 公寓UUID
      */
     @NotBlank(message = "公寓不能为空", groups = AddGroup.class)
@@ -109,6 +113,12 @@ public class Room extends BaseEntity {
     @TableLogic(value = "0", delval = "1")
     private Boolean deleted;
 
+    @TableField(exist = false)
+    private Order relatedOrder;
+
+    @TableField(exist = false)
+    private OrderItem relatedOrderItem;
+
     public String getStateName() {
         return EnumUtils.getName(RoomState.class, this.state);
     }
@@ -133,6 +143,11 @@ public class Room extends BaseEntity {
         this.income = null;
         this.price = null;
         this.prices = null;
+        if (this.state != null && (!this.state.equals(RoomState.STAY_CLEAN.getValue()))
+                && !this.state.equals(RoomState.STAY_DARTY.getValue())) {
+            // 修改状态， 并且状态不是入住，需要将入住人关联订单删除
+            this.orderItemUuid = "";
+        }
         return this;
     }
 

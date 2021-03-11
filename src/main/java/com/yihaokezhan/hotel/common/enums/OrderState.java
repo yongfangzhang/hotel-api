@@ -8,8 +8,9 @@ public enum OrderState implements BaseEnum<OrderState> {
     UNKNOWN                     (0,         "未知"),
     UNPAID                      (1,         "待付款"),
     UNUSED                      (2,         "待入住"),
-    UNCOMMENT                   (3,         "待评价"),
-    FINISHED                    (4,         "已完成"),
+    USED                        (3,         "已入住"),
+    UNCOMMENT                   (4,         "待评价"),
+    FINISHED                    (5,         "已完成"),
     CANCELD                     (10,        "已取消"),
     ABANDON                     (11,        "已作废"),
     END                         (1000,      "END");

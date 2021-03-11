@@ -3,6 +3,7 @@ package com.yihaokezhan.hotel.controller.room;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -13,10 +14,14 @@ import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
+import com.yihaokezhan.hotel.model.Pager;
 import com.yihaokezhan.hotel.model.RoomPrice;
 import com.yihaokezhan.hotel.module.entity.Room;
+import com.yihaokezhan.hotel.module.service.IOrderItemService;
+import com.yihaokezhan.hotel.module.service.IOrderService;
 import com.yihaokezhan.hotel.module.service.IRoomService;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,32 +51,46 @@ public class RoomController {
     @Autowired
     private IRoomService roomService;
 
+    @Autowired
+    private IOrderItemService orderItemService;
+
+    @Autowired
+    private IOrderService orderService;
+
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
     public R page(@RequestParam Map<String, Object> params) {
-        return R.ok().data(roomService.mPage(params));
+        Pager<Room> data = roomService.mPage(params);
+        this.attachOrder(data.getList());
+        return R.ok().data(data);
     }
 
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
     public R list(@RequestParam Map<String, Object> params) {
-        return R.ok().data(roomService.mList(params));
+        List<Room> data = roomService.mList(params);
+        this.attachOrder(data);
+        return R.ok().data(data);
     }
 
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
     public R one(@RequestParam Map<String, Object> params) {
-        return R.ok().data(roomService.mOne(params));
+        Room data = roomService.mOne(params);
+        this.attachOrder(data);
+        return R.ok().data(data);
     }
 
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
     public R get(@PathVariable String uuid) {
-        return R.ok().data(roomService.mGet(uuid));
+        Room data = roomService.mGet(uuid);
+        this.attachOrder(data);
+        return R.ok().data(data);
     }
 
     @PostMapping("")
@@ -128,5 +147,43 @@ public class RoomController {
     @SysLog(operation = Operation.DELETE, description = "删除房间 %s", params = "#uuid")
     public R delete(@PathVariable String uuid) {
         return R.ok().data(roomService.mDelete(uuid));
+    }
+
+    private void attachOrder(Room room) {
+        if (room == null || StringUtils.isBlank(room.getOrderItemUuid())) {
+            return;
+        }
+        orderItemService.attachOne(room, room.getOrderItemUuid(), (record, item) -> {
+            record.setRelatedOrderItem(item);
+        });
+        orderService.attachOne(room, room.getRelatedOrderItem().getOrderUuid(), (record, item) -> {
+            record.setRelatedOrder(item);
+        });
+    }
+
+    private void attachOrder(List<Room> rooms) {
+        if (CollectionUtils.isEmpty(rooms)) {
+            return;
+        }
+        List<Room> orderedRooms = rooms.stream().filter(room -> StringUtils.isNotBlank(room.getOrderItemUuid()))
+                .collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(orderedRooms)) {
+            return;
+        }
+
+        List<String> orderItemUuids = orderedRooms.stream().map(room -> room.getOrderItemUuid())
+                .collect(Collectors.toList());
+
+        orderItemService.attachList(orderedRooms, orderItemUuids, (record, map) -> {
+            record.setRelatedOrderItem(map.get(record.getOrderItemUuid()));
+        });
+
+        List<String> orderUuids = orderedRooms.stream().map(room -> room.getRelatedOrderItem().getOrderUuid())
+                .distinct().collect(Collectors.toList());
+
+        orderService.attachList(orderedRooms, orderUuids, (record, map) -> {
+            record.setRelatedOrder(map.get(record.getRelatedOrderItem().getOrderUuid()));
+        });
     }
 }

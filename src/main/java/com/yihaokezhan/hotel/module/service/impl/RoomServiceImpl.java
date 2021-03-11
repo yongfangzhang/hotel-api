@@ -34,6 +34,7 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
     public void beforeAction(Room room, Class<?> group) {
         if (room == null) {
             super.beforeAction(room, group);
+            return;
         }
         ValidatorUtils.validateEntities(room.getPrices(), group);
     }
@@ -42,6 +43,7 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
     public void beforeAction(List<Room> rooms, Class<?> group) {
         if (CollectionUtils.isEmpty(rooms)) {
             super.beforeAction(rooms, group);
+            return;
         }
         rooms.forEach(room -> {
             ValidatorUtils.validateEntities(room.getPrices(), group);

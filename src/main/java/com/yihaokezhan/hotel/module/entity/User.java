@@ -51,6 +51,7 @@ public class User extends BaseEntity {
     @NotNull(message = "性别不能为空", groups = AddGroup.class)
     @EnumValue(enumClass = Gender.class, message = "性别无效", canBeNull = true, groups = { AddGroup.class,
             UpdateGroup.class })
+    @JsonView(V.XS.class)
     private Integer gender;
 
     /**
@@ -59,6 +60,7 @@ public class User extends BaseEntity {
     @NotBlank(message = "手机号不能为空", groups = AddGroup.class)
     @Pattern(regexp = Constant.PATTERN_MOBILE, message = Constant.PATTERN_MOBILE_MSG, groups = { AddGroup.class,
             UpdateGroup.class })
+    @JsonView(V.XS.class)
     private String mobile;
 
     /**

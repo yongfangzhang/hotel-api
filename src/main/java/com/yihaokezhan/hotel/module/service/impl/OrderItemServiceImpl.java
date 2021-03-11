@@ -43,6 +43,11 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
     // @formatter:on
     public OrderItem mCreate(OrderItem entity) {
         super.mCreate(entity);
+        Room room = new Room();
+        room.setUuid(entity.getRoomUuid());
+        room.setState(RoomState.STAY_CLEAN.getValue());
+        room.setOrderItemUuid(entity.getUuid());
+        roomService.mCreate(room);
         return entity;
     }
 
@@ -58,6 +63,7 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
             Room room = new Room();
             room.setUuid(entity.getRoomUuid());
             room.setState(RoomState.STAY_CLEAN.getValue());
+            room.setOrderItemUuid(entity.getUuid());
             return room;
         }).collect(Collectors.toList());
 
