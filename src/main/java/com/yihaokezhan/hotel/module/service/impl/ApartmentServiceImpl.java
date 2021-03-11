@@ -37,7 +37,7 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
     // @formatter:off
     @Caching(evict = {
         @CacheEvict(key = "query", allEntries = true),
-        @CacheEvict(key = "#entity.getUuid()", allEntries = true)
+        @CacheEvict(key = "#apartment.getUuid()", allEntries = true)
     })
     // @formatter:on
     public Apartment mUpdate(Apartment apartment) {

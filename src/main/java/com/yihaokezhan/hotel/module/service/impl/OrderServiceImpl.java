@@ -1,11 +1,14 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.yihaokezhan.hotel.common.enums.OrderState;
+import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.RandomUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
@@ -52,6 +55,29 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
             return item;
         }).collect(Collectors.toList()));
         return order;
+    }
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true),
+        @CacheEvict(key = "#order.getUuid()", allEntries = true)
+    })
+    // @formatter:on
+    public Order mUpdate(Order order) {
+        OrderState orderState = EnumUtils.valueOf(OrderState.class, order.getState());
+        switch (orderState) {
+        case FINISHED:
+            order.setFinishedAt(LocalDateTime.now());
+            break;
+        case CANCELD:
+        case ABANDON:
+            order.setCanceledAt(LocalDateTime.now());
+            break;
+        default:
+            break;
+        }
+        return super.mUpdate(order);
     }
 
     @Override

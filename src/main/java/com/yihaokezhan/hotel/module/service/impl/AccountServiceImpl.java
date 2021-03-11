@@ -109,7 +109,7 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account> 
     // @formatter:off
     @Caching(evict = {
         @CacheEvict(key = "query", allEntries = true),
-        @CacheEvict(key = "#entity.getUuid()", allEntries = true)
+        @CacheEvict(key = "#account.getUuid()", allEntries = true)
     })
     // @formatter:on
     public Account mUpdate(Account account) {

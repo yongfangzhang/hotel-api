@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.annotation.SysLog;
 import com.yihaokezhan.hotel.common.enums.Operation;
+import com.yihaokezhan.hotel.common.enums.OrderState;
+import com.yihaokezhan.hotel.common.enums.RoomState;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -109,8 +111,30 @@ public class RoomController {
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.UPDATE, description = "更新房间 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Room entity) {
+
+        Room originRoom = roomService.mGet(entity.getUuid());
+
+        if (originRoom == null) {
+            return R.ok().data(originRoom);
+        }
+
+        String orderItemUuid = originRoom.getOrderItemUuid();
+
         entity.removeUpdateIgnores();
-        return R.ok().data(roomService.mUpdate(entity));
+
+        if (StringUtils.isNotBlank(orderItemUuid) && (RoomState.EMPTY_CLEAN.getValue().equals(entity.getState())
+                || RoomState.EMPTY_DARTY.getValue().equals(entity.getState()))) {
+            // 有入住单并且，将入住单退房， 把订单改成已完成
+            this.attachOrder(originRoom);
+            if (OrderState.FINISHED.getValue().compareTo(originRoom.getRelatedOrder().getState()) > 0) {
+                originRoom.getRelatedOrder().setState(OrderState.FINISHED.getValue());
+                orderService.mUpdate(originRoom.getRelatedOrder());
+            }
+        }
+
+        entity = roomService.mUpdate(entity);
+
+        return R.ok().data(entity);
     }
 
     @PutMapping("/{uuid}/price")
