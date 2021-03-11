@@ -53,7 +53,6 @@ public class AccountController {
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "分页查看账号列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountService.mPage(params));
     }
@@ -61,7 +60,6 @@ public class AccountController {
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看账号列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountService.mList(params));
     }
@@ -69,7 +67,6 @@ public class AccountController {
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看账号 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountService.mOne(params));
     }
@@ -77,7 +74,6 @@ public class AccountController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看账号详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(accountService.mGet(uuid));
     }

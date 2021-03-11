@@ -45,7 +45,6 @@ public class ApartmentController {
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_APARTMENT_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "分页查看公寓列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(apartmentService.mPage(params));
     }
@@ -53,7 +52,6 @@ public class ApartmentController {
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_APARTMENT_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看公寓列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(apartmentService.mList(params));
     }
@@ -61,7 +59,6 @@ public class ApartmentController {
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_APARTMENT_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看公寓 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(apartmentService.mOne(params));
     }
@@ -69,7 +66,6 @@ public class ApartmentController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_APARTMENT_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看公寓详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(apartmentService.mGet(uuid));
     }

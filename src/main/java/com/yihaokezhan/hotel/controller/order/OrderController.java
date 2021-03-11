@@ -47,7 +47,6 @@ public class OrderController {
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "分页查看订单列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(orderService.mPage(params));
     }
@@ -55,7 +54,6 @@ public class OrderController {
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看订单列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(orderService.mList(params));
     }
@@ -63,7 +61,6 @@ public class OrderController {
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看订单 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(orderService.mOne(params));
     }
@@ -71,7 +68,6 @@ public class OrderController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ORDER_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看订单详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(orderService.mGet(uuid));
     }

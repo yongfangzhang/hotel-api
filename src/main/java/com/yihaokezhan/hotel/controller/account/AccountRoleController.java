@@ -45,7 +45,6 @@ public class AccountRoleController {
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_ROLE_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "分页查看账号角色列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountRoleService.mPage(params));
     }
@@ -53,7 +52,6 @@ public class AccountRoleController {
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_ROLE_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看账号角色列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountRoleService.mList(params));
     }
@@ -61,7 +59,6 @@ public class AccountRoleController {
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_ROLE_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看账号角色 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(accountRoleService.mOne(params));
     }
@@ -69,7 +66,6 @@ public class AccountRoleController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ACCOUNT_ROLE_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看账号角色详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(accountRoleService.mGet(uuid));
     }

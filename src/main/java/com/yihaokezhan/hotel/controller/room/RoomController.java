@@ -49,7 +49,6 @@ public class RoomController {
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "分页查看房间列表 %s", params = "#params")
     public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(roomService.mPage(params));
     }
@@ -57,7 +56,6 @@ public class RoomController {
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看房间列表 %s", params = "#params")
     public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(roomService.mList(params));
     }
@@ -65,7 +63,6 @@ public class RoomController {
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看房间 %s", params = "#params")
     public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(roomService.mOne(params));
     }
@@ -73,7 +70,6 @@ public class RoomController {
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_ROOM_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看房间详情 %s", params = "#uuid")
     public R get(@PathVariable String uuid) {
         return R.ok().data(roomService.mGet(uuid));
     }

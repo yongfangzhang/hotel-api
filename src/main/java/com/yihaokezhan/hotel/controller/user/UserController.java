@@ -42,8 +42,7 @@ public class UserController {
 
     // @GetMapping("/one")
     // @JsonView(V.S.class)
-    // @SysLog(operation = Operation.RETRIEVE, description = "查看用户 %s", params =
-    // "#params")
+    //     // "#params")
     // public R one(@RequestParam Map<String, Object> params) {
     // return R.ok().data(userService.mOne(params));
     // }
@@ -56,8 +55,7 @@ public class UserController {
 
     // @GetMapping("/{uuid}")
     // @JsonView(V.S.class)
-    // @SysLog(operation = Operation.RETRIEVE, description = "查看用户详情 %s", params =
-    // "#uuid")
+    //     // "#uuid")
     // public R get(@PathVariable String uuid) {
     // return R.ok().data(userService.mGet(uuid));
     // }

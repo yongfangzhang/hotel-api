@@ -37,32 +37,28 @@ public class ${table.controllerName} {
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_${table.name}_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "分页查看${table.name}列表 %s", params = "#params")
-    public R page(@RequestParam Map<String, Object> params) {
+        public R page(@RequestParam Map<String, Object> params) {
         return R.ok().data(${table.entityPath}Service.mPage(params));
     }
 
     @GetMapping("/list")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_${table.name}_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看${table.name}列表 %s", params = "#params")
-    public R list(@RequestParam Map<String, Object> params) {
+        public R list(@RequestParam Map<String, Object> params) {
         return R.ok().data(${table.entityPath}Service.mList(params));
     }
 
     @GetMapping("/one")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_${table.name}_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看${table.name} %s", params = "#params")
-    public R one(@RequestParam Map<String, Object> params) {
+        public R one(@RequestParam Map<String, Object> params) {
         return R.ok().data(${table.entityPath}Service.mOne(params));
     }
 
     @GetMapping("/{uuid}")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_${table.name}_GET)
-    @SysLog(operation = Operation.RETRIEVE, description = "查看${table.name}详情 %s", params = "#uuid")
-    public R get(@PathVariable String uuid) {
+        public R get(@PathVariable String uuid) {
         return R.ok().data(${table.entityPath}Service.mGet(uuid));
     }
 
