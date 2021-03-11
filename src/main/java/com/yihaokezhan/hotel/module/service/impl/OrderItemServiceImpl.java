@@ -57,7 +57,7 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
         List<Room> rooms = entities.stream().map(entity -> {
             Room room = new Room();
             room.setUuid(entity.getRoomUuid());
-            room.setState(RoomState.IN_USE.getValue());
+            room.setState(RoomState.STAY_CLEAN.getValue());
             return room;
         }).collect(Collectors.toList());
 

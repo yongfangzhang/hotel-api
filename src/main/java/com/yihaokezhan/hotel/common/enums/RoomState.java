@@ -6,13 +6,13 @@ import lombok.Getter;
 public enum RoomState implements BaseEnum<RoomState> {
     // @formatter:off
     UNKNOWN                     (0,         "未知"),
-    NORMAL                      (1,         "正常"),
-    UNCLEAN                     (2,         "待打扫"),
-    IN_USE                      (3,         "已入住"),
-    FORBIDDEN                   (10,        "已禁用"),
-    APARTMENT_FORBIDDEN         (11,        "公寓已禁用"),
-    APARTMENT_DELETED           (12,        "公寓已删除"),
-    // DELETED                     (11,        "已删除"),
+    EMPTY_CLEAN                 (1,         "空净"),
+    EMPTY_DARTY                 (2,         "空脏"),
+    STAY_CLEAN                  (3,         "住净"),
+    STAY_DARTY                  (4,         "住脏"),
+    FORBIDDEN                   (10,        "禁用"),
+    APARTMENT_FORBIDDEN         (11,        "公禁"),
+    APARTMENT_DELETED           (12,        "公删"),
     END                         (1000,      "END");
     // @formatter:on
 
