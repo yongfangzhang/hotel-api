@@ -59,6 +59,13 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
     }
 
     @Override
+    public void onOrderCanceled(Order order) {
+        order.getItems().forEach(item -> {
+            baseMapper.updateIncome(item.getRoomUuid(), item.getPaidPrice().negate());
+        });
+    }
+
+    @Override
     public QueryWrapper<Room> getWrapper(Map<String, Object> params) {
         QueryWrapper<Room> wrapper = new QueryWrapper<Room>();
 

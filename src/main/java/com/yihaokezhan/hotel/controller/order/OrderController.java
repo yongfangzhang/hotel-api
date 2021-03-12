@@ -100,8 +100,9 @@ public class OrderController {
         for (OrderItem item : items) {
             Assert.isTrue(BigDecimal.ZERO.compareTo(item.getOriginalPrice()) <= 0, "原始价格无效");
             Assert.isTrue(BigDecimal.ZERO.compareTo(item.getPaidPrice()) <= 0, "支付价格无效");
-            entity.getOriginalPrice().add(item.getOriginalPrice());
-            entity.getPaidPrice().add(item.getPaidPrice());
+
+            entity.setOriginalPrice(entity.getOriginalPrice().add(item.getOriginalPrice()));
+            entity.setPaidPrice(entity.getPaidPrice().add(item.getPaidPrice()));
         }
 
         entity = orderService.mCreate(entity);

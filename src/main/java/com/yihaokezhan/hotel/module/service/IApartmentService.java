@@ -14,4 +14,6 @@ import com.yihaokezhan.hotel.module.entity.Order;
 public interface IApartmentService extends IBaseService<Apartment> {
 
     void onOrderCreated(Order order);
+
+    void onOrderCanceled(Order order);
 }

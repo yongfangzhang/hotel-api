@@ -1,5 +1,6 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,12 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
     public void onOrderCreated(Order order) {
         baseMapper.updateIncome(order.getApartmentUuid(), order.getPaidPrice());
         roomService.onOrderCreated(order);
+    }
+
+    @Override
+    public void onOrderCanceled(Order order) {
+        baseMapper.updateIncome(order.getApartmentUuid(), order.getPaidPrice().negate());
+        roomService.onOrderCanceled(order);
     }
 
     @Override
