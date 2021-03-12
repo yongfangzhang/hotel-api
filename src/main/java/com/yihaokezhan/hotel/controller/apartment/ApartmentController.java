@@ -1,18 +1,24 @@
 package com.yihaokezhan.hotel.controller.apartment;
 
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.annotation.SysLog;
 import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.Constant;
+import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
+import com.yihaokezhan.hotel.common.validator.Assert;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.module.entity.Apartment;
+import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.service.IApartmentService;
+import com.yihaokezhan.hotel.module.service.IRoomService;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +47,9 @@ public class ApartmentController {
 
     @Autowired
     private IApartmentService apartmentService;
+
+    @Autowired
+    private IRoomService roomService;
 
     @GetMapping("/page")
     @JsonView(V.S.class)
@@ -96,6 +105,15 @@ public class ApartmentController {
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.DELETE, description = "删除公寓 %s", params = "#uuid")
     public R delete(@PathVariable String uuid) {
+
+        Apartment apartment = apartmentService.mGet(uuid);
+
+        Assert.notNull(apartment, "公寓不存在");
+        List<Room> rooms = roomService.mList(M.m().put("apartmentUuid", uuid));
+        long count = rooms.stream().filter(room -> StringUtils.isNotBlank(room.getOrderItemUuid())).count();
+
+        Assert.state(count == 0, "公寓存在" + count + "个房间正在入住中， 不允许删除");
+
         return R.ok().data(apartmentService.mDelete(uuid));
     }
 }

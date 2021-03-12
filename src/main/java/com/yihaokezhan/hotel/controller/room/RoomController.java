@@ -14,6 +14,7 @@ import com.yihaokezhan.hotel.common.enums.RoomState;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
+import com.yihaokezhan.hotel.common.validator.Assert;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.Pager;
@@ -97,7 +98,8 @@ public class RoomController {
 
     @PostMapping("")
     @JsonView(V.S.class)
-    // @RequiresPermissions({ Constant.PERM_ROOM_CREATE, Constant.PERM_ROOM_PRICE_UPDATE })
+    // @RequiresPermissions({ Constant.PERM_ROOM_CREATE,
+    // Constant.PERM_ROOM_PRICE_UPDATE })
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.CREATE, description = "创建房间 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody Room entity) {
@@ -170,6 +172,9 @@ public class RoomController {
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.DELETE, description = "删除房间 %s", params = "#uuid")
     public R delete(@PathVariable String uuid) {
+        Room room = roomService.mGet(uuid);
+        Assert.notNull(room, "房间不存在");
+        Assert.state(StringUtils.isBlank(room.getOrderItemUuid()), "房间正在入住中， 不允许删除");
         return R.ok().data(roomService.mDelete(uuid));
     }
 
