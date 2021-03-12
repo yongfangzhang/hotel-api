@@ -52,6 +52,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
             item.setApartmentUuid(order.getApartmentUuid());
             item.setOrderUuid(order.getUuid());
             item.setState(order.getState());
+            item.setChannel(order.getChannel());
             return item;
         }).collect(Collectors.toList()));
         return order;
@@ -116,6 +117,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         WrapperUtils.fillEq(wrapper, params, "accountUuid");
         WrapperUtils.fillEq(wrapper, params, "from");
         WrapperUtils.fillEq(wrapper, params, "number");
+        WrapperUtils.fillEq(wrapper, params, "bizNumber");
         WrapperUtils.fillEq(wrapper, params, "state");
         WrapperUtils.fillEq(wrapper, params, "type");
 

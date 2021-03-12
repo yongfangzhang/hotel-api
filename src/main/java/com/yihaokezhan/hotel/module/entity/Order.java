@@ -62,6 +62,11 @@ public class Order extends BaseEntity {
     private String number;
 
     /**
+     * 第三方订单号
+     */
+    private String bizNumber;
+
+    /**
      * 订单渠道
      */
     @NotNull(message = "订单渠道不能为空", groups = AddGroup.class)

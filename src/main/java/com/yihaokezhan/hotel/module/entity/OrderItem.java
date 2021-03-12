@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.LodgingType;
 import com.yihaokezhan.hotel.common.enums.OrderState;
+import com.yihaokezhan.hotel.common.enums.RoomPriceType;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -75,6 +76,13 @@ public class OrderItem extends BaseEntity {
     private String mobile;
 
     /**
+     * 价格类型
+     */
+    @NotNull(message = "价格类型不能为空", groups = AddGroup.class)
+    @EnumValue(enumClass = RoomPriceType.class, message = "价格类型无效", canBeNull = true, groups = { AddGroup.class,
+            UpdateGroup.class })
+    private Integer priceType;
+    /**
      * 原始价格
      */
     @PositiveOrZero(message = "原始价格无效", groups = { AddGroup.class, UpdateGroup.class })
@@ -121,6 +129,14 @@ public class OrderItem extends BaseEntity {
     @TableField(exist = false)
     private Room room;
 
+    @TableField(exist = false)
+    @JsonView(V.IGNORE.class)
+    private boolean saveUser;
+
+    @TableField(exist = false)
+    @JsonView(V.IGNORE.class)
+    private Integer channel;
+
     public String getStateName() {
         return EnumUtils.getName(OrderState.class, this.state);
     }
@@ -129,4 +145,7 @@ public class OrderItem extends BaseEntity {
         return EnumUtils.getName(LodgingType.class, this.lodgingType);
     }
 
+    public String getPriceTypeName() {
+        return EnumUtils.getName(RoomPriceType.class, this.priceType);
+    }
 }

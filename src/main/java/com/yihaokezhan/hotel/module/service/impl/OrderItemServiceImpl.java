@@ -6,13 +6,18 @@ import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.yihaokezhan.hotel.common.enums.Gender;
 import com.yihaokezhan.hotel.common.enums.RoomState;
+import com.yihaokezhan.hotel.common.enums.UserState;
+import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.OrderItem;
 import com.yihaokezhan.hotel.module.entity.Room;
+import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.mapper.OrderItemMapper;
 import com.yihaokezhan.hotel.module.service.IOrderItemService;
 import com.yihaokezhan.hotel.module.service.IRoomService;
+import com.yihaokezhan.hotel.module.service.IUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -34,6 +39,9 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
 
     @Autowired
     private IRoomService roomService;
+
+    @Autowired
+    private IUserService userService;
 
     @Override
     // @formatter:off
@@ -58,7 +66,16 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
     })
     // @formatter:on
     public List<OrderItem> mBatchCreate(List<OrderItem> entities) {
-        super.mBatchCreate(entities);
+        if (CollectionUtils.isEmpty(entities)) {
+            throw new RRException("入住人不能为空");
+        }
+        try {
+            super.mBatchCreate(entities);
+        } catch (Exception e) {
+            log.error("创建订单子项目失败", e);
+            throw new RRException("请检查是否同一房间分配了多个入住人");
+        }
+        // 更新房间
         List<Room> rooms = entities.stream().map(entity -> {
             Room room = new Room();
             room.setUuid(entity.getRoomUuid());
@@ -68,6 +85,19 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
         }).collect(Collectors.toList());
 
         roomService.mBatchUpdate(rooms);
+
+        // 更新会员信息
+        List<User> users = entities.stream().filter(entity -> entity.isSaveUser()).map(entity -> {
+            User user = new User();
+            user.setChannel(entity.getChannel());
+            user.setGender(Gender.UNKNOWN.getValue());
+            user.setMobile(entity.getMobile());
+            user.setName(entity.getName());
+            user.setState(UserState.NORMAL.getValue());
+            return user;
+        }).collect(Collectors.toList());
+
+        userService.mBatchCreateMember(users);
 
         return entities;
     }

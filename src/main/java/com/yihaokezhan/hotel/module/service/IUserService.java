@@ -1,7 +1,8 @@
 package com.yihaokezhan.hotel.module.service;
 
-import com.yihaokezhan.hotel.module.entity.User;
+import java.util.List;
 
+import com.yihaokezhan.hotel.module.entity.User;
 
 /**
  * <p>
@@ -15,5 +16,6 @@ public interface IUserService extends IBaseService<User> {
 
     User mGetByOpenId(String openId);
 
-}
+    void mBatchCreateMember(List<User> users);
 
+}

@@ -1,17 +1,27 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.yihaokezhan.hotel.common.redis.CacheRedisService;
 import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
+import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
+import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.module.entity.Account;
 import com.yihaokezhan.hotel.module.entity.User;
 import com.yihaokezhan.hotel.module.mapper.UserMapper;
 import com.yihaokezhan.hotel.module.service.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,6 +45,31 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         return true;
     }
 
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true)
+    })
+    // @formatter:on
+    public void mBatchCreateMember(List<User> users) {
+        if (CollectionUtils.isEmpty(users)) {
+            return;
+        }
+
+        beforeAction(users, AddGroup.class);
+
+        List<String> mobiles = users.stream().map(user -> user.getMobile()).collect(Collectors.toList());
+
+        Map<String, String> mobileMap = mList(M.m().put("mobiles", mobiles).put(Constant.SQL_SELECT, "uuid,mobile"))
+                .stream().collect(Collectors.toMap(k -> k.getMobile(), v -> v.getUuid()));
+        users.forEach(user -> {
+            user.setUuid(mobileMap.get(user.getMobile()));
+        });
+
+        mBatchCreate(users.stream().filter(user -> StringUtils.isBlank(user.getUuid())).collect(Collectors.toList()));
+        mBatchUpdate(
+                users.stream().filter(user -> StringUtils.isNotBlank(user.getUuid())).collect(Collectors.toList()));
+    }
 
     @Override
     public User mGetByOpenId(String openId) {
@@ -56,6 +91,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         WrapperUtils.fillLike(wrapper, params, "nickname");
 
         WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
+        WrapperUtils.fillInList(wrapper, params, "mobiles", "mobile");
         WrapperUtils.fillInList(wrapper, params, "tenantUuids", "tenant_uuid");
 
         WrapperUtils.fillCreatedAtBetween(wrapper, params);
