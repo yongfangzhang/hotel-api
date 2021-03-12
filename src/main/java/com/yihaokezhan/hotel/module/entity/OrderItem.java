@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.yihaokezhan.hotel.common.enums.LodgingType;
 import com.yihaokezhan.hotel.common.enums.OrderState;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
@@ -94,17 +95,27 @@ public class OrderItem extends BaseEntity {
     private Integer state;
 
     /**
+     * 入住类型
+     */
+    @NotNull(message = "入住类型不能为空", groups = AddGroup.class)
+    @EnumValue(enumClass = LodgingType.class, message = "入住类型无效", canBeNull = true, groups = { AddGroup.class,
+            UpdateGroup.class })
+    private Integer lodgingType;
+
+    /**
      * 入住时间
      */
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    // @FutureOrPresent(message = "入住时间无效", groups = { AddGroup.class, UpdateGroup.class })
+    // @FutureOrPresent(message = "入住时间无效", groups = { AddGroup.class,
+    // UpdateGroup.class })
     private LocalDateTime liveAt;
 
     /**
      * 离店时间
      */
     @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
-    // @FutureOrPresent(message = "离店时间无效", groups = { AddGroup.class, UpdateGroup.class })
+    // @FutureOrPresent(message = "离店时间无效", groups = { AddGroup.class,
+    // UpdateGroup.class })
     private LocalDateTime leaveAt;
 
     @TableField(exist = false)
@@ -112,6 +123,10 @@ public class OrderItem extends BaseEntity {
 
     public String getStateName() {
         return EnumUtils.getName(OrderState.class, this.state);
+    }
+
+    public String getLodgingTypeName() {
+        return EnumUtils.getName(LodgingType.class, this.lodgingType);
     }
 
 }

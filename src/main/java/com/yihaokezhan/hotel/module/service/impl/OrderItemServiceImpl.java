@@ -105,6 +105,7 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
         WrapperUtils.fillEq(wrapper, params, "roomUuid");
         WrapperUtils.fillEq(wrapper, params, "mobile");
         WrapperUtils.fillEq(wrapper, params, "state");
+        WrapperUtils.fillEq(wrapper, params, "lodgingType");
 
         WrapperUtils.fillLike(wrapper, params, "name");
 
