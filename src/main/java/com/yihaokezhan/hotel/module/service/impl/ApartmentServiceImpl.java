@@ -2,16 +2,19 @@ package com.yihaokezhan.hotel.module.service.impl;
 
 import java.util.List;
 import java.util.Map;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yihaokezhan.hotel.common.enums.ApartmentState;
 import com.yihaokezhan.hotel.common.enums.RoomState;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Apartment;
+import com.yihaokezhan.hotel.module.entity.Order;
 import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.mapper.ApartmentMapper;
 import com.yihaokezhan.hotel.module.service.IApartmentService;
 import com.yihaokezhan.hotel.module.service.IRoomService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -32,6 +35,12 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
 
     @Autowired
     private IRoomService roomService;
+
+    @Override
+    public void onOrderCreated(Order order) {
+        baseMapper.updateIncome(order.getApartmentUuid(), order.getPaidPrice());
+        roomService.onOrderCreated(order);
+    }
 
     @Override
     // @formatter:off

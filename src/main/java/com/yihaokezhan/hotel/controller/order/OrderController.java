@@ -1,7 +1,10 @@
 package com.yihaokezhan.hotel.controller.order;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.annotation.LoginUser;
 import com.yihaokezhan.hotel.common.annotation.SysLog;
@@ -10,10 +13,13 @@ import com.yihaokezhan.hotel.common.enums.OrderType;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
+import com.yihaokezhan.hotel.common.validator.Assert;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.TokenUser;
 import com.yihaokezhan.hotel.module.entity.Order;
+import com.yihaokezhan.hotel.module.entity.OrderItem;
+import com.yihaokezhan.hotel.module.service.IApartmentService;
 import com.yihaokezhan.hotel.module.service.IOrderService;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -43,6 +49,9 @@ public class OrderController {
 
     @Autowired
     private IOrderService orderService;
+
+    @Autowired
+    private IApartmentService apartmentService;
 
     @GetMapping("/page")
     @JsonView(V.S.class)
@@ -80,7 +89,28 @@ public class OrderController {
     public R create(@Validated(AddGroup.class) @RequestBody Order entity, @LoginUser TokenUser tokenUser) {
         entity.setType(OrderType.LIVE_IN.getValue());
         entity.setAccountType(tokenUser.getAccountType());
-        return R.ok().data(orderService.mCreate(entity));
+
+        List<OrderItem> items = entity.getItems();
+
+        Assert.state(CollectionUtils.isNotEmpty(items), "入住人不能为空");
+
+        entity.setOriginalPrice(BigDecimal.ZERO);
+        entity.setPaidPrice(BigDecimal.ZERO);
+
+        for (OrderItem item : items) {
+            Assert.isTrue(BigDecimal.ZERO.compareTo(item.getOriginalPrice()) <= 0, "原始价格无效");
+            Assert.isTrue(BigDecimal.ZERO.compareTo(item.getPaidPrice()) <= 0, "支付价格无效");
+            entity.getOriginalPrice().add(item.getOriginalPrice());
+            entity.getPaidPrice().add(item.getPaidPrice());
+        }
+
+        entity = orderService.mCreate(entity);
+
+        // 修改公寓和房间的收益
+
+        apartmentService.onOrderCreated(entity);
+
+        return R.ok().data(entity);
     }
 
     @PutMapping("")

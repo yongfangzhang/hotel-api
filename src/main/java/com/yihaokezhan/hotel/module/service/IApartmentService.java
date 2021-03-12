@@ -1,7 +1,7 @@
 package com.yihaokezhan.hotel.module.service;
 
 import com.yihaokezhan.hotel.module.entity.Apartment;
-
+import com.yihaokezhan.hotel.module.entity.Order;
 
 /**
  * <p>
@@ -13,5 +13,5 @@ import com.yihaokezhan.hotel.module.entity.Apartment;
  */
 public interface IApartmentService extends IBaseService<Apartment> {
 
+    void onOrderCreated(Order order);
 }
-

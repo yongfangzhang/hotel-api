@@ -3,4 +3,12 @@
 
 <mapper namespace="com.yihaokezhan.hotel.module.mapper.ApartmentMapper">
 
+    <update id="updateIncome">
+        update 
+            apartment
+        set income = income + ${income}, sale_times = sale_times + 1
+        where 
+            uuid = #{uuid}
+    </update>
+
 </mapper>

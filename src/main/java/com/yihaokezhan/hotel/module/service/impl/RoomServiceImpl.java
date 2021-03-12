@@ -10,6 +10,7 @@ import com.yihaokezhan.hotel.common.enums.RoomState;
 import com.yihaokezhan.hotel.common.utils.MapUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
+import com.yihaokezhan.hotel.module.entity.Order;
 import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.mapper.RoomMapper;
 import com.yihaokezhan.hotel.module.service.IRoomService;
@@ -47,6 +48,13 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
         }
         rooms.forEach(room -> {
             ValidatorUtils.validateEntities(room.getPrices(), group);
+        });
+    }
+
+    @Override
+    public void onOrderCreated(Order order) {
+        order.getItems().forEach(item -> {
+            baseMapper.updateIncome(item.getRoomUuid(), item.getPaidPrice());
         });
     }
 

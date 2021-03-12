@@ -1,7 +1,11 @@
 package com.yihaokezhan.hotel.module.mapper;
 
-import com.yihaokezhan.hotel.module.entity.Apartment;
+import java.math.BigDecimal;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yihaokezhan.hotel.module.entity.Apartment;
+
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ApartmentMapper extends BaseMapper<Apartment> {
 
+    void updateIncome(@Param("uuid") String uuid, @Param("income") BigDecimal income);
 }
