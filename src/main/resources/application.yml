@@ -2,7 +2,7 @@ spring:
   application:
     name: yhkz-hotel
   profiles:
-    active: dev
+    active: prod
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     druid:
