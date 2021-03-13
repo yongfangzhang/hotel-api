@@ -37,12 +37,24 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
     private IRoomService roomService;
 
     @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true),
+        @CacheEvict(key = "#order.getApartmentUuid()", allEntries = true)
+    })
+    // @formatter:on
     public void onOrderCreated(Order order) {
         baseMapper.updateIncome(order.getApartmentUuid(), order.getPaidPrice(), order.getItems().size());
         roomService.onOrderCreated(order);
     }
 
     @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true),
+        @CacheEvict(key = "#order.getApartmentUuid()", allEntries = true)
+    })
+    // @formatter:on
     public void onOrderCanceled(Order order) {
         baseMapper.updateIncome(order.getApartmentUuid(), order.getPaidPrice().negate(), -1 * order.getItems().size());
         roomService.onOrderCanceled(order);

@@ -1,13 +1,11 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.RoomState;
-import com.yihaokezhan.hotel.common.utils.MapUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
 import com.yihaokezhan.hotel.module.entity.Order;
@@ -15,8 +13,9 @@ import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.mapper.RoomMapper;
 import com.yihaokezhan.hotel.module.service.IRoomService;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,6 +51,11 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
     }
 
     @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(allEntries = true)
+    })
+    // @formatter:on
     public void onOrderCreated(Order order) {
         order.getItems().forEach(item -> {
             baseMapper.updateIncome(item.getRoomUuid(), item.getPaidPrice());
@@ -59,6 +63,11 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
     }
 
     @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(allEntries = true)
+    })
+    // @formatter:on
     public void onOrderCanceled(Order order) {
         order.getItems().forEach(item -> {
             baseMapper.updateIncome(item.getRoomUuid(), item.getPaidPrice().negate());
