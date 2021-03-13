@@ -6,9 +6,6 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     druid:
-      password: ${ENV_DB_PRODUCT_PSWD}
-      url: jdbc:mysql://${ENV_DB_HOST}/product_base${ENV_JDBC_PARAMS}
-      username: ${ENV_DB_PRODUCT_USER}
       filter:
         stat:
           log-slow-sql: true
