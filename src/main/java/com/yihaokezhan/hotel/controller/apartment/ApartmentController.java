@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.annotation.SysLog;
+import com.yihaokezhan.hotel.common.enums.ApartmentState;
 import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.M;
@@ -96,6 +97,22 @@ public class ApartmentController {
     @SysLog(operation = Operation.UPDATE, description = "更新公寓 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody Apartment entity) {
         entity.removeIgnores();
+
+        if (StringUtils.isBlank(entity.getUuid())) {
+            return R.error("公寓不存在");
+        }
+
+        if (ApartmentState.FORBIDDEN.getValue().equals(entity.getState())) {
+
+            Apartment apartment = apartmentService.mGet(entity.getUuid());
+
+            Assert.notNull(apartment, "公寓不存在");
+            List<Room> rooms = roomService.mList(M.m().put("apartmentUuid", entity.getUuid()));
+            long count = rooms.stream().filter(room -> StringUtils.isNotBlank(room.getOrderItemUuid())).count();
+
+            Assert.state(count == 0, "公寓存在" + count + "个房间正在入住中， 不允许禁用");
+        }
+
         return R.ok().data(apartmentService.mUpdate(entity));
     }
 

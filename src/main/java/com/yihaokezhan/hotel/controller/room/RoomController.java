@@ -122,6 +122,10 @@ public class RoomController {
 
         String orderItemUuid = originRoom.getOrderItemUuid();
 
+        if (RoomState.FORBIDDEN.getValue().equals(entity.getState()) && StringUtils.isNotBlank(orderItemUuid)) {
+            return R.error("房间正在入住中， 不允许禁用");
+        }
+
         entity.removeUpdateIgnores();
 
         if (StringUtils.isNotBlank(orderItemUuid) && (RoomState.EMPTY_CLEAN.getValue().equals(entity.getState())

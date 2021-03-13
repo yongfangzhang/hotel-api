@@ -6,6 +6,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yihaokezhan.hotel.common.enums.ApartmentState;
 import com.yihaokezhan.hotel.common.enums.RoomState;
+import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Apartment;
@@ -69,8 +70,17 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
     // @formatter:on
     public Apartment mUpdate(Apartment apartment) {
         super.mUpdate(apartment);
-        if (ApartmentState.FORBIDDEN.getValue().equals(apartment.getState())) {
-            updateRoomState(apartment.getUuid(), RoomState.APARTMENT_FORBIDDEN);
+        ApartmentState state = EnumUtils.valueOf(ApartmentState.class, apartment.getState());
+        switch (state) {
+        case FORBIDDEN:
+            updateRoomState(apartment.getUuid(), RoomState.APARTMENT_FORBIDDEN, "");
+            break;
+        case NORMAL:
+            updateRoomState(apartment.getUuid(), RoomState.EMPTY_CLEAN,
+                    RoomState.APARTMENT_FORBIDDEN.getValue().toString());
+            break;
+        default:
+            break;
         }
         return apartment;
     }
@@ -84,7 +94,7 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
     // @formatter:on
     public boolean mDelete(String uuid) {
         super.mDelete(uuid);
-        updateRoomState(uuid, RoomState.APARTMENT_DELETED);
+        updateRoomState(uuid, RoomState.APARTMENT_DELETED, "");
         return true;
     }
 
@@ -116,9 +126,10 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
         return wrapper;
     }
 
-    private void updateRoomState(String apartmentUuid, RoomState state) {
+    private void updateRoomState(String apartmentUuid, RoomState state, String states) {
         // 禁用/删除 公寓同时 禁用/删除 房间
-        List<Room> rooms = roomService.mList(M.m().put("apartmentUuid", apartmentUuid));
+        List<Room> rooms = roomService
+                .mList(M.m().put("apartmentUuid", apartmentUuid).put("nstate", true).put("states", states));
         rooms.forEach(room -> {
             room.setState(state.getValue());
         });
