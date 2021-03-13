@@ -1,37 +1,36 @@
 package com.yihaokezhan.hotel.common.utils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 public class WrapperUtils {
 
-    public static <T> QueryWrapper<T> fillEq(QueryWrapper<T> wrapper, Map<String, Object> params,
-            String field, String column) {
+    public static <T> QueryWrapper<T> fillEq(QueryWrapper<T> wrapper, Map<String, Object> params, String field,
+            String column) {
         String v = MapUtils.getString(params, field);
         return wrapper.eq(StringUtils.isNotBlank(v), column, v);
     }
 
-    public static <T> QueryWrapper<T> fillEq(QueryWrapper<T> wrapper, Map<String, Object> params,
-            String field) {
+    public static <T> QueryWrapper<T> fillEq(QueryWrapper<T> wrapper, Map<String, Object> params, String field) {
         return fillEq(wrapper, params, field, StringUtils.camelToUnderline(field));
     }
 
-    public static <T> QueryWrapper<T> fillLike(QueryWrapper<T> wrapper, Map<String, Object> params,
-            String field, String column) {
+    public static <T> QueryWrapper<T> fillLike(QueryWrapper<T> wrapper, Map<String, Object> params, String field,
+            String column) {
         String v = MapUtils.getString(params, field);
         return wrapper.like(StringUtils.isNotBlank(v), column, v);
     }
 
-    public static <T> QueryWrapper<T> fillLike(QueryWrapper<T> wrapper, Map<String, Object> params,
-            String field) {
+    public static <T> QueryWrapper<T> fillLike(QueryWrapper<T> wrapper, Map<String, Object> params, String field) {
         return fillLike(wrapper, params, field, StringUtils.camelToUnderline(field));
     }
 
-    public static <T> QueryWrapper<T> fillSelect(QueryWrapper<T> wrapper,
-            Map<String, Object> params) {
+    public static <T> QueryWrapper<T> fillSelect(QueryWrapper<T> wrapper, Map<String, Object> params) {
         String sqlSelects = MapUtils.getString(params, Constant.SQL_SELECT);
         if (StringUtils.isBlank(sqlSelects)) {
             return wrapper;
@@ -39,8 +38,8 @@ public class WrapperUtils {
         return wrapper.select(sqlSelects);
     }
 
-    public static <T> QueryWrapper<T> fillInList(QueryWrapper<T> wrapper,
-            Map<String, Object> params, String key, String column) {
+    public static <T> QueryWrapper<T> fillInList(QueryWrapper<T> wrapper, Map<String, Object> params, String key,
+            String column) {
         Object itemJson = params.get(key);
         if (itemJson == null || StringUtils.isBlank(itemJson.toString())) {
             return wrapper;
@@ -70,14 +69,13 @@ public class WrapperUtils {
         return wrapper.le(column, "CURRENT_TIMESTAMP");
     }
 
-    public static <T> QueryWrapper<T> fillGroupBy(QueryWrapper<T> wrapper,
-            Map<String, Object> params) {
+    public static <T> QueryWrapper<T> fillGroupBy(QueryWrapper<T> wrapper, Map<String, Object> params) {
         String groupBy = MapUtils.getString(params, Constant.GROUP_BY);
         return wrapper.groupBy(StringUtils.isNotBlank(groupBy), groupBy);
     }
 
-    public static <T> QueryWrapper<T> fillBetween(QueryWrapper<T> wrapper,
-            Map<String, Object> params, String startKey, String stopKey, String column) {
+    public static <T> QueryWrapper<T> fillBetween(QueryWrapper<T> wrapper, Map<String, Object> params, String startKey,
+            String stopKey, String column) {
         String begin = MapUtils.getString(params, startKey);
         String end = MapUtils.getString(params, stopKey);
         wrapper.ge(StringUtils.isNotBlank(begin), column, begin);
@@ -85,14 +83,21 @@ public class WrapperUtils {
         return wrapper;
     }
 
-    public static <T> QueryWrapper<T> fillCreatedAtBetween(QueryWrapper<T> wrapper,
-            Map<String, Object> params) {
-        return fillBetween(wrapper, params, Constant.CREATED_AT_START, Constant.CREATED_AT_STOP,
-                "created_at");
+    public static <T> QueryWrapper<T> fillStates(QueryWrapper<T> wrapper, Map<String, Object> params) {
+        String states = MapUtils.getString(params, "states");
+
+        if (StringUtils.isBlank(states)) {
+            return wrapper;
+        }
+
+        return wrapper.in("state", Arrays.asList(states.split(",")));
     }
 
-    public static <T> QueryWrapper<T> fillOrderBy(QueryWrapper<T> wrapper,
-            Map<String, Object> params) {
+    public static <T> QueryWrapper<T> fillCreatedAtBetween(QueryWrapper<T> wrapper, Map<String, Object> params) {
+        return fillBetween(wrapper, params, Constant.CREATED_AT_START, Constant.CREATED_AT_STOP, "created_at");
+    }
+
+    public static <T> QueryWrapper<T> fillOrderBy(QueryWrapper<T> wrapper, Map<String, Object> params) {
         String asc = MapUtils.getString(params, Constant.ASC);
         String desc = MapUtils.getString(params, Constant.DESC);
 

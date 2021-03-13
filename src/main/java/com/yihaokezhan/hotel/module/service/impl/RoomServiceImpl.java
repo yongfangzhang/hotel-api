@@ -84,10 +84,7 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
         WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
         WrapperUtils.fillInList(wrapper, params, "typeUuids", "type_uuid");
 
-        String states = MapUtils.getString(params, "states");
-        if (StringUtils.isNotBlank(states)) {
-            wrapper.in("state", Arrays.asList(StringUtils.split(states, ",")));
-        }
+        WrapperUtils.fillStates(wrapper, params);
 
         wrapper.ne("state", RoomState.APARTMENT_FORBIDDEN.getValue());
         wrapper.ne("state", RoomState.APARTMENT_DELETED.getValue());

@@ -126,6 +126,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
         WrapperUtils.fillInList(wrapper, params, "accountUuids", "account_uuid");
 
+        WrapperUtils.fillStates(wrapper, params);
         WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
         WrapperUtils.fillOrderBy(wrapper, params);

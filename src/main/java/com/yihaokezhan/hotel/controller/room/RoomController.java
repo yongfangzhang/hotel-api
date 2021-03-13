@@ -65,7 +65,7 @@ public class RoomController {
     @RequiresPermissions(Constant.PERM_ROOM_GET)
     public R page(@RequestParam Map<String, Object> params) {
         Pager<Room> data = roomService.mPage(params);
-        this.attachOrder(data.getList());
+        this.join(data.getList());
         return R.ok().data(data);
     }
 
@@ -74,7 +74,7 @@ public class RoomController {
     @RequiresPermissions(Constant.PERM_ROOM_GET)
     public R list(@RequestParam Map<String, Object> params) {
         List<Room> data = roomService.mList(params);
-        this.attachOrder(data);
+        this.join(data);
         return R.ok().data(data);
     }
 
@@ -83,7 +83,7 @@ public class RoomController {
     @RequiresPermissions(Constant.PERM_ROOM_GET)
     public R one(@RequestParam Map<String, Object> params) {
         Room data = roomService.mOne(params);
-        this.attachOrder(data);
+        this.join(data);
         return R.ok().data(data);
     }
 
@@ -92,7 +92,7 @@ public class RoomController {
     @RequiresPermissions(Constant.PERM_ROOM_GET)
     public R get(@PathVariable String uuid) {
         Room data = roomService.mGet(uuid);
-        this.attachOrder(data);
+        this.join(data);
         return R.ok().data(data);
     }
 
@@ -127,7 +127,7 @@ public class RoomController {
         if (StringUtils.isNotBlank(orderItemUuid) && (RoomState.EMPTY_CLEAN.getValue().equals(entity.getState())
                 || RoomState.EMPTY_DARTY.getValue().equals(entity.getState()))) {
             // 有入住单并且，将入住单退房， 把订单改成已完成
-            this.attachOrder(originRoom);
+            this.join(originRoom);
             if (OrderState.FINISHED.getValue().compareTo(originRoom.getRelatedOrder().getState()) > 0) {
                 originRoom.getRelatedOrder().setState(OrderState.FINISHED.getValue());
                 orderService.mUpdate(originRoom.getRelatedOrder());
@@ -178,7 +178,7 @@ public class RoomController {
         return R.ok().data(roomService.mDelete(uuid));
     }
 
-    private void attachOrder(Room room) {
+    private void join(Room room) {
         if (room == null || StringUtils.isBlank(room.getOrderItemUuid())) {
             return;
         }
@@ -190,7 +190,7 @@ public class RoomController {
         });
     }
 
-    private void attachOrder(List<Room> rooms) {
+    private void join(List<Room> rooms) {
         if (CollectionUtils.isEmpty(rooms)) {
             return;
         }

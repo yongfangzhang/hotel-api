@@ -1,6 +1,7 @@
 [
   { "uuid": "11eb763ed35bca81942677f8b1e79557", "path": "/", "accountType": 2, "type": 1, "permissions": ["*"], "caption": "根" },
   { "uuid": "11eb7ca635e3f7c4890f8d10c588fccf", "path": "/dashboard/", "accountType": 2, "type": 1, "permissions": ["hotel:pub:*"], "caption": "首页" },
+  { "uuid": "11eb834974a53fe8ac075fba9b7a81e9", "path": "/statistics/", "accountType": 2, "type": 1, "permissions": ["order:get:*","order:item:get:*"], "caption": "统计分析" },
   { "uuid": "11eb7cb772e7b843b54159292e1d28d2", "path": "/system/account/index", "accountType": 2, "type": 2, "permissions": ["account:get","account:role:get"], "caption": "账号-查看" },
   { "uuid": "11eb7cb772eb3ab4b54171f32c760538", "path": "/system/account/edit", "accountType": 2, "type": 3, "permissions": ["account:create","account:role:create"], "caption": "账号-创建" },
   { "uuid": "11eb7cb772eb88d5b5411704e488d7b5", "path": "/system/account/edit", "accountType": 2, "type": 4, "permissions": ["account:update","account:role:update"], "caption": "账号-修改" },

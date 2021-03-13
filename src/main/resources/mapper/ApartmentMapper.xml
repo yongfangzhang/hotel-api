@@ -6,7 +6,7 @@
     <update id="updateIncome">
         update 
             apartment
-        set income = income + ${income}, sale_times = sale_times + 1
+        set income = income + ${income}, sale_times = sale_times + ${times}
         where 
             uuid = #{uuid}
     </update>

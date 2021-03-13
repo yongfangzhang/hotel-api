@@ -17,5 +17,5 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ApartmentMapper extends BaseMapper<Apartment> {
 
-    void updateIncome(@Param("uuid") String uuid, @Param("income") BigDecimal income);
+    void updateIncome(@Param("uuid") String uuid, @Param("income") BigDecimal income, @Param("times") int times);
 }
