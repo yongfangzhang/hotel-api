@@ -6,6 +6,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.RoomState;
+import com.yihaokezhan.hotel.common.utils.MapUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.common.validator.ValidatorUtils;
 import com.yihaokezhan.hotel.module.entity.Order;
@@ -95,8 +96,10 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
 
         WrapperUtils.fillStates(wrapper, params);
 
-        wrapper.ne("state", RoomState.APARTMENT_FORBIDDEN.getValue());
-        wrapper.ne("state", RoomState.APARTMENT_DELETED.getValue());
+        if (!MapUtils.getBoolean(params, "nstate")) {
+            wrapper.ne("state", RoomState.APARTMENT_FORBIDDEN.getValue());
+            wrapper.ne("state", RoomState.APARTMENT_DELETED.getValue());
+        }
 
         WrapperUtils.fillCreatedAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
