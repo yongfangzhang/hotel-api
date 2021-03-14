@@ -33,4 +33,12 @@ public class RoomPrice implements Serializable {
     @NotNull(message = "价格不能为空", groups = AddGroup.class)
     @PositiveOrZero(message = "价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal price;
+
+    public RoomPrice() {
+    }
+
+    public RoomPrice(Integer type, Integer price) {
+        this.type = type;
+        this.price = new BigDecimal(price);
+    }
 }
