@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yihaokezhan.hotel.common.enums.ApartmentState;
 import com.yihaokezhan.hotel.common.enums.RoomState;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
+import com.yihaokezhan.hotel.common.utils.GeoUtils;
 import com.yihaokezhan.hotel.common.utils.M;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
+import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.module.entity.Apartment;
 import com.yihaokezhan.hotel.module.entity.Order;
 import com.yihaokezhan.hotel.module.entity.Room;
@@ -59,6 +61,19 @@ public class ApartmentServiceImpl extends BaseServiceImpl<ApartmentMapper, Apart
     public void onOrderCanceled(Order order) {
         baseMapper.updateIncome(order.getApartmentUuid(), order.getPaidPrice().negate(), -1 * order.getItems().size());
         roomService.onOrderCanceled(order);
+    }
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true)
+    })
+    // @formatter:on
+    public Apartment mCreate(Apartment apartment) {
+        super.beforeAction(apartment, AddGroup.class);
+        String geohash4 = GeoUtils.geohash(apartment.getLatitude(), apartment.getLongitude());
+        apartment.setGeohash4(geohash4);
+        return super.mCreate(apartment);
     }
 
     @Override
