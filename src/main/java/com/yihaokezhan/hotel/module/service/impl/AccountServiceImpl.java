@@ -1,9 +1,11 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.UserState;
@@ -29,6 +31,7 @@ import com.yihaokezhan.hotel.module.service.IAccountRoleService;
 import com.yihaokezhan.hotel.module.service.IAccountService;
 import com.yihaokezhan.hotel.module.service.ITenantService;
 import com.yihaokezhan.hotel.module.service.IUserService;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -36,6 +39,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -115,12 +119,18 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account> 
     public Account mUpdate(Account account) {
         ValidatorUtils.validateEntity(account, UpdateGroup.class);
         RemarkUtils.appendRemark(account, getRemark(account.getUuid()));
-        if (StringUtils.isNotBlank(account.getPassword())) {
+        boolean updatePassword = StringUtils.isNotBlank(account.getPassword());
+        if (updatePassword) {
             account.setSalt(RandomUtils.randomString32());
             account.setPassword(getPasswordHex(account.getPassword(), account.getSalt()));
         }
         if (updateById(account) && clearRelationCaches()) {
             return account;
+        }
+        if (updatePassword) {
+            Map<String, Integer> accountMap = new HashMap<>();
+            accountMap.put(account.getUuid(), account.getType());
+            tokenUtils.expireToken(accountMap);
         }
         throw new RRException("更新失败");
     }
