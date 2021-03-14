@@ -98,8 +98,7 @@ public class RoomController {
 
     @PostMapping("")
     @JsonView(V.S.class)
-    // @RequiresPermissions({ Constant.PERM_ROOM_CREATE,
-    // Constant.PERM_ROOM_PRICE_UPDATE })
+    @RequiresPermissions({ Constant.PERM_ROOM_CREATE, Constant.PERM_ROOM_PRICE_UPDATE })
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.CREATE, description = "创建房间 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody Room entity) {
