@@ -26,11 +26,19 @@ public class RoomPrice implements Serializable {
      */
     private static final long serialVersionUID = 6083443997967417449L;
 
-    @NotNull(message = "价格类型不能为空")
+    @NotNull(message = "价格类型不能为空", groups = { AddGroup.class, UpdateGroup.class })
     @EnumValue(enumClass = RoomPriceType.class, message = "价格类型无效", groups = { AddGroup.class, UpdateGroup.class })
     private Integer type;
 
-    @NotNull(message = "价格不能为空", groups = AddGroup.class)
+    @NotNull(message = "价格不能为空", groups = { AddGroup.class, UpdateGroup.class })
     @PositiveOrZero(message = "价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal price;
+
+    public RoomPrice() {
+    }
+
+    public RoomPrice(Integer type, Integer price) {
+        this.type = type;
+        this.price = new BigDecimal(price);
+    }
 }

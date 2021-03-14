@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -81,9 +80,9 @@ public class Room extends BaseEntity {
     /**
      * 基础价格
      */
-    @NotNull(message = "基础价格不能为空", groups = AddGroup.class)
-    @PositiveOrZero(message = "基础价格无效", groups = { AddGroup.class, UpdateGroup.class })
-    private BigDecimal price;
+    // @NotNull(message = "基础价格不能为空", groups = AddGroup.class)
+    // @PositiveOrZero(message = "基础价格无效", groups = { AddGroup.class, UpdateGroup.class })
+    // private BigDecimal price;
 
     @NotNull(message = "价格数组不能为空", groups = AddGroup.class)
     @Size(min = 1, message = "至少添加一种价格", groups = AddGroup.class)
@@ -141,7 +140,7 @@ public class Room extends BaseEntity {
     public Room removeUpdateIgnores() {
         this.saleTimes = null;
         this.income = null;
-        this.price = null;
+        // this.price = null;
         this.prices = null;
         if (this.state != null && (!this.state.equals(RoomState.STAY_CLEAN.getValue()))
                 && !this.state.equals(RoomState.STAY_DARTY.getValue())) {
