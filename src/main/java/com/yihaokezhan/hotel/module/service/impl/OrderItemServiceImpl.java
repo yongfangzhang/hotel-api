@@ -71,6 +71,8 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
         }
         try {
             super.mBatchCreate(entities);
+        } catch (RRException e) {
+            throw e;
         } catch (Exception e) {
             log.error("创建订单子项目失败", e);
             throw new RRException("请检查是否同一房间分配了多个入住人");
