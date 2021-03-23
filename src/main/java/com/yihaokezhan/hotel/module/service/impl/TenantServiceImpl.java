@@ -1,16 +1,21 @@
 package com.yihaokezhan.hotel.module.service.impl;
 
 import java.util.Map;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yihaokezhan.hotel.common.redis.CacheRedisService;
 import com.yihaokezhan.hotel.common.redis.CachingConfiguration;
+import com.yihaokezhan.hotel.common.utils.RandomUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Account;
 import com.yihaokezhan.hotel.module.entity.Tenant;
 import com.yihaokezhan.hotel.module.mapper.TenantMapper;
 import com.yihaokezhan.hotel.module.service.ITenantService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,11 +28,22 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @CacheConfig(cacheNames = Tenant.TABLE_NAME)
-public class TenantServiceImpl extends BaseServiceImpl<TenantMapper, Tenant>
-        implements ITenantService {
+public class TenantServiceImpl extends BaseServiceImpl<TenantMapper, Tenant> implements ITenantService {
 
     @Autowired
     private CacheRedisService cacheRedisService;
+
+    @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(key = "query", allEntries = true)
+    })
+    // @formatter:on
+    public Tenant mCreate(Tenant tenant) {
+        tenant.setUuid(RandomUtils.timeBasedUuid());
+        tenant.setTenantUuid(tenant.getUuid());
+        return super.mCreate(tenant);
+    }
 
     @Override
     public boolean clearRelationCaches() {
