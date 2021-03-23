@@ -151,6 +151,14 @@ public class Order extends BaseEntity {
     @TableField(exist = false)
     private List<OrderItem> items;
 
+    @TableField(exist = false)
+    private boolean renew;
+
+    public Order removeCreateIgnores() {
+        this.setUuid(null);
+        return this;
+    }
+
     public Order removeUpdateIgnores() {
         this.apartmentUuid = null;
         this.userUuid = null;

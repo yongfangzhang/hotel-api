@@ -76,6 +76,22 @@ public class RoomServiceImpl extends BaseServiceImpl<RoomMapper, Room> implement
     }
 
     @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(allEntries = true)
+    })
+    // @formatter:on
+    public void clearOrderItems(List<String> orderItemUuids) {
+        if (CollectionUtils.isEmpty(orderItemUuids)) {
+            return;
+        }
+        Room entity = new Room();
+        entity.setOrderItemUuid("");
+        entity.setState(RoomState.EMPTY_DARTY.getValue());
+        baseMapper.update(entity, new QueryWrapper<Room>().in("order_item_uuid", orderItemUuids));
+    }
+
+    @Override
     public QueryWrapper<Room> getWrapper(Map<String, Object> params) {
         QueryWrapper<Room> wrapper = new QueryWrapper<Room>();
 

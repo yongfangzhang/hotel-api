@@ -105,6 +105,47 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
     }
 
     @Override
+    // @formatter:off
+    @Caching(evict = {
+        @CacheEvict(allEntries = true)
+    })
+    // @formatter:on
+    public List<OrderItem> mBatchUpdate(List<OrderItem> entities) {
+        if (CollectionUtils.isEmpty(entities)) {
+            throw new RRException("入住人不能为空");
+        }
+
+        List<String> orderItemUuids = entities.stream().map(item -> item.getUuid()).collect(Collectors.toList());
+
+        roomService.clearOrderItems(orderItemUuids);
+
+        // List<OrderItem> originItems =
+        // baseMapper.selectList(getWrapper(M.m().put("uuids", orderItemUuids)));
+
+        try {
+            entities = super.mBatchUpdate(entities);
+        } catch (RRException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("更新订单子项目失败", e);
+            throw new RRException("请检查是否同一房间分配了多个入住人");
+        }
+
+        // 更新房间
+        List<Room> rooms = entities.stream().map(entity -> {
+            Room room = new Room();
+            room.setUuid(entity.getRoomUuid());
+            room.setState(RoomState.STAY_CLEAN.getValue());
+            room.setOrderItemUuid(entity.getUuid());
+            return room;
+        }).collect(Collectors.toList());
+
+        roomService.mBatchUpdate(rooms);
+
+        return entities;
+    }
+
+    @Override
     public OrderItem join(OrderItem item) {
         if (item == null) {
             return item;

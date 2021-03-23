@@ -78,6 +78,9 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         default:
             break;
         }
+
+        orderItemService.mBatchUpdate(order.getItems());
+
         return super.mUpdate(order);
     }
 

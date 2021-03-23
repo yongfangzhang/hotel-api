@@ -91,6 +91,7 @@ public class OrderItem extends BaseEntity {
     /**
      * 支付价格
      */
+    @NotNull(message = "支付价格不能为空", groups = AddGroup.class)
     @PositiveOrZero(message = "支付价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal paidPrice;
 
