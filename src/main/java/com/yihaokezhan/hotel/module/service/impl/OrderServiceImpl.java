@@ -79,7 +79,12 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
             break;
         }
 
-        orderItemService.mBatchUpdate(order.getItems());
+        if (CollectionUtils.isNotEmpty(order.getItems())) {
+            order.getItems().forEach(item -> {
+                item.setState(order.getState());
+            });
+            orderItemService.mBatchUpdate(order.getItems());
+        }
 
         return super.mUpdate(order);
     }
