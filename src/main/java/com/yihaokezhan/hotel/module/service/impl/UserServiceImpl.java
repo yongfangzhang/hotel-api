@@ -84,8 +84,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         WrapperUtils.fillEq(wrapper, params, "tenantUuid");
         WrapperUtils.fillEq(wrapper, params, "gender");
         WrapperUtils.fillEq(wrapper, params, "mobile");
-        WrapperUtils.fillEq(wrapper, params, "unionId");
-        WrapperUtils.fillEq(wrapper, params, "openId");
+        WrapperUtils.fillEq(wrapper, params, "wxUuid");
+        // WrapperUtils.fillEq(wrapper, params, "openId");
+        WrapperUtils.fillEq(wrapper, params, "channel");
 
         WrapperUtils.fillLike(wrapper, params, "name");
         WrapperUtils.fillLike(wrapper, params, "nickname");
