@@ -149,7 +149,7 @@ public class OrderController {
     }
 
     private void beforeCreateOrder(Order entity, TokenUser tokenUser) {
-        entity.setOperatorUuid(tokenUser.getUuid());
+        entity.setOperatorUuid(tokenUser.getUserUuid());
         entity.setAccountType(tokenUser.getAccountType());
         entity.setType(OrderType.LIVE_IN.getValue());
 
