@@ -1,22 +1,28 @@
 package com.yihaokezhan.hotel.controller.apartment;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.annotation.SysLog;
 import com.yihaokezhan.hotel.common.enums.ApartmentState;
 import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.utils.Constant;
 import com.yihaokezhan.hotel.common.utils.M;
+import com.yihaokezhan.hotel.common.utils.MapUtils;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.Assert;
 import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
+import com.yihaokezhan.hotel.model.Pager;
 import com.yihaokezhan.hotel.module.entity.Apartment;
+import com.yihaokezhan.hotel.module.entity.Order;
 import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.service.IApartmentService;
+import com.yihaokezhan.hotel.module.service.IOrderService;
 import com.yihaokezhan.hotel.module.service.IRoomService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,11 +58,19 @@ public class ApartmentController {
     @Autowired
     private IRoomService roomService;
 
+    @Autowired
+    private IOrderService orderService;
+
+    // @Autowired
+    // private IOrderItemService orderItemService;
+
     @GetMapping("/page")
     @JsonView(V.S.class)
     @RequiresPermissions(Constant.PERM_APARTMENT_GET)
     public R page(@RequestParam Map<String, Object> params) {
-        return R.ok().data(apartmentService.mPage(params));
+        Pager<Apartment> data = apartmentService.mPage(params);
+        this.fillApartmentReport(params, data.getList());
+        return R.ok().data(data);
     }
 
     @GetMapping("/list")
@@ -132,5 +146,36 @@ public class ApartmentController {
         Assert.state(count == 0, "公寓存在" + count + "个房间正在入住中， 不允许删除");
 
         return R.ok().data(apartmentService.mDelete(uuid));
+    }
+
+    private void fillApartmentReport(Map<String, Object> params, List<Apartment> records) {
+        if (!MapUtils.getBoolean(params, "report")) {
+            return;
+        }
+        M orderParams = M.m();
+
+        orderParams.put("operatorUuid", params.get("operatorUuid"));
+        orderParams.put("channel", params.get("channel"));
+        // orderParams.put("report", params.get("report"));
+        // orderParams.put("name", params.get("name"));
+        orderParams.put("createdAtStart", params.get("orderCreatedAtStart"));
+        orderParams.put("createdAtStop", params.get("orderCreatedAtStop"));
+        orderParams.put("vstate", 1);
+
+        orderService.attachListItems(records, orderParams, Order::getApartmentUuid, (record, orderMap) -> {
+            record.setSaleTimes(0);
+            record.setIncome(BigDecimal.ZERO);
+            if (orderMap == null || orderMap.isEmpty()) {
+                return;
+            }
+            List<Order> orders = orderMap.get(record.getUuid());
+            if (CollectionUtils.isEmpty(orders)) {
+                return;
+            }
+            orders.forEach(order -> {
+                record.setSaleTimes(record.getSaleTimes() + 1);
+                record.setIncome(record.getIncome().add(order.getPaidPrice()));
+            });
+        });
     }
 }

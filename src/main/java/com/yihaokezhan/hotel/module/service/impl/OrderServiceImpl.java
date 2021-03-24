@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.OrderState;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.M;
+import com.yihaokezhan.hotel.common.utils.MapUtils;
 import com.yihaokezhan.hotel.common.utils.RandomUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Order;
@@ -123,6 +124,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         WrapperUtils.fillEq(wrapper, params, "tenantUuid");
         WrapperUtils.fillEq(wrapper, params, "apartmentUuid");
         WrapperUtils.fillEq(wrapper, params, "accountUuid");
+        WrapperUtils.fillEq(wrapper, params, "operatorUuid");
         WrapperUtils.fillEq(wrapper, params, "from");
         WrapperUtils.fillEq(wrapper, params, "number");
         WrapperUtils.fillEq(wrapper, params, "bizNumber");
@@ -134,6 +136,9 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         WrapperUtils.fillInList(wrapper, params, "tenantUuids", "tenant_uuid");
         WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
         WrapperUtils.fillInList(wrapper, params, "accountUuids", "account_uuid");
+
+        // 有效订单
+        wrapper.le(MapUtils.getBoolean(params, "vstate"), "state", OrderState.FINISHED.getValue());
 
         WrapperUtils.fillStates(wrapper, params);
         WrapperUtils.fillCreatedAtBetween(wrapper, params);
