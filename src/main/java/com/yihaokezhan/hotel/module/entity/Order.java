@@ -132,6 +132,8 @@ public class Order extends BaseEntity {
     // @Past(message = "评价时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime commentedAt;
 
+    private String operatorUuid;
+
     public String getChannelName() {
         return EnumUtils.getName(OrderChannel.class, this.channel);
     }
