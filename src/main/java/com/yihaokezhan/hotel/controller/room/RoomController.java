@@ -1,5 +1,6 @@
 package com.yihaokezhan.hotel.controller.room;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ import com.yihaokezhan.hotel.common.enums.Operation;
 import com.yihaokezhan.hotel.common.enums.OrderState;
 import com.yihaokezhan.hotel.common.enums.RoomState;
 import com.yihaokezhan.hotel.common.utils.Constant;
+import com.yihaokezhan.hotel.common.utils.M;
+import com.yihaokezhan.hotel.common.utils.MapUtils;
 import com.yihaokezhan.hotel.common.utils.R;
 import com.yihaokezhan.hotel.common.utils.V;
 import com.yihaokezhan.hotel.common.validator.Assert;
@@ -19,6 +22,7 @@ import com.yihaokezhan.hotel.common.validator.group.AddGroup;
 import com.yihaokezhan.hotel.common.validator.group.UpdateGroup;
 import com.yihaokezhan.hotel.model.Pager;
 import com.yihaokezhan.hotel.model.RoomPrice;
+import com.yihaokezhan.hotel.module.entity.OrderItem;
 import com.yihaokezhan.hotel.module.entity.Room;
 import com.yihaokezhan.hotel.module.service.IOrderItemService;
 import com.yihaokezhan.hotel.module.service.IOrderService;
@@ -66,6 +70,7 @@ public class RoomController {
     public R page(@RequestParam Map<String, Object> params) {
         Pager<Room> data = roomService.mPage(params);
         this.join(data.getList());
+        this.fillRoomReport(params, data.getList());
         return R.ok().data(data);
     }
 
@@ -216,6 +221,56 @@ public class RoomController {
 
         orderService.attachList(orderedRooms, orderUuids, (record, map) -> {
             record.setRelatedOrder(map.get(record.getRelatedOrderItem().getOrderUuid()));
+        });
+    }
+
+    private void fillRoomReport(Map<String, Object> params, List<Room> records) {
+        if (!MapUtils.getBoolean(params, "report")) {
+            return;
+        }
+        M orderItemParams = M.m();
+
+        orderItemParams.put("roomUuids", records.stream().map(record -> record.getUuid()).collect(Collectors.toList()));
+        orderItemParams.put("operatorUuid", params.get("operatorUuid"));
+        orderItemParams.put("apartmentUuid", params.get("apartmentUuid"));
+        orderItemParams.put("channel", params.get("channel"));
+        // orderItemParams.put("report", params.get("report"));
+        // orderItemParams.put("name", params.get("name"));
+        orderItemParams.put("createdAtStart", params.get("orderCreatedAtStart"));
+        orderItemParams.put("createdAtStop", params.get("orderCreatedAtStop"));
+        // orderItemParams.put("vstate", 1);
+
+        boolean filterChannel = StringUtils.isNotBlank(MapUtils.getString(params, "channel"));
+
+        orderItemService.attachListItems(records, orderItemParams, OrderItem::getRoomUuid, (record, orderItemMap) -> {
+            record.setSaleTimes(0);
+            record.setIncome(BigDecimal.ZERO);
+            if (orderItemMap == null || orderItemMap.isEmpty()) {
+                return;
+            }
+            List<OrderItem> orderItems = orderItemMap.get(record.getUuid());
+            if (CollectionUtils.isEmpty(orderItems)) {
+                return;
+            }
+
+            if (filterChannel) {
+
+                List<String> orderUuids = orderItems.stream().map(item -> item.getOrderUuid()).distinct()
+                        .collect(Collectors.toList());
+
+                List<String> validOrderUuids = orderService
+                        .mList(M.m().put("uuids", orderUuids).put("channel", params.get("channel"))).stream()
+                        .map(order -> order.getUuid()).collect(Collectors.toList());
+
+                orderItems = orderItems.stream().filter(item -> validOrderUuids.contains(item.getOrderUuid()))
+                        .collect(Collectors.toList());
+
+            }
+
+            orderItems.forEach(orderItem -> {
+                record.setSaleTimes(record.getSaleTimes() + 1);
+                record.setIncome(record.getIncome().add(orderItem.getPaidPrice()));
+            });
         });
     }
 }

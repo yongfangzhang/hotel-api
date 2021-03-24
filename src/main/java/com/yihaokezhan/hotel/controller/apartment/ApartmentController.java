@@ -3,6 +3,7 @@ package com.yihaokezhan.hotel.controller.apartment;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -149,18 +150,20 @@ public class ApartmentController {
     }
 
     private void fillApartmentReport(Map<String, Object> params, List<Apartment> records) {
-        if (!MapUtils.getBoolean(params, "report")) {
+        if (!MapUtils.getBoolean(params, "report") || CollectionUtils.isEmpty(records)) {
             return;
         }
+
         M orderParams = M.m();
 
+        orderParams.put("apartmentUuids", records.stream().map(record->record.getUuid()).collect(Collectors.toList()));
         orderParams.put("operatorUuid", params.get("operatorUuid"));
         orderParams.put("channel", params.get("channel"));
         // orderParams.put("report", params.get("report"));
         // orderParams.put("name", params.get("name"));
         orderParams.put("createdAtStart", params.get("orderCreatedAtStart"));
         orderParams.put("createdAtStop", params.get("orderCreatedAtStop"));
-        orderParams.put("vstate", 1);
+        // orderParams.put("vstate", 1);
 
         orderService.attachListItems(records, orderParams, Order::getApartmentUuid, (record, orderMap) -> {
             record.setSaleTimes(0);
