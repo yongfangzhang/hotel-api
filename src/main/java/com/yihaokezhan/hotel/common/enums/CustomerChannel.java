@@ -10,6 +10,7 @@ public enum CustomerChannel implements BaseEnum<CustomerChannel> {
     WECHAT                      (2,         "微信"),
     ALIPAY                      (3,         "支付宝"),
     STORE                       (4,         "门店"),
+    XIE_CHENG                   (5,         "携程"),
     BACKEND                     (10,        "后台添加"),
     END                         (1000,      "END");
     // @formatter:on

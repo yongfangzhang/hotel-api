@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.AccountType;
+import com.yihaokezhan.hotel.common.enums.DepositState;
 import com.yihaokezhan.hotel.common.enums.OrderChannel;
 import com.yihaokezhan.hotel.common.enums.OrderState;
 import com.yihaokezhan.hotel.common.enums.OrderType;
@@ -90,6 +91,15 @@ public class Order extends BaseEntity {
     @PositiveOrZero(message = "支付价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal paidPrice;
 
+    @PositiveOrZero(message = "押金无效", groups = { AddGroup.class, UpdateGroup.class })
+    private BigDecimal deposit;
+
+    @PositiveOrZero(message = "押金状态无效", groups = { AddGroup.class, UpdateGroup.class })
+    private Integer depositState;
+
+    @PositiveOrZero(message = "扣除押金无效", groups = { AddGroup.class, UpdateGroup.class })
+    private BigDecimal depositDeduction;
+
     /**
      * 订单状态
      */
@@ -154,6 +164,10 @@ public class Order extends BaseEntity {
 
     public String getUserTypeName() {
         return EnumUtils.getName(OrderUserType.class, this.userType);
+    }
+
+    public String getDepositStateName() {
+        return EnumUtils.getName(DepositState.class, this.depositState);
     }
 
     @TableField(exist = false)
