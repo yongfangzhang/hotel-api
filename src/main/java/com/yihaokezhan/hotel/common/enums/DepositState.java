@@ -9,8 +9,7 @@ public enum DepositState implements BaseEnum<DepositState> {
     NONE                        (1,         "无"),
     PAID                        (2,         "已付"),
     UNPAID                      (3,         "待付"),
-    FULL_REFUNDED               (4,         "已全额退"),
-    PARTIAL_REFUNDED            (5,         "已部分退"),
+    REFUNDED                    (4,         "已退"),
     END                         (1000,      "END");
     // @formatter:on
 

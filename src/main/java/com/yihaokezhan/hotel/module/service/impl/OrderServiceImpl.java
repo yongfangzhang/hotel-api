@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.yihaokezhan.hotel.common.enums.DepositState;
 import com.yihaokezhan.hotel.common.enums.OrderState;
 import com.yihaokezhan.hotel.common.utils.EnumUtils;
 import com.yihaokezhan.hotel.common.utils.M;
@@ -70,7 +71,12 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         OrderState orderState = EnumUtils.valueOf(OrderState.class, order.getState());
         switch (orderState) {
         case FINISHED:
+            Order originOrder = getById(order.getUuid());
             order.setFinishedAt(LocalDateTime.now());
+            if (DepositState.PAID.getValue().equals(originOrder.getDepositState())) {
+                // 订单完成后将已付押金退掉
+                order.setDepositState(DepositState.REFUNDED.getValue());
+            }
             break;
         case CANCELD:
         case ABANDON:
