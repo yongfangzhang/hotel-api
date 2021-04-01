@@ -1,5 +1,7 @@
 package com.yihaokezhan.hotel.common.utils;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +106,33 @@ public class WrapperUtils {
         }
 
         return fillBetween(wrapper, params, Constant.CREATED_AT_START, Constant.CREATED_AT_STOP, "created_at");
+    }
+
+    public static <T> QueryWrapper<T> fillCreatedTimeAtBetween(QueryWrapper<T> wrapper, Map<String, Object> params) {
+        String begin = MapUtils.getString(params, Constant.CREATED_TIME_AT_START);
+        String end = MapUtils.getString(params, Constant.CREATED_TIME_AT_STOP);
+        String field = "created_time_at";
+
+        if (StringUtils.isBlank(begin) || StringUtils.isBlank(end)) {
+            return wrapper;
+        }
+        if (begin.equals(end)) {
+            return wrapper.eq(field, begin);
+        }
+
+        LocalTime beginTime = LocalTime.parse(begin, DateTimeFormatter.ofPattern(Constant.TIME_PATTERN));
+        LocalTime endTime = LocalTime.parse(end, DateTimeFormatter.ofPattern(Constant.TIME_PATTERN));
+
+        if (beginTime.isBefore(endTime)) {
+            return fillBetween(wrapper, params, Constant.CREATED_TIME_AT_START, Constant.CREATED_TIME_AT_STOP, field);
+        }
+
+        // @formatter:off
+        return wrapper.and(w1 -> w1
+                .ge(field, begin).le(field, "23:59:59")
+                .or()
+                .ge(field, "00:00:00").lt(field, end));
+        // @formatter:on
     }
 
     public static <T> QueryWrapper<T> fillOrderBy(QueryWrapper<T> wrapper, Map<String, Object> params) {

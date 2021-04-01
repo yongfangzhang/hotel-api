@@ -238,6 +238,8 @@ public class RoomController {
         // orderItemParams.put("name", params.get("name"));
         orderItemParams.put("createdAtStart", params.get("orderCreatedAtStart"));
         orderItemParams.put("createdAtStop", params.get("orderCreatedAtStop"));
+        orderItemParams.put("createdTimeAtStart", params.get("orderShiftStart"));
+        orderItemParams.put("createdTimeAtStop", params.get("orderShiftStop"));
         // orderItemParams.put("vstate", 1);
 
         boolean filterChannel = StringUtils.isNotBlank(MapUtils.getString(params, "channel"));

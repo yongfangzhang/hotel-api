@@ -163,6 +163,8 @@ public class ApartmentController {
         // orderParams.put("name", params.get("name"));
         orderParams.put("createdAtStart", params.get("orderCreatedAtStart"));
         orderParams.put("createdAtStop", params.get("orderCreatedAtStop"));
+        orderParams.put("createdTimeAtStart", params.get("orderShiftStart"));
+        orderParams.put("createdTimeAtStop", params.get("orderShiftStop"));
         // orderParams.put("vstate", 1);
 
         orderService.attachListItems(records, orderParams, Order::getApartmentUuid, (record, orderMap) -> {

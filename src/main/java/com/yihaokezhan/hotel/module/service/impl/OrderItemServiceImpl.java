@@ -189,6 +189,7 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
         WrapperUtils.fillInList(wrapper, params, "roomUuids", "room_uuid");
 
         WrapperUtils.fillCreatedAtBetween(wrapper, params);
+        WrapperUtils.fillCreatedTimeAtBetween(wrapper, params);
         WrapperUtils.fillSelect(wrapper, params);
         WrapperUtils.fillOrderBy(wrapper, params);
         WrapperUtils.fillGroupBy(wrapper, params);

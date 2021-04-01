@@ -59,6 +59,9 @@ public class Constant {
     public static final String DESC                               = "desc";
     public static final String CREATED_AT_START                   = "createdAtStart";
     public static final String CREATED_AT_STOP                    = "createdAtStop";
+    public static final String CREATED_TIME_AT_START              = "createdTimeAtStart";
+    public static final String CREATED_TIME_AT_STOP               = "createdTimeAtStop";
+
     public static final String PAGE                               = "page";
     public static final String LIMIT                              = "limit";
     // 只允许后台用
