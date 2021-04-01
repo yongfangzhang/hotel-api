@@ -97,6 +97,8 @@ public class OrderController {
     @SysLog(operation = Operation.CREATE, description = "创建订单 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody Order entity, @LoginUser TokenUser tokenUser) {
 
+        // 创建新的订单
+        entity.removeCreateIgnores();
         beforeCreateOrder(entity, tokenUser);
         entity = orderService.mCreate(entity);
 
@@ -161,7 +163,7 @@ public class OrderController {
         entity.setPaidPrice(BigDecimal.ZERO);
 
         for (OrderItem item : items) {
-            item.setUuid(null);
+            item.removeCreateIgnores();
             Assert.isTrue(BigDecimal.ZERO.compareTo(item.getOriginalPrice()) <= 0, "原始价格无效");
             Assert.isTrue(BigDecimal.ZERO.compareTo(item.getPaidPrice()) <= 0, "支付价格无效");
 

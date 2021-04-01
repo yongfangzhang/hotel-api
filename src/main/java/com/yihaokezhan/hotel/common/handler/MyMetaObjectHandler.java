@@ -1,8 +1,10 @@
 package com.yihaokezhan.hotel.common.handler;
 
 import java.time.LocalDateTime;
+
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.yihaokezhan.hotel.common.utils.RandomUtils;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         insertDate(metaObject);
+        insertTime(metaObject);
         insertOrderedUuid(metaObject);
     }
 
@@ -28,13 +31,22 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     }
 
     private void insertDate(MetaObject metaObject) {
-        String[] insertFields = new String[] {"createdAt", "updatedAt"};
+        String[] insertFields = new String[] { "createdAt", "updatedAt" };
         LocalDateTime now = LocalDateTime.now();
         for (String field : insertFields) {
             if (metaObject.hasSetter(field)) {
                 setFieldValByName(field, now, metaObject);
             }
         }
+    }
+
+    private void insertTime(MetaObject metaObject) {
+        if (!metaObject.hasSetter("createdAt") || !metaObject.hasSetter("createdTimeAt")
+                || metaObject.getValue("createdAt") == null) {
+            return;
+        }
+        LocalDateTime createdAt = (LocalDateTime) metaObject.getValue("createdAt");
+        setFieldValByName("createdTimeAt", createdAt.toLocalTime(), metaObject);
     }
 
     // 生成有序uuid

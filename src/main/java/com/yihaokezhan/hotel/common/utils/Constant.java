@@ -37,7 +37,11 @@ public class Constant {
     public static final long CACHE_DURATION_TOKEN                 = 43200L; // 12 * 3600 
 
     // date
+    public static final String DATE_PATTERN                       = "yyyy-MM-dd";
+    public static final String TIME_PATTERN                       = "HH:mm:ss";
     public static final String DATE_TIME_PATTERN                  = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_PATTERN_BEGIN            = "yyyy-MM-dd 00:00:00";
+    public static final String DATE_TIME_PATTERN_END              = "yyyy-MM-dd 23:59:59";
     public static final String DATE_TIME_PATTERN_NUMBER           = "yyyyMMddHHmmss";
     public static final String TIMEZONE                           = "GMT+08:00";
 

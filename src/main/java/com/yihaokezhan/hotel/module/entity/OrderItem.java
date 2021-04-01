@@ -2,12 +2,14 @@ package com.yihaokezhan.hotel.module.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -127,6 +129,10 @@ public class OrderItem extends BaseEntity {
     // UpdateGroup.class })
     private LocalDateTime leaveAt;
 
+    @JsonFormat(pattern = Constant.TIME_PATTERN, timezone = Constant.TIMEZONE)
+    @TableField(fill = FieldFill.INSERT)
+    private LocalTime createdTimeAt;
+
     @TableField(exist = false)
     private Room room;
 
@@ -149,4 +155,12 @@ public class OrderItem extends BaseEntity {
     public String getPriceTypeName() {
         return EnumUtils.getName(RoomPriceType.class, this.priceType);
     }
+
+    public OrderItem removeCreateIgnores() {
+        this.setUuid(null);
+        this.createdTimeAt = null;
+        this.setCreatedAt(null);
+        return this;
+    }
+
 }

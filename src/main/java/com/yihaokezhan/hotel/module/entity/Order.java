@@ -2,12 +2,14 @@ package com.yihaokezhan.hotel.module.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -132,6 +134,10 @@ public class Order extends BaseEntity {
     // @Past(message = "评价时间无效", groups = { AddGroup.class, UpdateGroup.class })
     private LocalDateTime commentedAt;
 
+    @JsonFormat(pattern = Constant.TIME_PATTERN, timezone = Constant.TIMEZONE)
+    @TableField(fill = FieldFill.INSERT)
+    private LocalTime createdTimeAt;
+
     private String operatorUuid;
 
     public String getChannelName() {
@@ -158,6 +164,11 @@ public class Order extends BaseEntity {
 
     public Order removeCreateIgnores() {
         this.setUuid(null);
+        this.canceledAt = null;
+        this.finishedAt = null;
+        this.commentedAt = null;
+        this.createdTimeAt = null;
+        this.setCreatedAt(null);
         return this;
     }
 

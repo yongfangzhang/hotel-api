@@ -2,6 +2,7 @@ package com.yihaokezhan.hotel.common.aspect;
 
 import java.lang.reflect.Method;
 import com.yihaokezhan.hotel.common.annotation.SysLog;
+import com.yihaokezhan.hotel.common.config.AppConfig;
 import com.yihaokezhan.hotel.common.enums.AspectPos;
 import com.yihaokezhan.hotel.common.handler.DynamicTenantHandler;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
@@ -30,6 +31,9 @@ public class SysLogAspect {
     @Autowired
     private ISystemLogService systemLogService;
 
+    @Autowired
+    private AppConfig appConfig;
+
     @Pointcut("@annotation(com.yihaokezhan.hotel.common.annotation.SysLog)")
     public void sysLogPointCut() {
     }
@@ -51,6 +55,9 @@ public class SysLogAspect {
 
     private SystemLog sendLog(JoinPoint joinPoint) {
         try {
+            if (appConfig.isDev()) {
+                return null;
+            }
             SysLog sysLog = getSysLogAnnotation(joinPoint);
             StandardEvaluationContext context = getContext(joinPoint);
             SystemLog logModel = new SystemLog();

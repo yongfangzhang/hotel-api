@@ -79,7 +79,7 @@ public class WrapperUtils {
         String begin = MapUtils.getString(params, startKey);
         String end = MapUtils.getString(params, stopKey);
         wrapper.ge(StringUtils.isNotBlank(begin), column, begin);
-        wrapper.le(StringUtils.isNotBlank(end), column, end);
+        wrapper.lt(StringUtils.isNotBlank(end), column, end);
         return wrapper;
     }
 
@@ -94,6 +94,15 @@ public class WrapperUtils {
     }
 
     public static <T> QueryWrapper<T> fillCreatedAtBetween(QueryWrapper<T> wrapper, Map<String, Object> params) {
+        String begin = MapUtils.getString(params, Constant.CREATED_AT_START);
+        String end = MapUtils.getString(params, Constant.CREATED_AT_STOP);
+        if (StringUtils.isNotBlank(begin) && begin.length() == 10) {
+            params.put(Constant.CREATED_AT_START, begin + " 00:00:00");
+        }
+        if (StringUtils.isNotBlank(end) && end.length() == 10) {
+            params.put(Constant.CREATED_AT_STOP, end + " 23:59:59");
+        }
+
         return fillBetween(wrapper, params, Constant.CREATED_AT_START, Constant.CREATED_AT_STOP, "created_at");
     }
 
