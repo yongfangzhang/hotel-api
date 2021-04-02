@@ -171,9 +171,15 @@ public class Order extends BaseEntity {
     }
 
     public BigDecimal getDepositRefunded() {
-        if (this.deposit == null || this.depositDeduction == null) {
-            return null;
+        if (this.deposit == null) {
+            // 无押金
+            return BigDecimal.ZERO;
         }
+        if (this.depositDeduction == null) {
+            // 无扣除
+            return this.deposit;
+        }
+        // 计算退款
         return this.deposit.subtract(this.depositDeduction);
     }
 

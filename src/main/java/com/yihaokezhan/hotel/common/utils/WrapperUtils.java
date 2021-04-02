@@ -85,6 +85,34 @@ public class WrapperUtils {
         return wrapper;
     }
 
+    public static <T> QueryWrapper<T> fillDatetimeBetween(QueryWrapper<T> wrapper, Map<String, Object> params,
+            String startKey, String stopKey, String column) {
+        String begin = MapUtils.getString(params, startKey);
+        String end = MapUtils.getString(params, stopKey);
+        if (StringUtils.isNotBlank(begin) && begin.length() == 10) {
+            params.put(startKey, begin + " 00:00:00");
+        }
+        if (StringUtils.isNotBlank(end) && end.length() == 10) {
+            params.put(stopKey, end + " 23:59:59");
+        }
+
+        return fillBetween(wrapper, params, startKey, stopKey, column);
+    }
+
+    public static <T> QueryWrapper<T> fillDateBetween(QueryWrapper<T> wrapper, Map<String, Object> params,
+            String startKey, String stopKey, String column) {
+        String begin = MapUtils.getString(params, startKey);
+        String end = MapUtils.getString(params, stopKey);
+        if (StringUtils.isNotBlank(begin) && begin.length() > 10) {
+            params.put(startKey, begin.substring(0, 10));
+        }
+        if (StringUtils.isNotBlank(end) && end.length() > 10) {
+            params.put(stopKey, end.substring(0, 10));
+        }
+
+        return fillBetween(wrapper, params, startKey, stopKey, column);
+    }
+
     public static <T> QueryWrapper<T> fillStates(QueryWrapper<T> wrapper, Map<String, Object> params) {
         String states = MapUtils.getString(params, "states");
 
@@ -96,16 +124,7 @@ public class WrapperUtils {
     }
 
     public static <T> QueryWrapper<T> fillCreatedAtBetween(QueryWrapper<T> wrapper, Map<String, Object> params) {
-        String begin = MapUtils.getString(params, Constant.CREATED_AT_START);
-        String end = MapUtils.getString(params, Constant.CREATED_AT_STOP);
-        if (StringUtils.isNotBlank(begin) && begin.length() == 10) {
-            params.put(Constant.CREATED_AT_START, begin + " 00:00:00");
-        }
-        if (StringUtils.isNotBlank(end) && end.length() == 10) {
-            params.put(Constant.CREATED_AT_STOP, end + " 23:59:59");
-        }
-
-        return fillBetween(wrapper, params, Constant.CREATED_AT_START, Constant.CREATED_AT_STOP, "created_at");
+        return fillDatetimeBetween(wrapper, params, Constant.CREATED_AT_START, Constant.CREATED_AT_STOP, "created_at");
     }
 
     public static <T> QueryWrapper<T> fillCreatedTimeAtBetween(QueryWrapper<T> wrapper, Map<String, Object> params) {
