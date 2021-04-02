@@ -81,7 +81,7 @@ public class WrapperUtils {
         String begin = MapUtils.getString(params, startKey);
         String end = MapUtils.getString(params, stopKey);
         wrapper.ge(StringUtils.isNotBlank(begin), column, begin);
-        wrapper.lt(StringUtils.isNotBlank(end), column, end);
+        wrapper.le(StringUtils.isNotBlank(end), column, end);
         return wrapper;
     }
 
@@ -150,7 +150,7 @@ public class WrapperUtils {
         return wrapper.and(w1 -> w1
                 .ge(field, begin).le(field, "23:59:59")
                 .or()
-                .ge(field, "00:00:00").lt(field, end));
+                .ge(field, "00:00:00").le(field, end));
         // @formatter:on
     }
 
