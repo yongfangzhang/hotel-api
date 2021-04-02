@@ -123,6 +123,9 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountMapper, Account> 
         if (updatePassword) {
             account.setSalt(RandomUtils.randomString32());
             account.setPassword(getPasswordHex(account.getPassword(), account.getSalt()));
+        } else {
+            account.setSalt(null);
+            account.setPassword(null);
         }
         if (updateById(account) && clearRelationCaches()) {
             return account;
