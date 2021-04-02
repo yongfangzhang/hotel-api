@@ -91,7 +91,7 @@ public class Order extends BaseEntity {
     @PositiveOrZero(message = "支付价格无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal paidPrice;
 
-    @PositiveOrZero(message = "押金无效", groups = { AddGroup.class, UpdateGroup.class })
+    @PositiveOrZero(message = "已收押金无效", groups = { AddGroup.class, UpdateGroup.class })
     private BigDecimal deposit;
 
     @PositiveOrZero(message = "押金状态无效", groups = { AddGroup.class, UpdateGroup.class })
@@ -168,6 +168,13 @@ public class Order extends BaseEntity {
 
     public String getDepositStateName() {
         return EnumUtils.getName(DepositState.class, this.depositState);
+    }
+
+    public BigDecimal getDepositRefunded() {
+        if (this.deposit == null || this.depositDeduction == null) {
+            return null;
+        }
+        return this.deposit.subtract(this.depositDeduction);
     }
 
     @TableField(exist = false)
