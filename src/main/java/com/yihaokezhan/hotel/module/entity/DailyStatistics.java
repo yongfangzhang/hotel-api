@@ -76,7 +76,7 @@ public class DailyStatistics extends BaseEntity {
     /**
      * 统计日期
      */
-    @JsonFormat(pattern = Constant.DATE_TIME_PATTERN, timezone = Constant.TIMEZONE)
+    @JsonFormat(pattern = Constant.DATE_PATTERN, timezone = Constant.TIMEZONE)
     private LocalDate statisticsDate;
 
     public String getChannelName() {
