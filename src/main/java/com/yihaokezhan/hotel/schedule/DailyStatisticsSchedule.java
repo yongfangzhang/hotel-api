@@ -44,7 +44,7 @@ public class DailyStatisticsSchedule {
     /**
      * 凌晨0点10分统计订单
      */
-    @Scheduled(cron = "0 0 0 10 * *")
+    @Scheduled(cron = "0 10 0 * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void run() {
         tenantService.mList(M.m()).forEach(tenant -> {
