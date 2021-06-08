@@ -9,6 +9,7 @@ public enum RoleType implements BaseEnum<RoleType> {
     // SU                   (1,     "SU",             "超级管理员"),
     ADMIN                (2,     "ADMIN",          "管理员"),
     STAFF                (3,     "STAFF",          "员工"),
+    FINANCE              (4,     "FINANCE",        "财务"),
     END                  (1000,  "END",            "END");
     // @formatter:on
 
