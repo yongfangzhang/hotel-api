@@ -138,6 +138,7 @@ public class RoomController {
             this.join(originRoom);
             if (OrderState.FINISHED.getValue().compareTo(originRoom.getRelatedOrder().getState()) > 0) {
                 originRoom.getRelatedOrder().setState(OrderState.FINISHED.getValue());
+                originRoom.getRelatedOrder().setDepositDeduction(entity.getDepositDeduction());
                 orderService.mUpdate(originRoom.getRelatedOrder());
             }
         }

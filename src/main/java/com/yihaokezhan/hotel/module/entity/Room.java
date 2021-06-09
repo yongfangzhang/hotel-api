@@ -92,8 +92,8 @@ public class Room extends BaseEntity {
     /**
      * 房间状态
      */
-    @EnumValue(enumClass = RoomState.class, message = "房间状态无效", canBeNull = true, groups = { AddGroup.class,
-            UpdateGroup.class })
+    @EnumValue(enumClass = RoomState.class, message = "房间状态无效", canBeNull = true,
+            groups = {AddGroup.class, UpdateGroup.class})
     private Integer state;
 
     /**
@@ -117,6 +117,9 @@ public class Room extends BaseEntity {
 
     @TableField(exist = false)
     private OrderItem relatedOrderItem;
+
+    @TableField(exist = false)
+    private BigDecimal depositDeduction;
 
     public String getStateName() {
         return EnumUtils.getName(RoomState.class, this.state);
