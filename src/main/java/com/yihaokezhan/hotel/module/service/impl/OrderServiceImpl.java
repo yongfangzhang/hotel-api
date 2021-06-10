@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.yihaokezhan.hotel.common.enums.DepositState;
@@ -19,7 +18,7 @@ import com.yihaokezhan.hotel.module.entity.OrderItem;
 import com.yihaokezhan.hotel.module.mapper.OrderMapper;
 import com.yihaokezhan.hotel.module.service.IOrderItemService;
 import com.yihaokezhan.hotel.module.service.IOrderService;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -49,6 +48,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
     // @formatter:on
     public Order mCreate(Order order) {
         order.setNumber(RandomUtils.generateNumer());
+        syncMainOrder(order);
         super.mCreate(order);
         orderItemService.mBatchCreate(order.getItems().stream().map(item -> {
             item.setApartmentUuid(order.getApartmentUuid());
@@ -70,20 +70,20 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
     public Order mUpdate(Order order) {
         OrderState orderState = EnumUtils.valueOf(OrderState.class, order.getState());
         switch (orderState) {
-        case FINISHED:
-            Order originOrder = getById(order.getUuid());
-            order.setFinishedAt(LocalDateTime.now());
-            if (DepositState.PAID.getValue().equals(originOrder.getDepositState())) {
-                // 订单完成后将已付押金退掉
-                order.setDepositState(DepositState.REFUNDED.getValue());
-            }
-            break;
-        case CANCELD:
-        case ABANDON:
-            order.setCanceledAt(LocalDateTime.now());
-            break;
-        default:
-            break;
+            case FINISHED:
+                Order originOrder = getById(order.getUuid());
+                order.setFinishedAt(LocalDateTime.now());
+                if (DepositState.PAID.getValue().equals(originOrder.getDepositState())) {
+                    // 订单完成后将已付押金退掉
+                    order.setDepositState(DepositState.REFUNDED.getValue());
+                }
+                break;
+            case CANCELD:
+            case ABANDON:
+                order.setCanceledAt(LocalDateTime.now());
+                break;
+            default:
+                break;
         }
 
         if (CollectionUtils.isNotEmpty(order.getItems())) {
@@ -92,7 +92,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
             });
             orderItemService.mBatchUpdate(order.getItems());
         }
-
+        syncMainOrder(order);
         return super.mUpdate(order);
     }
 
@@ -101,9 +101,10 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         if (order == null) {
             return order;
         }
-        orderItemService.attachOneItems(order, M.m().put("orderUuid", order.getUuid()), (record, items) -> {
-            record.setItems(items);
-        });
+        orderItemService.attachOneItems(order, M.m().put("orderUuid", order.getUuid()),
+                (record, items) -> {
+                    record.setItems(items);
+                });
         return order;
     }
 
@@ -114,7 +115,8 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         }
 
         orderItemService.attachListItems(orders,
-                M.m().put("orderUuids", orders.stream().map(Order::getUuid).collect(Collectors.toList())),
+                M.m().put("orderUuids",
+                        orders.stream().map(Order::getUuid).collect(Collectors.toList())),
                 OrderItem::getOrderUuid, (record, itemsMap) -> {
                     record.setItems(itemsMap.get(record.getUuid()));
                 });
@@ -153,5 +155,18 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         WrapperUtils.fillOrderBy(wrapper, params);
         WrapperUtils.fillGroupBy(wrapper, params);
         return wrapper;
+    }
+
+    private void syncMainOrder(Order order) {
+        if (order == null || CollectionUtils.isEmpty(order.getItems())) {
+            return;
+        }
+        OrderItem mainItem = order.getItems().get(0);
+        if (StringUtils.isNotBlank(mainItem.getName())) {
+            order.setMainName(mainItem.getName());
+        }
+        if (StringUtils.isNotBlank(mainItem.getMobile())) {
+            order.setMainMobile(mainItem.getMobile());
+        }
     }
 }

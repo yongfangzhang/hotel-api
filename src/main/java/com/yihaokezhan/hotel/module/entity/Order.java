@@ -73,56 +73,56 @@ public class Order extends BaseEntity {
      * 订单渠道
      */
     @NotNull(message = "订单渠道不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = OrderChannel.class, message = "订单渠道无效", canBeNull = true, groups = { AddGroup.class,
-            UpdateGroup.class })
+    @EnumValue(enumClass = OrderChannel.class, message = "订单渠道无效", canBeNull = true,
+            groups = {AddGroup.class, UpdateGroup.class})
     private Integer channel;
 
     /**
      * 原始价格
      */
     // @NotNull(message = "原始价格不能为空", groups = AddGroup.class)
-    @PositiveOrZero(message = "原始价格无效", groups = { AddGroup.class, UpdateGroup.class })
+    @PositiveOrZero(message = "原始价格无效", groups = {AddGroup.class, UpdateGroup.class})
     private BigDecimal originalPrice;
 
     /**
      * 支付价格
      */
     // @NotNull(message = "支付价格不能为空", groups = AddGroup.class)
-    @PositiveOrZero(message = "支付价格无效", groups = { AddGroup.class, UpdateGroup.class })
+    @PositiveOrZero(message = "支付价格无效", groups = {AddGroup.class, UpdateGroup.class})
     private BigDecimal paidPrice;
 
-    @PositiveOrZero(message = "已收押金无效", groups = { AddGroup.class, UpdateGroup.class })
+    @PositiveOrZero(message = "已收押金无效", groups = {AddGroup.class, UpdateGroup.class})
     private BigDecimal deposit;
 
-    @PositiveOrZero(message = "押金状态无效", groups = { AddGroup.class, UpdateGroup.class })
+    @PositiveOrZero(message = "押金状态无效", groups = {AddGroup.class, UpdateGroup.class})
     private Integer depositState;
 
-    @PositiveOrZero(message = "扣除押金无效", groups = { AddGroup.class, UpdateGroup.class })
+    @PositiveOrZero(message = "扣除押金无效", groups = {AddGroup.class, UpdateGroup.class})
     private BigDecimal depositDeduction;
 
     /**
      * 订单状态
      */
     @NotNull(message = "订单状态不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = OrderState.class, message = "订单状态无效", canBeNull = true, groups = { AddGroup.class,
-            UpdateGroup.class })
+    @EnumValue(enumClass = OrderState.class, message = "订单状态无效", canBeNull = true,
+            groups = {AddGroup.class, UpdateGroup.class})
     private Integer state;
 
     /**
      * 订单类型
      */
     // @NotNull(message = "订单类型不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = OrderType.class, message = "订单类型无效", canBeNull = true, groups = { AddGroup.class,
-            UpdateGroup.class })
+    @EnumValue(enumClass = OrderType.class, message = "订单类型无效", canBeNull = true,
+            groups = {AddGroup.class, UpdateGroup.class})
     private Integer type = OrderType.LIVE_IN.getValue();
 
     @NotNull(message = "用户类型不能为空", groups = AddGroup.class)
-    @EnumValue(enumClass = OrderUserType.class, message = "用户类型无效", canBeNull = true, groups = { AddGroup.class,
-            UpdateGroup.class })
+    @EnumValue(enumClass = OrderUserType.class, message = "用户类型无效", canBeNull = true,
+            groups = {AddGroup.class, UpdateGroup.class})
     private Integer userType;
 
-    @EnumValue(enumClass = AccountType.class, message = "账户类型无效", canBeNull = true, groups = { AddGroup.class,
-            UpdateGroup.class })
+    @EnumValue(enumClass = AccountType.class, message = "账户类型无效", canBeNull = true,
+            groups = {AddGroup.class, UpdateGroup.class})
     private Integer accountType;
 
     /**
@@ -149,6 +149,16 @@ public class Order extends BaseEntity {
     private LocalTime createdTimeAt;
 
     private String operatorUuid;
+
+    /**
+     * 主入住人姓名
+     */
+    private String mainName;
+
+    /**
+     * 主入住人手机号
+     */
+    private String mainMobile;
 
     public String getChannelName() {
         return EnumUtils.getName(OrderChannel.class, this.channel);
