@@ -140,6 +140,9 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         WrapperUtils.fillEq(wrapper, params, "type");
         WrapperUtils.fillEq(wrapper, params, "channel");
 
+        WrapperUtils.fillEq(wrapper, params, "mainName");
+        WrapperUtils.fillEq(wrapper, params, "mainMobile");
+
         WrapperUtils.fillInList(wrapper, params, "uuids", "uuid");
         WrapperUtils.fillInList(wrapper, params, "tenantUuids", "tenant_uuid");
         WrapperUtils.fillInList(wrapper, params, "apartmentUuids", "apartment_uuid");
