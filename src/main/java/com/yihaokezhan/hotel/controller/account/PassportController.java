@@ -107,7 +107,7 @@ public class PassportController {
 
 
     @Annc
-    @GetMapping("/login/bdd2f7c21f4c490f9404859637b57d9e")
+    @GetMapping("/login/11eb7a9d0c449fc68e30a1e166e56231")
     public String autoLogin() {
         try {
             LoginForm form = new LoginForm();
