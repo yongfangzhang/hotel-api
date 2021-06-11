@@ -66,6 +66,11 @@ public class OrderProduct extends BaseEntity {
     private Integer productCount;
 
     /**
+     * 是否押金支付
+     */
+    private boolean paidByDeposit;
+
+    /**
      * 商品总价
      */
     private BigDecimal totalPrice;
