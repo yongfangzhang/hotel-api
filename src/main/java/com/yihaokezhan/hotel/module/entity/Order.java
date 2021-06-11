@@ -12,6 +12,7 @@ import javax.validation.constraints.PositiveOrZero;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.enums.AccountType;
@@ -197,7 +198,21 @@ public class Order extends BaseEntity {
     private List<OrderItem> items;
 
     @TableField(exist = false)
+    private List<OrderProduct> products;
+
+    @TableField(exist = false)
     private boolean renew;
+
+    public BigDecimal getProductIncome() {
+        BigDecimal income = BigDecimal.ZERO;
+        if (CollectionUtils.isEmpty(products)) {
+            return income;
+        }
+        for (OrderProduct product : products) {
+            income = income.add(product.getTotalPrice());
+        }
+        return income;
+    }
 
     public Order removeCreateIgnores() {
         this.setUuid(null);

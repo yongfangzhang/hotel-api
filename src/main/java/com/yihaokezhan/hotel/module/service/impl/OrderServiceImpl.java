@@ -15,8 +15,10 @@ import com.yihaokezhan.hotel.common.utils.RandomUtils;
 import com.yihaokezhan.hotel.common.utils.WrapperUtils;
 import com.yihaokezhan.hotel.module.entity.Order;
 import com.yihaokezhan.hotel.module.entity.OrderItem;
+import com.yihaokezhan.hotel.module.entity.OrderProduct;
 import com.yihaokezhan.hotel.module.mapper.OrderMapper;
 import com.yihaokezhan.hotel.module.service.IOrderItemService;
+import com.yihaokezhan.hotel.module.service.IOrderProductService;
 import com.yihaokezhan.hotel.module.service.IOrderService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
 
     @Autowired
     private IOrderItemService orderItemService;
+
+    @Autowired
+    private IOrderProductService orderProductService;
 
     @Override
     // @formatter:off
@@ -101,10 +106,15 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         if (order == null) {
             return order;
         }
-        orderItemService.attachOneItems(order, M.m().put("orderUuid", order.getUuid()),
-                (record, items) -> {
-                    record.setItems(items);
-                });
+
+        M params = M.m().put("orderUuid", order.getUuid());
+        orderItemService.attachOneItems(order, params, (record, items) -> {
+            record.setItems(items);
+        });
+
+        orderProductService.attachOneItems(order, params, (record, items) -> {
+            record.setProducts(items);
+        });
         return order;
     }
 
@@ -114,11 +124,18 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
             return orders;
         }
 
-        orderItemService.attachListItems(orders,
-                M.m().put("orderUuids",
-                        orders.stream().map(Order::getUuid).collect(Collectors.toList())),
-                OrderItem::getOrderUuid, (record, itemsMap) -> {
+        List<String> orderUuids = orders.stream().map(Order::getUuid).collect(Collectors.toList());
+
+        M params = M.m().put("orderUuids", orderUuids);
+
+        orderItemService.attachListItems(orders, params, OrderItem::getOrderUuid,
+                (record, itemsMap) -> {
                     record.setItems(itemsMap.get(record.getUuid()));
+                });
+
+        orderProductService.attachListItems(orders, params, OrderProduct::getOrderUuid,
+                (record, itemsMap) -> {
+                    record.setProducts(itemsMap.get(record.getUuid()));
                 });
 
         return orders;

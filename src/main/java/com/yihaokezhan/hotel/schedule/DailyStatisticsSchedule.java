@@ -94,6 +94,7 @@ public class DailyStatisticsSchedule {
                 record.setDeposit(record.getDeposit().add(order.getDeposit()));
                 record.setDepositRefunded(record.getDepositRefunded().add(order.getDepositRefunded()));
                 record.setDepositDeduction(record.getDepositDeduction().add(order.getDepositDeduction()));
+                record.setProductIncome(record.getProductIncome().add(order.getProductIncome()));
             });
             records.add(record);
         });

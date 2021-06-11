@@ -69,6 +69,10 @@ public class DailyStatistics extends BaseEntity {
     private BigDecimal depositDeduction = BigDecimal.ZERO;
 
     /**
+     * 商品收益
+     */
+    private BigDecimal productIncome = BigDecimal.ZERO;
+    /**
      * 销售次数
      */
     private Integer saleTimes;
