@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.yihaokezhan.hotel.common.utils.V;
@@ -70,6 +71,7 @@ public class OrderProduct extends BaseEntity {
      */
     private boolean paidByDeposit;
 
+    @TableField(exist = false)
     private boolean exsited;
 
     /**
