@@ -27,12 +27,6 @@ public class Product extends BaseEntity {
 
     public static final String TABLE_NAME = "product";
 
-
-    /**
-     * 租户UUID
-     */
-    private String tenantUuid;
-
     /**
      * 商品名称
      */

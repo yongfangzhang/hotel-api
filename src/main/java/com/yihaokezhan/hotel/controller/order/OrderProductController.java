@@ -93,6 +93,7 @@ public class OrderProductController {
             productService.mCreate(product);
             entity.setProductUuid(product.getUuid());
         }
+        entity.updateTotalPrice();
         return R.ok().data(orderProductService.mCreate(entity));
     }
 
@@ -102,6 +103,7 @@ public class OrderProductController {
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.UPDATE, description = "更新订单商品 %s", params = "#entity")
     public R update(@Validated(UpdateGroup.class) @RequestBody OrderProduct entity) {
+        entity.updateTotalPrice();
         return R.ok().data(orderProductService.mUpdate(entity));
     }
 
