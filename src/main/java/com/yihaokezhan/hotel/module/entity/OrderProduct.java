@@ -70,6 +70,8 @@ public class OrderProduct extends BaseEntity {
      */
     private boolean paidByDeposit;
 
+    private boolean exsited;
+
     /**
      * 商品总价
      */

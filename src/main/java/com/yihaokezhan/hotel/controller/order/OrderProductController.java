@@ -15,7 +15,6 @@ import com.yihaokezhan.hotel.module.entity.OrderProduct;
 import com.yihaokezhan.hotel.module.entity.Product;
 import com.yihaokezhan.hotel.module.service.IOrderProductService;
 import com.yihaokezhan.hotel.module.service.IProductService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,15 +83,7 @@ public class OrderProductController {
     @SysLog(operation = Operation.CREATE, description = "创建订单商品 %s", params = "#entity")
     public R create(@Validated(AddGroup.class) @RequestBody OrderProduct entity,
             @LoginUser TokenUser tokenUser) {
-        if (StringUtils.isBlank(entity.getProductUuid())) {
-            // 新建商品
-            Product product = new Product();
-            product.setTenantUuid(tokenUser.getTenantUuid());
-            product.setName(entity.getProductName());
-            product.setPrice(entity.getProductPrice());
-            productService.mCreate(product);
-            entity.setProductUuid(product.getUuid());
-        }
+        this.createProduct(entity, tokenUser);
         entity.updateTotalPrice();
         return R.ok().data(orderProductService.mCreate(entity));
     }
@@ -102,7 +93,9 @@ public class OrderProductController {
     @RequiresPermissions(Constant.PERM_ORDER_UPDATE)
     @Transactional(rollbackFor = Exception.class)
     @SysLog(operation = Operation.UPDATE, description = "更新订单商品 %s", params = "#entity")
-    public R update(@Validated(UpdateGroup.class) @RequestBody OrderProduct entity) {
+    public R update(@Validated(UpdateGroup.class) @RequestBody OrderProduct entity,
+            @LoginUser TokenUser tokenUser) {
+        this.createProduct(entity, tokenUser);
         entity.updateTotalPrice();
         return R.ok().data(orderProductService.mUpdate(entity));
     }
@@ -114,5 +107,18 @@ public class OrderProductController {
     @SysLog(operation = Operation.DELETE, description = "删除订单商品 %s", params = "#uuid")
     public R delete(@PathVariable String uuid) {
         return R.ok().data(orderProductService.mDelete(uuid));
+    }
+
+    private void createProduct(OrderProduct entity, TokenUser tokenUser) {
+        if (entity.isExsited()) {
+            return;
+        }
+        // 新建商品
+        Product product = new Product();
+        product.setTenantUuid(tokenUser.getTenantUuid());
+        product.setName(entity.getProductName());
+        product.setPrice(entity.getProductPrice());
+        productService.mCreate(product);
+        entity.setProductUuid(product.getUuid());
     }
 }
