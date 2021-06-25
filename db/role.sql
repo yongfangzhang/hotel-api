@@ -1,0 +1,3 @@
+INSERT INTO yhkz_hotel.`role` (uuid,tenant_uuid,account_type,code,name,description,remark,created_at,updated_at) VALUES
+	 ('11eb7be97236c3b69080d9b112f847bf',NULL,2,'ADMIN','管理员','管理员','[{"content": "自动创建", "createdAt": "2021-03-03 14:26:53"}]','2021-03-03 14:26:54','2021-03-03 14:26:54'),
+	 ('11eb7be9723982d7908001e0de431e3a',NULL,2,'STAFF','员工','员工','[{"content": "自动创建", "createdAt": "2021-03-03 14:26:53"}]','2021-03-03 14:26:54','2021-03-14 17:52:58');
