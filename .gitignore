@@ -31,7 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
-*.sql
 application-*.yaml
 GeneratorApplication.java
 *.ignore
